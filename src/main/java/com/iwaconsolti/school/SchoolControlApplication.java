@@ -1,4 +1,4 @@
-package com.iwaconsolti.school.demo;
+package com.iwaconsolti.school;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
