@@ -1,8 +1,12 @@
 package com.iwaconsolti.school.service;
 
+import com.iwaconsolti.school.model.Course;
+
+import java.util.List;
+
 public interface CourseService {
-    public void getCurses();
-    public void getCurseById();
+    public List<Course> getCurses();
+    public Course getCurseById(Integer id);
     public void getNameCourse();
     public void getProfessorName();
 

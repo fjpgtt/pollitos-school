@@ -45,7 +45,7 @@ public class StudentServiceImpl implements StudentService {
             }
         }
         logger.error("Student not found with ID: {}", id);
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with ID: " + id);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + id);
 
     }
 
@@ -59,7 +59,7 @@ public class StudentServiceImpl implements StudentService {
                 break;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with ID: " + student.getId());
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + student.getId());
     }
 
     @Override
