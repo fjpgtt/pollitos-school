@@ -30,7 +30,7 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<?> addStudent(@RequestBody Student student) {
         Student addStudent = studentService.addStudent(student);
-        return ResponseEntity.ok(addStudent);
+        return ResponseEntity.status(201).body(addStudent);
     }
 
     @PutMapping
