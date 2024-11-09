@@ -1,10 +1,10 @@
 package com.iwaconsolti.school.demo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
+@Getter
+@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,5 +14,4 @@ public class Student {
     private String firstName;
     private String lastName;
     private int age;
-
-}
+  }

@@ -18,12 +18,18 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class DemoController {
-    @Autowired  private StudentService studentService;
+    @Autowired private StudentService studentService;
 
 
+//http://localhost:8080/demo/addStudent?id=1&firstName=John&lastName=Doe&age=22
     @PostMapping("/addStudent")
     public String registerStudent(@RequestParam int id, @RequestParam String firstName , @RequestParam String lastName, @RequestParam int age) {
         return studentService.saveStudent(id, firstName, lastName, age);
+    }
+//http://localhost:8080/demo/getStudents
+    @GetMapping("/getStudents")
+    public String returnStudents(){
+        return studentService.getStudents();
     }
 
 
