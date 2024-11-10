@@ -26,7 +26,6 @@ public class DemoController {
 @PostMapping("/")
     public ResponseEntity<Void> postDemo(@RequestBody final RequestDemo demoRequest){
         log.info("Request {}", demoRequest);
-        log.info("Request Demo {}", demoRequest);
         service.insertName(demoRequest.getName());
     return ResponseEntity.noContent().build();
     }

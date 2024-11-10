@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Getter
 @ToString
 @Component
-public class Qualifications {
-    private String id;
-    private int score;
+public class Grade {
+    private int id;
+    private long score;
     private Students student;
     private Courses course;
 

@@ -5,14 +5,12 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Setter
 @Getter
 @ToString
 @Component
 public class Students {
-    private String id,age;
+    private int id;
     private String firstName,lastName;
+    private int age;
 }

@@ -10,6 +10,6 @@ import org.springframework.stereotype.Component;
 @ToString
 @Component
 public class Courses {
-    private String id;
+    private int id;
     private String nameCourse, professorName;
 }
