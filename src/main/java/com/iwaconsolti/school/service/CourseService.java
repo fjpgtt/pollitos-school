@@ -6,19 +6,16 @@ import java.util.List;
 
 public interface CourseService {
     public List<Course> getCurses();
-    public Course getCurseById(Integer id);
-    public void getNameCourse();
-    public void getProfessorName();
+    public Course getCurseById(Integer idCourse);
+    public String getNameCourse(Integer idCourse);
+    public String getProfessorName(Integer idCourse);
 
-    public void setCurseId(Integer idCourse);
-    public void setNameCourse(String nameCourse);
-    public void setProfessorName(String professorName);
+    public void addCurse(Course course);
 
-    public void addCurseId(Integer idCourse);
-    public void addNameCourse(String nameCourse);
-    public void addProfessorName(String professorName);
+    public void setNameCourse(Course course);
+    public void setProfessorName(Course course);
 
     public void deleteCurseId(Integer idCourse);
-    public void deleteNameCourse(String nameCourse);
-    public void deleteProfessorName(String professorName);
+    public void deleteAllCurses();
+
 }
