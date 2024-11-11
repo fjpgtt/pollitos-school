@@ -5,13 +5,8 @@ import com.iwaconsolti.school.model.Student;
 import java.util.List;
 
 public interface StudentService {
-    public List<Student> getStudents();
+    List<Student> getStudents();
 
-    public Student getStudentById(Integer id);
+    Student editStudent(Student student);
 
-    public Student editStudent(Student student);
-
-    public Student addStudent(Student student);
-
-    public void deleteStudent(Integer id);
 }

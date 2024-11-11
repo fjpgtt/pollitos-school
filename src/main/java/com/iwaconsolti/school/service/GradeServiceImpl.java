@@ -33,7 +33,7 @@ public class GradeServiceImpl implements GradeService {
         grades = new ArrayList<>();
 
         List<Student> students = studentService.getStudents();
-        List<Course> courses = courseService.getCurses();
+        List<Course> courses = courseService.getAllCourses();
 
         grades.add(new Grade(1, 100, students.get(0), courses.get(0)));
         grades.add(new Grade(2, 100, students.get(0), courses.get(1)));
@@ -52,13 +52,7 @@ public class GradeServiceImpl implements GradeService {
         grades.add(new Grade(15, 100, students.get(3), courses.get(2)));
         grades.add(new Grade(16, 100, students.get(3), courses.get(3)));
 
-        logger.info("GradeServiceImpl has initialized with pre-defined grades.");
-    }
-
-    @Override
-    public List<Grade> getAllGrades() {
-        logger.debug("Fetching all grades");
-        return grades;
+        logger.info("GradeServiceImpl has initialized.");
     }
 
     @Override
@@ -69,38 +63,12 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Grade addGrade(Grade grade) {
-        grades.add(grade);
-        logger.info("Added new grade for student {} in course {} with grade: {}",
-                grade.getStudent().getFirstName(), grade.getCourse().getName(), grade.getScore());
-        return grade;
-    }
-
-    @Override
-    public Grade editGrade(Grade grade) {
-        for (int i = 0; i < grades.size(); i++) {
-            if (grades.get(i).getStudent().equals(grade.getStudent()) &&
-                    grades.get(i).getCourse().equals(grade.getCourse())) {
-                grades.set(i, grade);
-                logger.info("Edited grade for student {} in course {} to new grade: {}",
-                        grade.getStudent().getFirstName(), grade.getCourse().getName(), grade.getScore());
-                return grade;
-            }
-        }
-        logger.warn("Grade not found for student {} in course {} to edit",
-                grade.getStudent().getFirstName(), grade.getCourse().getName());
-        throw new IllegalArgumentException("Grade not found to edit");
-    }
-
-    @Override
     public void deleteAllGradesOfStudent(Integer studentId) {
         grades.removeIf(grade -> (grade.getStudent().getId()).equals(studentId));
-        logger.info("Deleted all grades for student {}", studentId);
     }
 
     @Override
-    public void deleteAllGradesOfCourse(Integer coursetId) {
-        grades.removeIf(grade -> (grade.getCourse().getId()).equals(coursetId));
-        logger.info("Deleted all grades for course {}", coursetId);
+    public void deleteAllGradesOfCourse(Integer courseId) {
+        grades.removeIf(grade -> (grade.getCourse().getId()).equals(courseId));
     }
 }

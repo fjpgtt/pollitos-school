@@ -27,27 +27,15 @@ public class StudentServiceImpl implements StudentService {
         students = new ArrayList<>(Arrays.asList(
                 new Student(1, "Adrian", "Sanchez", 24),
                 new Student(2, "Francisco", "Perez", 18),
-                new Student(3, "aaaaaa", "lastaaaa", 18),
-                new Student(4, "bbbbbb", "lastbbbbb", 18)
+                new Student(3, "Emanuel", "Ayala", 18),
+                new Student(4, "Sandra", "Lopez", 18)
         ));
-        logger.info("StudentServiceImpl has initialized");
+        logger.info("StudentServiceImpl has initialized.");
     }
 
     @Override
     public List<Student> getStudents() {
         return students;
-    }
-
-    @Override
-    public Student getStudentById(Integer id) {
-        for (Student s : students) {
-            if (Objects.equals(s.getId(), id)) {
-                return s;
-            }
-        }
-        logger.error("Student not found with ID: {}", id);
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + id);
-
     }
 
     @Override
@@ -69,14 +57,4 @@ public class StudentServiceImpl implements StudentService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + student.getId());
     }
 
-    @Override
-    public Student addStudent(Student student) {
-        students.add(student);
-        return student;
-    }
-
-    @Override
-    public void deleteStudent(Integer id) {
-        students.removeIf(student -> Objects.equals(student.getId(), id));
-    }
 }

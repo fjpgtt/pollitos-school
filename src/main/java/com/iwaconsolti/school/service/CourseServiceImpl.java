@@ -1,7 +1,6 @@
 package com.iwaconsolti.school.service;
 
 import com.iwaconsolti.school.model.Course;
-import com.iwaconsolti.school.model.Student;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,45 +14,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Profile("populated")
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CourseServiceImpl.class);
     List<Course> courses;
-
+    @Profile("populated")
     @PostConstruct
     public void init() {
         courses = new ArrayList<>(Arrays.asList(
-                new Course(1, "Math", "Tere"),
+                new Course(1, "Math", "Teresa"),
                 new Course(2, "Spanish", "Frank"),
-                new Course(3, "English", "Vero"),
+                new Course(3, "English", "Veronica"),
                 new Course(4, "Programming", "Gabriela")
         ));
-        logger.info("CourseServiceImpl has initialized");
+        logger.info("CourseServiceImpl has initialized.");
     }
 
-
     @Override
-    public List<Course> getCurses() {
+    public List<Course> getAllCourses() {
         return courses;
     }
 
-    @Override
-    public Course getCurseById(Integer id) {
-        for (Course s : courses) {
-            if (Objects.equals(s.getId(), id)) {
-                return s;
-            }
-        }
-        logger.error("Course not found with ID: {}", id);
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found with ID: " + id);
-    }
-
-    @Override
-    public void addCurse(Course course) {
-        courses.add(course);
-    }
 
     @Override
     public Course editCourse(Course course) {
@@ -71,13 +53,4 @@ public class CourseServiceImpl implements CourseService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found with ID: " + course.getId());
     }
 
-    @Override
-    public void deleteCurseId(Integer idCourse) {
-        courses.removeIf(courses -> Objects.equals(courses.getId(), idCourse));
-    }
-
-    @Override
-    public void deleteAllCurses() {
-        courses.clear();
-    }
 }

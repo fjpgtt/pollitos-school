@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Student {
-
     private Integer id;
     private String firstName;
     private String lastName;

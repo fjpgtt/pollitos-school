@@ -2,8 +2,6 @@ package com.iwaconsolti.school.model;
 
 import lombok.*;
 
-import java.util.List;
-
 @Setter
 @Getter
 @ToString

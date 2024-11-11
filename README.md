@@ -16,15 +16,17 @@ For the grade we would implement a limit what is the highest score, by default w
 
 We need to create the following endpoints (in each request you should indicate what is the league you want to modify):
 * Create student (Ready)
-* Create course (Ready)
-* Create a grade (Ready)
 * Get all the students (Ready)
-* Get all the courses (Ready)
-* Get all the grades from a specific student (Ready)
-* Edit the course information (Ready)
 * Edit the student information (Ready)
+
+* Create course (Ready)
+* Get all the courses (Ready)
+* Edit the course information (Ready)
+
+* Create a grade (Ready)
+* Get all the grades from a specific student (Ready)
 * Delete all the grades of a student (Ready)
-* Delete all the grades of a course (Ready)
+* Delete all the grades of a course 
 
 Criteria to evaluate:
 * Creation of beans

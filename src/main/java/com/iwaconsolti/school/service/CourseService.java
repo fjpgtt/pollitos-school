@@ -5,16 +5,8 @@ import com.iwaconsolti.school.model.Course;
 import java.util.List;
 
 public interface CourseService {
-    public List<Course> getCurses();
+    List<Course> getAllCourses();
 
-    public Course getCurseById(Integer idCourse);
-
-    public void addCurse(Course course);
-
-    public Course editCourse(Course course);
-
-    public void deleteCurseId(Integer idCourse);
-
-    public void deleteAllCurses();
+    Course editCourse(Course course);
 
 }
