@@ -1,24 +1,21 @@
 package com.iwaconsolti.school.service;
 
 import com.iwaconsolti.school.model.Course;
+import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.Student;
 
+import java.util.List;
+
 public interface GradeService {
-    public Student getCourseById(Integer idGrade);
-    public Student getStudent();
-    public Integer getScore();
-    public Course getCourse ();
+    public List<Grade> getAllGrades();
 
-    public Student setStudent(Student student);
-    public Integer setScore(Integer score);
-    public Course setCourse (Course course);
+    public List<Grade> getGradesByStudent(Integer idStudent);
 
-    public Student addStudent(Student student);
-    public Integer addScore(Integer score);
-    public Course addCourse (Course course);
+    public Grade addGrade(Grade grade);
 
-    public Student deleteStudent(Student student);
-    public Integer deleteScore(Integer score);
-    public Course deleteCourse (Course course);
+    public Grade editGrade(Grade grade);
 
+    public void deleteAllGradesOfStudent(Integer idStudent);
+
+    public void deleteAllGradesOfCourse(Integer idCourse);
 }

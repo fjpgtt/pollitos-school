@@ -28,17 +28,6 @@ public class CourseController {
         return ResponseEntity.ok(course);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getNameCourse(@PathVariable Integer id) {
-        String courseName = courseService.getNameCourse(id);
-        return ResponseEntity.ok(courseName);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getProfessorName(@PathVariable Integer id) {
-        String courseProfessor = courseService.getProfessorName(id);
-        return ResponseEntity.ok(courseProfessor);
-    }
 
     @PostMapping
     public ResponseEntity<?> addCourse(@RequestBody Course course) {
@@ -47,15 +36,9 @@ public class CourseController {
     }
 
     @PutMapping
-    public ResponseEntity<?> setProfessorName(@RequestBody Course course){
-        courseService.setProfessorName(course);
-        return ResponseEntity.ok(200);
-    }
-
-    @PutMapping
-    public ResponseEntity<?> setNameCourse(@RequestBody Course course){
-        courseService.setNameCourse(course);
-        return ResponseEntity.ok(200);
+    public ResponseEntity<?> editCourse(@RequestBody Course course){
+        Course editCourse = courseService.editCourse(course);
+        return ResponseEntity.ok(editCourse);
     }
 
     @DeleteMapping("/{id}")
@@ -64,7 +47,7 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping()
     public ResponseEntity<?> deleteAllCourses(){
         courseService.deleteAllCurses();
         return ResponseEntity.noContent().build();

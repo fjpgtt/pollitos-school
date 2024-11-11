@@ -51,49 +51,21 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public String getNameCourse(Integer id) {
-        for (Course s : courses) {
-            if (Objects.equals(s.getId(), id)) {
-                return s.getName();
-            }
-        }
-        logger.error("Name course not found with ID: {}", id);
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found with ID: " + id);
-    }
-
-    @Override
-    public String getProfessorName(Integer id) {
-        for (Course s : courses) {
-            if (Objects.equals(s.getId(), id)) {
-                return s.getProfessorName();
-            }
-        }
-        logger.error("Professor not found in course with ID: {}", id);
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found with ID: " + id);
-    }
-
-    @Override
     public void addCurse(Course course) {
         courses.add(course);
     }
 
     @Override
-    public void setNameCourse(Course course) {
+    public Course editCourse(Course course) {
         for (Course s : courses) {
             if (Objects.equals(s.getId(), course.getId())) {
-                s.setName(course.getName());
-                break;
-            }
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found with ID: " + course.getId());
-    }
-
-    @Override
-    public void setProfessorName(Course course) {
-        for (Course s : courses) {
-            if (Objects.equals(s.getId(), course.getId())) {
-                s.setProfessorName(course.getProfessorName());
-                break;
+                if (course.getName() != null){
+                    s.setName(course.getName());
+                }
+                if (course.getProfessorName() != null){
+                    s.setProfessorName(course.getProfessorName());
+                }
+                return course;
             }
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found with ID: " + course.getId());

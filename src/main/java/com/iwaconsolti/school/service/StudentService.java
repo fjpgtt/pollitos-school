@@ -9,7 +9,7 @@ public interface StudentService {
 
     public Student getStudentById(Integer id);
 
-    public Student setStudent(Student student);
+    public Student editStudent(Student student);
 
     public Student addStudent(Student student);
 

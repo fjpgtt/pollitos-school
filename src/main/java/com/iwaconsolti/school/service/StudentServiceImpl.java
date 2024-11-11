@@ -20,15 +20,16 @@ public class StudentServiceImpl implements StudentService {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
 
-    List<Student> students = new ArrayList<>(Arrays.asList(
-            new Student(1, "Adrian", "Sanchez", 24),
-            new Student(2, "Francisco", "Perez", 18),
-            new Student(3, "aaaaaa", "lastaaaa", 18),
-            new Student(4, "bbbbbb", "lastbbbbb", 18)
-    ));
+    List<Student> students;
 
     @PostConstruct
     public void init() {
+        students = new ArrayList<>(Arrays.asList(
+                new Student(1, "Adrian", "Sanchez", 24),
+                new Student(2, "Francisco", "Perez", 18),
+                new Student(3, "aaaaaa", "lastaaaa", 18),
+                new Student(4, "bbbbbb", "lastbbbbb", 18)
+        ));
         logger.info("StudentServiceImpl has initialized");
     }
 
@@ -50,13 +51,19 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student setStudent(Student student) {
+    public Student editStudent(Student student) {
         for (Student s : students) {
             if (Objects.equals(s.getId(), student.getId())) {
-                s.setFirstName(student.getFirstName());
-                s.setLastName(student.getLastName());
-                s.setAge(student.getAge());
-                break;
+                if (student.getFirstName() != null) {
+                    s.setFirstName(student.getFirstName());
+                }
+                if (student.getLastName() != null) {
+                    s.setLastName(student.getLastName());
+                }
+                if (student.getAge() != null) {
+                    s.setAge(student.getAge());
+                }
+                return student;
             }
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + student.getId());

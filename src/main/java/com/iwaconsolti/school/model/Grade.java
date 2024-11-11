@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Grade {
+    private Integer id;
     private Integer score;
     private Student student;
     private Course course;

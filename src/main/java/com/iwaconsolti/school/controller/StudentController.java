@@ -34,8 +34,8 @@ public class StudentController {
     }
 
     @PutMapping
-    public ResponseEntity<?> setStudent(@RequestBody Student student){
-        Student setStudent = studentService.setStudent(student);
+    public ResponseEntity<?> editStudent(@RequestBody Student student){
+        Student setStudent = studentService.editStudent(student);
         return ResponseEntity.ok(setStudent);
     }
 

@@ -15,16 +15,16 @@ that will have at least 2 students and 2 courses already created in each school.
 For the grade we would implement a limit what is the highest score, by default will be 100 but it can be overriden by a property
 
 We need to create the following endpoints (in each request you should indicate what is the league you want to modify):
-* Create student
-* Create course
-* Create a grade
-* Get all the students
-* Get all the courses
-* Get all the grades from a specific student
-* Edit the course information
-* Edit the student information
-* Delete all the grades of a student
-* Delete all the grades of a course
+* Create student (Ready)
+* Create course (Ready)
+* Create a grade (Ready)
+* Get all the students (Ready)
+* Get all the courses (Ready)
+* Get all the grades from a specific student (Ready)
+* Edit the course information (Ready)
+* Edit the student information (Ready)
+* Delete all the grades of a student (Ready)
+* Delete all the grades of a course (Ready)
 
 Criteria to evaluate:
 * Creation of beans
