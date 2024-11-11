@@ -17,25 +17,12 @@ import java.util.Objects;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CourseServiceImpl.class);
     List<Course> courses;
-    @Profile("populated")
-    @PostConstruct
-    public void init() {
-        courses = new ArrayList<>(Arrays.asList(
-                new Course(1, "Math", "Teresa"),
-                new Course(2, "Spanish", "Frank"),
-                new Course(3, "English", "Veronica"),
-                new Course(4, "Programming", "Gabriela")
-        ));
-        logger.info("CourseServiceImpl has initialized.");
-    }
 
     @Override
     public List<Course> getAllCourses() {
         return courses;
     }
-
 
     @Override
     public Course editCourse(Course course) {

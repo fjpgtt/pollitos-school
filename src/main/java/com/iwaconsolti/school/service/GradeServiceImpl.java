@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 @Service
 public class GradeServiceImpl implements GradeService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GradeServiceImpl.class);
-
     @Autowired
     private StudentService studentService;
 
@@ -28,32 +26,6 @@ public class GradeServiceImpl implements GradeService {
 
     private List<Grade> grades;
 
-    @PostConstruct
-    public void init() {
-        grades = new ArrayList<>();
-
-        List<Student> students = studentService.getStudents();
-        List<Course> courses = courseService.getAllCourses();
-
-        grades.add(new Grade(1, 100, students.get(0), courses.get(0)));
-        grades.add(new Grade(2, 100, students.get(0), courses.get(1)));
-        grades.add(new Grade(3, 100, students.get(0), courses.get(2)));
-        grades.add(new Grade(4, 100, students.get(0), courses.get(3)));
-        grades.add(new Grade(5, 100, students.get(1), courses.get(0)));
-        grades.add(new Grade(6, 100, students.get(1), courses.get(1)));
-        grades.add(new Grade(7, 100, students.get(1), courses.get(2)));
-        grades.add(new Grade(8, 100, students.get(1), courses.get(3)));
-        grades.add(new Grade(9, 100, students.get(2), courses.get(0)));
-        grades.add(new Grade(10, 100, students.get(2), courses.get(1)));
-        grades.add(new Grade(11, 100, students.get(2), courses.get(2)));
-        grades.add(new Grade(12, 100, students.get(2), courses.get(3)));
-        grades.add(new Grade(13, 100, students.get(3), courses.get(0)));
-        grades.add(new Grade(14, 100, students.get(3), courses.get(1)));
-        grades.add(new Grade(15, 100, students.get(3), courses.get(2)));
-        grades.add(new Grade(16, 100, students.get(3), courses.get(3)));
-
-        logger.info("GradeServiceImpl has initialized.");
-    }
 
     @Override
     public List<Grade> getGradesByStudent(Integer idStudent) {

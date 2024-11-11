@@ -18,20 +18,7 @@ import java.util.Objects;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
-
     List<Student> students;
-
-    @PostConstruct
-    public void init() {
-        students = new ArrayList<>(Arrays.asList(
-                new Student(1, "Adrian", "Sanchez", 24),
-                new Student(2, "Francisco", "Perez", 18),
-                new Student(3, "Emanuel", "Ayala", 18),
-                new Student(4, "Sandra", "Lopez", 18)
-        ));
-        logger.info("StudentServiceImpl has initialized.");
-    }
 
     @Override
     public List<Student> getStudents() {

@@ -1,34 +1,52 @@
 package com.iwaconsolti.school.controller;
 
 import com.iwaconsolti.school.model.Grade;
-import com.iwaconsolti.school.service.GradeService;
+import com.iwaconsolti.school.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/grades")
+@RequestMapping("/{schoolName}/grades")
 public class GradeController {
 
     @Autowired
-    private GradeService gradeService;
+    @Qualifier("gerardoServicePopulated")
+    private SchoolService gerardoService;
 
-    @GetMapping("/student/{studentId}")
-    public ResponseEntity<List<Grade>> getGradesByStudent(@PathVariable Integer studentId) {
-        return ResponseEntity.ok(gradeService.getGradesByStudent(studentId));
+    @Autowired
+    @Qualifier("zetServicePopulated")
+    private SchoolService zetService;
+
+    private SchoolService getServiceBySchoolName(String schoolName) {
+        if ("GerardoInstitute".equalsIgnoreCase(schoolName)) {
+            return gerardoService;
+        } else if ("ZetCollege".equalsIgnoreCase(schoolName)) {
+            return zetService;
+        } else {
+            throw new IllegalArgumentException("Invalid school name");
+        }
     }
 
-    @DeleteMapping("/student/{studentId}")
-    public ResponseEntity<Void> deleteAllGradesOfStudent(@PathVariable Integer studentId) {
-        gradeService.deleteAllGradesOfStudent(studentId);
-        return ResponseEntity.noContent().build();
+    @PostMapping
+    public void createGrade(@PathVariable String schoolName, @RequestBody Grade grade) {
+        getServiceBySchoolName(schoolName).addGrade(grade);
     }
 
-    @DeleteMapping("/course/{courseId}")
-    public ResponseEntity<Void> deleteAllGradesOfCourse(@PathVariable Integer courseId) {
-        gradeService.deleteAllGradesOfCourse(courseId);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/students/{studentId}")
+    public List<Grade> getGradesByStudent(@PathVariable String schoolName, @PathVariable Integer studentId) {
+        return getServiceBySchoolName(schoolName).getGradesByStudent(studentId);
+    }
+
+    @DeleteMapping("/students/{studentId}")
+    public void deleteGradesByStudent(@PathVariable String schoolName, @PathVariable Integer studentId) {
+        getServiceBySchoolName(schoolName).deleteGradesByStudent(studentId);
+    }
+
+    @DeleteMapping("/courses/{courseId}")
+    public void deleteGradesByCourse(@PathVariable String schoolName, @PathVariable Integer courseId) {
+        getServiceBySchoolName(schoolName).deleteGradesByCourse(courseId);
     }
 }
