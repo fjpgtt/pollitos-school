@@ -6,7 +6,8 @@ import com.iwaconsolti.school.model.Schools.GerardoInstitute;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Schools.ZetCollege;
 import com.iwaconsolti.school.model.Student;
-import com.iwaconsolti.school.service.*;
+import com.iwaconsolti.school.service.SchoolService;
+import com.iwaconsolti.school.service.SchoolServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +16,6 @@ import org.springframework.context.annotation.Profile;
 @Slf4j
 @Configuration
 public class SchoolConfig {
-
-    StudentService studentService;
-    CourseService courseService;
-    GradeService gradeService;
 
     @Bean
     public School gerardoInstitute() {
@@ -32,22 +29,21 @@ public class SchoolConfig {
 
     @Bean
     @Profile("empty")
-    public SchoolService gerardoServiceDefault(School gerardoInstitute, StudentService studentService, CourseService courseService, GradeService gradeService) {
-        return new SchoolServiceImpl(gerardoInstitute, studentService, courseService, gradeService);
+    public SchoolService gerardoServiceDefault() {
+        return new SchoolServiceImpl(gerardoInstitute());
     }
 
     @Bean
     @Profile("empty")
-    public SchoolService zetServiceDefault(School zetCollege, StudentService studentService, CourseService courseService, GradeService gradeService) {
-        return new SchoolServiceImpl(zetCollege, studentService, courseService, gradeService);
+    public SchoolService zetServiceDefault() {
+        return new SchoolServiceImpl(zetCollege());
     }
 
     @Bean
     @Profile("populated")
     public SchoolService gerardoServicePopulated() {
         School gerardoInstitute = gerardoInstitute();
-
-        SchoolServiceImpl schoolService = new SchoolServiceImpl(gerardoInstitute, studentService, courseService, gradeService);
+        SchoolServiceImpl schoolService = new SchoolServiceImpl(gerardoInstitute);
 
         Student student1 = new Student(1, "Juan", "Perez", 20);
         Student student2 = new Student(2, "Ana", "Gomez", 22);
@@ -78,7 +74,7 @@ public class SchoolConfig {
     @Profile("populated")
     public SchoolService zetServicePopulated() {
         School zetCollege = zetCollege();
-        SchoolServiceImpl schoolService = new SchoolServiceImpl(zetCollege, studentService, courseService, gradeService);
+        SchoolServiceImpl schoolService = new SchoolServiceImpl(zetCollege);
 
         Student student1 = new Student(3, "Carlos", "Martinez", 21);
         Student student2 = new Student(4, "Lucia", "Fernandez", 23);

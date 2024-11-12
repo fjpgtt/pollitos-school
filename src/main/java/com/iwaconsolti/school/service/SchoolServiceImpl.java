@@ -4,74 +4,78 @@ import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Service
 public class SchoolServiceImpl implements SchoolService {
-
     private final School school;
 
-    private final StudentService studentService;
-    private final CourseService courseService;
-    private final GradeService gradeService;
-
-    public SchoolServiceImpl(School school, StudentService studentService, CourseService courseService, GradeService gradeService) {
+    public SchoolServiceImpl(School school) {
         this.school = school;
-        this.studentService = studentService;
-        this.courseService = courseService;
-        this.gradeService = gradeService;
     }
 
     @Override
     public void addStudent(Student student) {
-       // studentService.addStudent(student); // Utiliza el servicio StudentService
+        school.getStudents().add(student);
     }
 
     @Override
     public List<Student> getAllStudents() {
-        return studentService.getStudents(); // Llama al servicio para obtener estudiantes
+        return school.getStudents();
     }
 
     @Override
     public void editStudent(Integer id, Student updatedStudent) {
-        studentService.editStudent(updatedStudent); // Edita el estudiante
+        // Implementación de edición de estudiante
     }
 
     @Override
     public void addCourse(Course course) {
-        //courseService.addCourse(course); // Llama al servicio CourseService
+        school.getCourses().add(course);
     }
 
     @Override
     public List<Course> getAllCourses() {
-        return courseService.getAllCourses(); // Llama al servicio CourseService
+        return school.getCourses();
     }
 
     @Override
     public void editCourse(Integer id, Course updatedCourse) {
-        courseService.editCourse(updatedCourse); // Edita el curso
+        // Implementación de edición de curso
     }
 
     @Override
     public void addGrade(Grade grade) {
-        //gradeService.addGrade(grade); // Llama al servicio GradeService
+        school.getGrades().add(grade);
+    }
+
+    public List<Grade> getGrades() {
+        return school.getGrades();
     }
 
     @Override
     public List<Grade> getGradesByStudent(Integer studentId) {
-        return gradeService.getGradesByStudent(studentId); // Delegar a GradeService
+        return school.getGrades().stream()
+                .filter(grade -> grade.getStudent().getId().equals(studentId))
+                .collect(Collectors.toList());
     }
 
     @Override
     public void deleteGradesByStudent(Integer studentId) {
-        gradeService.deleteAllGradesOfStudent(studentId); // Delegar a GradeService
+        school.setGrades(
+                school.getGrades().stream()
+                        .filter(grade -> !grade.getStudent().getId().equals(studentId))
+                        .collect(Collectors.toList())
+        );
     }
 
     @Override
     public void deleteGradesByCourse(Integer courseId) {
-        gradeService.deleteAllGradesOfCourse(courseId); // Delegar a GradeService
+        school.setGrades(
+                school.getGrades().stream()
+                        .filter(grade -> !grade.getCourse().getId().equals(courseId))
+                        .collect(Collectors.toList())
+        );
     }
 }
