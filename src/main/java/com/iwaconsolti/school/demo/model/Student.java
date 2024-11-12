@@ -3,8 +3,6 @@ package com.iwaconsolti.school.demo.model;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
-@Getter
-@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

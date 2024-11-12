@@ -2,18 +2,15 @@ package com.iwaconsolti.school.demo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @Data
 @AllArgsConstructor
 @Component
 public class School{
+    private String name;
     private final List<Student> studentsList;
     private final List<Course> courseList;
     private final List<Grade> gradeList;
@@ -24,5 +21,11 @@ public class School{
         this.gradeList = new ArrayList<>();
     }
 
+    public School(String name){
+        this.name = name;
+        this.studentsList = new ArrayList<>();
+        this.courseList = new ArrayList<>();
+        this.gradeList = new ArrayList<>();
+    }
 
 }
