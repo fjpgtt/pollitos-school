@@ -2,19 +2,26 @@ package com.iwaconsolti.school.config;
 
 import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
-import com.iwaconsolti.school.model.Schools.GerardoInstitute;
+import com.iwaconsolti.school.model.schools.GerardoInstitute;
 import com.iwaconsolti.school.model.School;
-import com.iwaconsolti.school.model.Schools.ZetCollege;
+import com.iwaconsolti.school.model.schools.ZetCollege;
 import com.iwaconsolti.school.model.Student;
 import com.iwaconsolti.school.service.SchoolService;
 import com.iwaconsolti.school.service.SchoolServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.beans.factory.annotation.Value;
+
 
 @Profile("populated")
 @Configuration
+@Slf4j
 public class SchoolPopulatedConfig {
+    @Value("${school.score.limit:100}")
+    private int limitGrade;
+
     @Bean
     public School gerardoInstitute() {
         return new GerardoInstitute();
@@ -28,7 +35,7 @@ public class SchoolPopulatedConfig {
     @Bean("gerardoService")
     public SchoolService gerardoServicePopulated() {
         School gerardoInstitute = gerardoInstitute();
-        SchoolServiceImpl schoolService = new SchoolServiceImpl(gerardoInstitute);
+        SchoolServiceImpl schoolService = new SchoolServiceImpl(gerardoInstitute, limitGrade);
 
         Student student1 = new Student(1, "Juan", "Perez", 20);
         Student student2 = new Student(2, "Ana", "Gomez", 22);
@@ -52,13 +59,14 @@ public class SchoolPopulatedConfig {
         schoolService.addGrade(grade3);
         schoolService.addGrade(grade4);
 
+        log.info("gerardoServicePopulated initialized");
         return schoolService;
     }
 
     @Bean("zetService")
     public SchoolService zetServicePopulated() {
         School zetCollege = zetCollege();
-        SchoolServiceImpl schoolService = new SchoolServiceImpl(zetCollege);
+        SchoolServiceImpl schoolService = new SchoolServiceImpl(zetCollege, limitGrade);
 
         Student student1 = new Student(1, "Carlos", "Martinez", 21);
         Student student2 = new Student(2, "Lucia", "Fernandez", 23);
@@ -82,6 +90,7 @@ public class SchoolPopulatedConfig {
         schoolService.addGrade(grade3);
         schoolService.addGrade(grade4);
 
+        log.info("zetServicePopulated initialized");
         return schoolService;
     }
 }

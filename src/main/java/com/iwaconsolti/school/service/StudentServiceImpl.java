@@ -3,7 +3,6 @@ package com.iwaconsolti.school.service;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,7 +22,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student editStudent(School school, int studentId, Student student) {
-        for (Student s : school.getStudents()) {  // Usamos la lista de estudiantes en school
+        for (Student s : school.getStudents()) {
             if (Objects.equals(s.getId(), studentId)) {
                 if (student.getFirstName() != null) {
                     s.setFirstName(student.getFirstName());
@@ -34,7 +33,7 @@ public class StudentServiceImpl implements StudentService {
                 if (student.getAge() != null) {
                     s.setAge(student.getAge());
                 }
-                return s;  // Devolvemos el estudiante actualizado en lugar del original recibido
+                return s;
             }
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + studentId);

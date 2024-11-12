@@ -1,4 +1,4 @@
-package com.iwaconsolti.school.model.Schools;
+package com.iwaconsolti.school.model.schools;
 
 import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;

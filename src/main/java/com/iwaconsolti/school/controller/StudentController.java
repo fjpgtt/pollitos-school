@@ -1,5 +1,6 @@
 package com.iwaconsolti.school.controller;
 
+import com.iwaconsolti.school.controller.response.StudentResponse;
 import com.iwaconsolti.school.model.Student;
 import com.iwaconsolti.school.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/{schoolName}/student")
@@ -29,9 +31,17 @@ public class StudentController {
             throw new IllegalArgumentException("Invalid school name");
         }
     }
+
+    private StudentResponse convertToStudentResponse(Student student) {
+        return new StudentResponse(student.getId(), student.getFirstName(), student.getLastName(), student.getAge());
+    }
+
     @GetMapping
-    public List<Student> getAllStudents(@PathVariable String schoolName) {
-        return getServiceBySchoolName(schoolName).getStudents();
+    public List<StudentResponse> getAllStudents(@PathVariable String schoolName) {
+        List<Student> students = getServiceBySchoolName(schoolName).getStudents();
+        return students.stream()
+                .map(this::convertToStudentResponse)
+                .collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")

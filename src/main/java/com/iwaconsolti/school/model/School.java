@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public abstract class School {
+public class School {
 
     protected String name;
     protected List<Student> students;

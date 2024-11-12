@@ -1,17 +1,10 @@
 package com.iwaconsolti.school.service;
 
-import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.School;
-import com.iwaconsolti.school.model.Student;
-import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

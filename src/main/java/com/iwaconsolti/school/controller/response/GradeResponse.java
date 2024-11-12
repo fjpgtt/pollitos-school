@@ -10,4 +10,5 @@ public class GradeResponse {
     private int score;
     private StudentResponse studentResponse;
     private CourseResponse courseResponse;
+
 }

@@ -8,9 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-
 public class SchoolServiceImpl implements SchoolService {
     private final School school;
+
+    private final int limitGrade;
+
+    public SchoolServiceImpl(School school, int limitGrade) {
+        this.school = school;
+        this.limitGrade = limitGrade;
+    }
 
     @Autowired
     private CourseService course;
@@ -19,9 +25,6 @@ public class SchoolServiceImpl implements SchoolService {
     @Autowired
     private StudentService student;
 
-    public SchoolServiceImpl(School school) {
-        this.school = school;
-    }
 
     public void addCourse(Course course) {
         school.getCourses().add(course);
@@ -32,7 +35,11 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     public void addGrade(Grade grade) {
-        school.getGrades().add(grade);
+        if (grade.getScore() <= limitGrade) {
+            school.getGrades().add(grade);
+        } else {
+            throw new IllegalArgumentException("Grade value exceeds the score limit of " + limitGrade);
+        }
     }
 
     @Override
