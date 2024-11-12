@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
+
 
 @Setter
 @Getter
@@ -18,5 +20,6 @@ public class Student {
     private String lastName;
     private int age;
     private Date creationDate;
+    private List<Grade> grades;
 
 }

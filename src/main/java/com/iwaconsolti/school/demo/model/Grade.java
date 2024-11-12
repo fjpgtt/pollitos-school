@@ -1,19 +1,22 @@
 package com.iwaconsolti.school.demo.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Setter
 @Getter
 @ToString
-@Component
+@Builder
 public class Grade {
 
     private int id;
     private long score;
-    private Student student;
-    private Course course;
+    private int studentId;
+    private int courseId;
+    private Date creationDate;
 
 }
