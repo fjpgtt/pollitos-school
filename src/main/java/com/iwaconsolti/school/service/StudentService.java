@@ -7,6 +7,6 @@ import java.util.List;
 public interface StudentService {
     List<Student> getStudents();
 
-    Student editStudent(Student student);
+    Student editStudent(int studentId, Student student);
 
 }

@@ -11,19 +11,19 @@ public interface SchoolService {
 
     List<Student> getAllStudents();
 
-    void editStudent(Integer id, Student updatedStudent);
+    void editStudent(int id, Student updatedStudent);
 
     void addCourse(Course course);
 
     List<Course> getAllCourses();
 
-    void editCourse(Integer id, Course updatedCourse);
+    void editCourse(int id, Course updatedCourse);
 
     void addGrade(Grade grade);
 
-    List<Grade> getGradesByStudent(Integer studentId);
+    List<Grade> getGradesByStudent(int studentId);
 
-    void deleteGradesByStudent(Integer studentId);
+    void deleteGradesByStudent(int studentId);
 
-    void deleteGradesByCourse(Integer courseId);
+    void deleteGradesByCourse(int courseId);
 }

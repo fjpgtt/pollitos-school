@@ -7,6 +7,6 @@ import java.util.List;
 public interface CourseService {
     List<Course> getAllCourses();
 
-    Course editCourse(Course course);
+    Course editCourse(int courseId, Course course);
 
 }

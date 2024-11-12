@@ -6,6 +6,7 @@ import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SchoolServiceImpl implements SchoolService {
@@ -26,7 +27,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public void editStudent(Integer id, Student updatedStudent) {
+    public void editStudent(int id, Student updatedStudent) {
         // Implementación de edición de estudiante
     }
 
@@ -41,7 +42,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public void editCourse(Integer id, Course updatedCourse) {
+    public void editCourse(int id, Course updatedCourse) {
         // Implementación de edición de curso
     }
 
@@ -55,26 +56,26 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public List<Grade> getGradesByStudent(Integer studentId) {
+    public List<Grade> getGradesByStudent(int studentId) {
         return school.getGrades().stream()
-                .filter(grade -> grade.getStudent().getId().equals(studentId))
+                .filter(grade -> Objects.equals(grade.getStudent().getId(), studentId))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void deleteGradesByStudent(Integer studentId) {
+    public void deleteGradesByStudent(int studentId) {
         school.setGrades(
                 school.getGrades().stream()
-                        .filter(grade -> !grade.getStudent().getId().equals(studentId))
+                        .filter(grade -> !Objects.equals(grade.getCourse().getId(), studentId))
                         .collect(Collectors.toList())
         );
     }
 
     @Override
-    public void deleteGradesByCourse(Integer courseId) {
+    public void deleteGradesByCourse(int courseId) {
         school.setGrades(
                 school.getGrades().stream()
-                        .filter(grade -> !grade.getCourse().getId().equals(courseId))
+                        .filter(grade -> !Objects.equals(grade.getCourse().getId(), courseId))
                         .collect(Collectors.toList())
         );
     }

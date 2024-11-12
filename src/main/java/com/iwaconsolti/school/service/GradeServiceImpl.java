@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Profile("populated")
@@ -28,19 +29,19 @@ public class GradeServiceImpl implements GradeService {
 
 
     @Override
-    public List<Grade> getGradesByStudent(Integer idStudent) {
+    public List<Grade> getGradesByStudent(int studentId) {
         return grades.stream()
-                .filter(grade -> (grade.getStudent().getId()).equals(idStudent))
+                .filter(grade -> Objects.equals(grade.getStudent().getId(), studentId))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void deleteAllGradesOfStudent(Integer studentId) {
-        grades.removeIf(grade -> (grade.getStudent().getId()).equals(studentId));
+    public void deleteAllGradesOfStudent(int studentId) {
+        grades.removeIf(grade -> (Objects.equals(grade.getStudent().getId(), studentId)));
     }
 
     @Override
-    public void deleteAllGradesOfCourse(Integer courseId) {
-        grades.removeIf(grade -> (grade.getCourse().getId()).equals(courseId));
+    public void deleteAllGradesOfCourse(int courseId) {
+        grades.removeIf(grade -> (Objects.equals(grade.getStudent().getId(), courseId)));
     }
 }

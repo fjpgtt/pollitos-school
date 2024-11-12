@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/{schoolName}/grades")
+@RequestMapping("/{schoolName}/gradeResponses")
 public class GradeController {
 
     @Autowired
@@ -36,17 +36,17 @@ public class GradeController {
     }
 
     @GetMapping("/students/{studentId}")
-    public List<Grade> getGradesByStudent(@PathVariable String schoolName, @PathVariable Integer studentId) {
+    public List<Grade> getGradesByStudent(@PathVariable String schoolName, @PathVariable int studentId) {
         return getServiceBySchoolName(schoolName).getGradesByStudent(studentId);
     }
 
     @DeleteMapping("/students/{studentId}")
-    public void deleteGradesByStudent(@PathVariable String schoolName, @PathVariable Integer studentId) {
+    public void deleteGradesByStudent(@PathVariable String schoolName, @PathVariable int studentId) {
         getServiceBySchoolName(schoolName).deleteGradesByStudent(studentId);
     }
 
-    @DeleteMapping("/courses/{courseId}")
-    public void deleteGradesByCourse(@PathVariable String schoolName, @PathVariable Integer courseId) {
+    @DeleteMapping("/cours/{courseId}")
+    public void deleteGradesByCourse(@PathVariable String schoolName, @PathVariable int courseId) {
         getServiceBySchoolName(schoolName).deleteGradesByCourse(courseId);
     }
 }

@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface GradeService {
 
-    List<Grade> getGradesByStudent(Integer idStudent);
+    List<Grade> getGradesByStudent(int idStudent);
 
-    void deleteAllGradesOfStudent(Integer idStudent);
+    void deleteAllGradesOfStudent(int idStudent);
 
-    void deleteAllGradesOfCourse(Integer idCourse);
+    void deleteAllGradesOfCourse(int idCourse);
 }

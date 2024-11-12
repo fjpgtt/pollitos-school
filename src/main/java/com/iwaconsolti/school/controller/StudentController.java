@@ -41,7 +41,7 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public void editStudent(@PathVariable String schoolName, @PathVariable Integer id, @RequestBody Student updatedStudent) {
+    public void editStudent(@PathVariable String schoolName, @PathVariable int id, @RequestBody Student updatedStudent) {
         getServiceBySchoolName(schoolName).editStudent(id, updatedStudent);
     }
 }

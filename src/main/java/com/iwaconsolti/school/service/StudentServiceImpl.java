@@ -26,9 +26,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student editStudent(Student student) {
+    public Student editStudent(int studentId, Student student) {
         for (Student s : students) {
-            if (Objects.equals(s.getId(), student.getId())) {
+            if (Objects.equals(s.getId(), studentId)) {
                 if (student.getFirstName() != null) {
                     s.setFirstName(student.getFirstName());
                 }

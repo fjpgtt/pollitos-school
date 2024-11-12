@@ -76,8 +76,8 @@ public class SchoolConfig {
         School zetCollege = zetCollege();
         SchoolServiceImpl schoolService = new SchoolServiceImpl(zetCollege);
 
-        Student student1 = new Student(3, "Carlos", "Martinez", 21);
-        Student student2 = new Student(4, "Lucia", "Fernandez", 23);
+        Student student1 = new Student(1, "Carlos", "Martinez", 21);
+        Student student2 = new Student(2, "Lucia", "Fernandez", 23);
 
         schoolService.addStudent(student1);
         schoolService.addStudent(student2);

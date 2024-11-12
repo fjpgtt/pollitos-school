@@ -2,13 +2,11 @@ package com.iwaconsolti.school.model;
 
 import java.util.List;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Setter
-@Getter
-@ToString
+@Data
 @AllArgsConstructor
-@NoArgsConstructor
 public abstract class School {
 
     protected String name;

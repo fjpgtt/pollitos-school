@@ -1,16 +1,11 @@
 package com.iwaconsolti.school.service;
 
 import com.iwaconsolti.school.model.Course;
-import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,9 +20,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course editCourse(Course course) {
+    public Course editCourse(int courseId, Course course) {
         for (Course s : courses) {
-            if (Objects.equals(s.getId(), course.getId())) {
+            if (Objects.equals(s.getId(), courseId)) {
                 if (course.getName() != null){
                     s.setName(course.getName());
                 }
@@ -37,7 +32,7 @@ public class CourseServiceImpl implements CourseService {
                 return course;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found with ID: " + course.getId());
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "CourseResponse not found with ID: " + course.getId());
     }
 
 }

@@ -1,11 +1,16 @@
 package com.iwaconsolti.school.model.Schools;
 
+import com.iwaconsolti.school.model.Course;
+import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.School;
+import com.iwaconsolti.school.model.Student;
 
 import java.util.ArrayList;
 
 public class ZetCollege extends School {
     public ZetCollege() {
+        super("ZetCollege", new ArrayList<Student>(), new ArrayList<Course>(), new ArrayList<Grade>());
+
         this.name = "ZetCollege";
         this.students = new ArrayList<>();
         this.courses = new ArrayList<>();
