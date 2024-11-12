@@ -1,16 +1,12 @@
 package com.iwaconsolti.school.service;
 
 import com.iwaconsolti.school.model.Student;
-import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,7 +37,7 @@ public class StudentServiceImpl implements StudentService {
                 return student;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + student.getId());
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "StudentResponse not found with ID: " + student.getId());
     }
 
 }

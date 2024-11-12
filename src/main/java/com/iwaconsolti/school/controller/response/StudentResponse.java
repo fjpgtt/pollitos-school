@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Student {
+public class StudentResponse {
     private final int id;
     private String firstName;
     private String lastName;

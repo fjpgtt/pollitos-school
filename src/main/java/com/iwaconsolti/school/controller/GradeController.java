@@ -35,12 +35,12 @@ public class GradeController {
         getServiceBySchoolName(schoolName).addGrade(grade);
     }
 
-    @GetMapping("/students/{studentId}")
+    @GetMapping("/studentResponses/{studentId}")
     public List<Grade> getGradesByStudent(@PathVariable String schoolName, @PathVariable int studentId) {
         return getServiceBySchoolName(schoolName).getGradesByStudent(studentId);
     }
 
-    @DeleteMapping("/students/{studentId}")
+    @DeleteMapping("/studentResponses/{studentId}")
     public void deleteGradesByStudent(@PathVariable String schoolName, @PathVariable int studentId) {
         getServiceBySchoolName(schoolName).deleteGradesByStudent(studentId);
     }

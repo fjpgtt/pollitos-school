@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class SchoolResponse {
 
     protected String name;
-    protected List<Student> students;
+    protected List<StudentResponse> studentResponses;
     protected List<CourseResponse> cours;
     protected List<GradeResponse> gradeResponses;
 
