@@ -30,7 +30,7 @@ public class StudentServiceImpl implements StudentService {
                 if (student.getLastName() != null) {
                     s.setLastName(student.getLastName());
                 }
-                if (student.getAge() != null) {
+                if (student.getAge() != 0) {
                     s.setAge(student.getAge());
                 }
                 return s;

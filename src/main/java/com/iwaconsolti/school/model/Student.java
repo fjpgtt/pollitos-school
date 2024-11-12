@@ -9,5 +9,5 @@ public class Student {
     private final int id;
     private String firstName;
     private String lastName;
-    private Integer age;
+    private int age;
 }
