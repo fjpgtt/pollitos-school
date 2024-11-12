@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/{schoolName}/cours")
+@RequestMapping("/{schoolName}/course")
 public class CourseController {
 
     @Autowired
@@ -30,14 +30,9 @@ public class CourseController {
         }
     }
 
-    @PostMapping
-    public void createCourse(@PathVariable String schoolName, @RequestBody Course course) {
-        getServiceBySchoolName(schoolName).addCourse(course);
-    }
-
     @GetMapping
     public List<Course> getAllCourses(@PathVariable String schoolName) {
-        return getServiceBySchoolName(schoolName).getAllCourses();
+        return getServiceBySchoolName(schoolName).getCourses();
     }
 
     @PutMapping("/{id}")

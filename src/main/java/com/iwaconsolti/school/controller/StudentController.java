@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/{schoolName}/studentResponses")
+@RequestMapping("/{schoolName}/student")
 public class StudentController {
 
     @Autowired
@@ -29,15 +29,9 @@ public class StudentController {
             throw new IllegalArgumentException("Invalid school name");
         }
     }
-
-    @PostMapping
-    public void createStudent(@PathVariable String schoolName, @RequestBody Student student) {
-        getServiceBySchoolName(schoolName).addStudent(student);
-    }
-
     @GetMapping
     public List<Student> getAllStudents(@PathVariable String schoolName) {
-        return getServiceBySchoolName(schoolName).getAllStudents();
+        return getServiceBySchoolName(schoolName).getStudents();
     }
 
     @PutMapping("/{id}")

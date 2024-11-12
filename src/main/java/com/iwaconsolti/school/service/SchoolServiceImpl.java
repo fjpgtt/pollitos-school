@@ -4,79 +4,69 @@ import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 public class SchoolServiceImpl implements SchoolService {
     private final School school;
+
+    @Autowired
+    private CourseService course;
+    @Autowired
+    private GradeService grade;
+    @Autowired
+    private StudentService student;
 
     public SchoolServiceImpl(School school) {
         this.school = school;
     }
 
-    @Override
-    public void addStudent(Student student) {
-        school.getStudents().add(student);
-    }
-
-    @Override
-    public List<Student> getAllStudents() {
-        return school.getStudents();
-    }
-
-    @Override
-    public void editStudent(int id, Student updatedStudent) {
-        // Implementación de edición de estudiante
-    }
-
-    @Override
     public void addCourse(Course course) {
         school.getCourses().add(course);
     }
 
-    @Override
-    public List<Course> getAllCourses() {
-        return school.getCourses();
+    public void addStudent(Student student) {
+        school.getStudents().add(student);
     }
 
-    @Override
-    public void editCourse(int id, Course updatedCourse) {
-        // Implementación de edición de curso
-    }
-
-    @Override
     public void addGrade(Grade grade) {
         school.getGrades().add(grade);
     }
 
-    public List<Grade> getGrades() {
-        return school.getGrades();
+    @Override
+    public List<Student> getStudents() {
+        return student.getStudents(school);
+    }
+
+    @Override
+    public void editStudent(int id, Student updatedStudent) {
+        student.editStudent(school, id, updatedStudent);
+    }
+
+    @Override
+    public List<Course> getCourses() {
+        return course.getCourses(school);
+    }
+
+    @Override
+    public void editCourse(int id, Course updatedCourse) {
+        course.editCourse(school, id, updatedCourse);
     }
 
     @Override
     public List<Grade> getGradesByStudent(int studentId) {
-        return school.getGrades().stream()
-                .filter(grade -> Objects.equals(grade.getStudent().getId(), studentId))
-                .collect(Collectors.toList());
+        return grade.getGradesByStudent(school, studentId);
     }
 
     @Override
-    public void deleteGradesByStudent(int studentId) {
-        school.setGrades(
-                school.getGrades().stream()
-                        .filter(grade -> !Objects.equals(grade.getCourse().getId(), studentId))
-                        .collect(Collectors.toList())
-        );
+    public void deleteGradesOfStudent(int studentId) {
+        grade.deleteGradesOfStudent(school,studentId);
     }
 
     @Override
-    public void deleteGradesByCourse(int courseId) {
-        school.setGrades(
-                school.getGrades().stream()
-                        .filter(grade -> !Objects.equals(grade.getCourse().getId(), courseId))
-                        .collect(Collectors.toList())
-        );
+    public void deleteGradesOfCourse(int courseId) {
+        grade.deleteGradesOfCourse(school, courseId);
     }
 }

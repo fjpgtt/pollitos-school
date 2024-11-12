@@ -1,16 +1,15 @@
 package com.iwaconsolti.school.service;
 
-import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
-import com.iwaconsolti.school.model.Student;
+import com.iwaconsolti.school.model.School;
 
 import java.util.List;
 
 public interface GradeService {
 
-    List<Grade> getGradesByStudent(int idStudent);
+    List<Grade> getGradesByStudent(School school, int idStudent);
 
-    void deleteAllGradesOfStudent(int idStudent);
+    void deleteGradesOfStudent(School school, int idStudent);
 
-    void deleteAllGradesOfCourse(int idCourse);
+    void deleteGradesOfCourse(School school, int idCourse);
 }

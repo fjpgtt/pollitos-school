@@ -1,12 +1,13 @@
 package com.iwaconsolti.school.service;
 
 import com.iwaconsolti.school.model.Course;
+import com.iwaconsolti.school.model.School;
 
 import java.util.List;
 
 public interface CourseService {
-    List<Course> getAllCourses();
+    List<Course> getCourses(School school);
 
-    Course editCourse(int courseId, Course course);
+    Course editCourse(School school, int courseId, Course course);
 
 }

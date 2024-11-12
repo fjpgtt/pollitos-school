@@ -7,23 +7,18 @@ import com.iwaconsolti.school.model.Student;
 import java.util.List;
 
 public interface SchoolService {
-    void addStudent(Student student);
 
-    List<Student> getAllStudents();
+    List<Student> getStudents();
 
     void editStudent(int id, Student updatedStudent);
 
-    void addCourse(Course course);
-
-    List<Course> getAllCourses();
+    List<Course> getCourses();
 
     void editCourse(int id, Course updatedCourse);
 
-    void addGrade(Grade grade);
-
     List<Grade> getGradesByStudent(int studentId);
 
-    void deleteGradesByStudent(int studentId);
+    void deleteGradesOfStudent(int studentId);
 
-    void deleteGradesByCourse(int courseId);
+    void deleteGradesOfCourse(int courseId);
 }
