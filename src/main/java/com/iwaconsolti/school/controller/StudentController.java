@@ -33,19 +33,33 @@ public class StudentController {
     }
 
     private StudentResponse convertToStudentResponse(Student student) {
-        return new StudentResponse(student.getId(), student.getFirstName(), student.getLastName(), student.getAge());
+        return new StudentResponse(student.getId(),
+                student.getFirstName(),
+                student.getLastName(),
+                student.getAge());
+    }
+
+    private Student convertToStudent(StudentResponse studentResponse) {
+        return new Student(studentResponse.getId(),
+                studentResponse.getFirstName(),
+                studentResponse.getLastName(),
+                studentResponse.getAge());
     }
 
     @GetMapping
     public List<StudentResponse> getAllStudents(@PathVariable String schoolName) {
         List<Student> students = getServiceBySchoolName(schoolName).getStudents();
         return students.stream()
-                .map(this::convertToStudentResponse)
+                .map(student -> new StudentResponse(student.getId(),
+                        student.getFirstName(),
+                        student.getLastName(),
+                        student.getAge()))
                 .collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")
-    public void editStudent(@PathVariable String schoolName, @PathVariable int id, @RequestBody Student updatedStudent) {
+    public void editStudent(@PathVariable String schoolName, @PathVariable int id, @RequestBody StudentResponse updatedStudentResponse) {
+        Student updatedStudent = convertToStudent(updatedStudentResponse);
         getServiceBySchoolName(schoolName).editStudent(id, updatedStudent);
     }
 }

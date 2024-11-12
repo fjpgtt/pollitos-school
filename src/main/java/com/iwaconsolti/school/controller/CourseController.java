@@ -32,23 +32,25 @@ public class CourseController {
         }
     }
 
-    // Convertir Course a CourseResponse
     private CourseResponse convertToCourseResponse(Course course) {
         return new CourseResponse(course.getId(), course.getName(), course.getProfessorName());
     }
 
-    // Obtener todos los cursos, devolviendo una lista de CourseResponse
+    private Course convertToCourse(CourseResponse courseResponse) {
+        return new Course(courseResponse.getId(), courseResponse.getName(), courseResponse.getProfessorName());
+    }
+
     @GetMapping
     public List<CourseResponse> getAllCourses(@PathVariable String schoolName) {
         List<Course> courses = getServiceBySchoolName(schoolName).getCourses();
         return courses.stream()
-                .map(this::convertToCourseResponse)
+                .map(course -> new CourseResponse(course.getId(), course.getName(), course.getProfessorName()))
                 .collect(Collectors.toList());
     }
 
-    // Editar un curso
     @PutMapping("/{id}")
-    public void editCourse(@PathVariable String schoolName, @PathVariable int id, @RequestBody Course updatedCourse) {
+    public void editCourse(@PathVariable String schoolName, @PathVariable int id, @RequestBody CourseResponse updatedCourseResponse) {
+        Course updatedCourse = convertToCourse(updatedCourseResponse);
         getServiceBySchoolName(schoolName).editCourse(id, updatedCourse);
     }
 }
