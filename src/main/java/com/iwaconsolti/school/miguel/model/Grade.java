@@ -1,14 +1,8 @@
 package com.iwaconsolti.school.miguel.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.stereotype.Component;
+import lombok.Data;
 
-@Setter
-@Getter
-@ToString
-@Component
+@Data
 public class Grade {
     private int id;
     private long score;

@@ -1,14 +1,8 @@
 package com.iwaconsolti.school.miguel.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.stereotype.Component;
+import lombok.Data;
 
-@Setter
-@Getter
-@ToString
-@Component
+@Data
 public class Courses {
     private int id;
     private String nameCourse, professorName;
