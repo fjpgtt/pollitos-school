@@ -8,15 +8,13 @@ import com.iwaconsolti.school.model.Schools.ZetCollege;
 import com.iwaconsolti.school.model.Student;
 import com.iwaconsolti.school.service.SchoolService;
 import com.iwaconsolti.school.service.SchoolServiceImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Slf4j
+@Profile("populated")
 @Configuration
-public class SchoolConfig {
-
+public class SchoolPopulatedConfig {
     @Bean
     public School gerardoInstitute() {
         return new GerardoInstitute();
@@ -27,20 +25,7 @@ public class SchoolConfig {
         return new ZetCollege();
     }
 
-    @Bean
-    @Profile("empty")
-    public SchoolService gerardoServiceDefault() {
-        return new SchoolServiceImpl(gerardoInstitute());
-    }
-
-    @Bean
-    @Profile("empty")
-    public SchoolService zetServiceDefault() {
-        return new SchoolServiceImpl(zetCollege());
-    }
-
-    @Bean
-    @Profile("populated")
+    @Bean("gerardoService")
     public SchoolService gerardoServicePopulated() {
         School gerardoInstitute = gerardoInstitute();
         SchoolServiceImpl schoolService = new SchoolServiceImpl(gerardoInstitute);
@@ -70,8 +55,7 @@ public class SchoolConfig {
         return schoolService;
     }
 
-    @Bean
-    @Profile("populated")
+    @Bean("zetService")
     public SchoolService zetServicePopulated() {
         School zetCollege = zetCollege();
         SchoolServiceImpl schoolService = new SchoolServiceImpl(zetCollege);

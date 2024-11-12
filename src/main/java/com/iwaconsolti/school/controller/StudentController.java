@@ -13,11 +13,11 @@ import java.util.List;
 public class StudentController {
 
     @Autowired
-    @Qualifier("gerardoServicePopulated")
+    @Qualifier("gerardoService")
     private SchoolService gerardoService;
 
     @Autowired
-    @Qualifier("zetServicePopulated")
+    @Qualifier("zetService")
     private SchoolService zetService;
 
     private SchoolService getServiceBySchoolName(String schoolName) {
