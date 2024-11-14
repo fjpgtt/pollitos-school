@@ -1,8 +1,6 @@
 package com.iwaconsolti.school.miguel.model;
 
-
 import lombok.*;
-
 import java.util.HashMap;
 import java.util.Map;
 

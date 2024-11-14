@@ -8,5 +8,4 @@ public class Grade {
     private long score;
     private Students student;
     private Courses course;
-
 }
