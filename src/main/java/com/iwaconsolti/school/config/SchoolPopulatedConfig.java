@@ -33,64 +33,64 @@ public class SchoolPopulatedConfig {
     }
 
     @Bean("gerardoService")
-    public SchoolService gerardoServicePopulated() {
+    public SchoolService createGerardoServicePopulated() {
         School gerardoInstitute = gerardoInstitute();
         SchoolServiceImpl schoolService = new SchoolServiceImpl(gerardoInstitute, limitGrade);
 
         Student student1 = new Student(1, "Juan", "Perez", 20);
         Student student2 = new Student(2, "Ana", "Gomez", 22);
 
-        schoolService.addStudent(student1);
-        schoolService.addStudent(student2);
+        schoolService.createStudent(student1);
+        schoolService.createStudent(student2);
 
         Course course1 = new Course(1, "Matemáticas", "Prof. Ramirez");
         Course course2 = new Course(2, "Historia", "Prof. López");
 
-        schoolService.addCourse(course1);
-        schoolService.addCourse(course2);
+        schoolService.createCourse(course1);
+        schoolService.createCourse(course2);
 
         Grade grade1 = new Grade(1, 85, student1, course1);
         Grade grade2 = new Grade(2, 90, student1, course2);
         Grade grade3 = new Grade(3, 78, student2, course1);
         Grade grade4 = new Grade(4, 88, student2, course2);
 
-        schoolService.addGrade(grade1);
-        schoolService.addGrade(grade2);
-        schoolService.addGrade(grade3);
-        schoolService.addGrade(grade4);
+        schoolService.createGrade(grade1);
+        schoolService.createGrade(grade2);
+        schoolService.createGrade(grade3);
+        schoolService.createGrade(grade4);
 
-        log.info("gerardoServicePopulated initialized");
+        log.info("createGerardoServicePopulated initialized");
         return schoolService;
     }
 
     @Bean("zetService")
-    public SchoolService zetServicePopulated() {
+    public SchoolService createZetServicePopulated() {
         School zetCollege = zetCollege();
         SchoolServiceImpl schoolService = new SchoolServiceImpl(zetCollege, limitGrade);
 
         Student student1 = new Student(1, "Carlos", "Martinez", 21);
         Student student2 = new Student(2, "Lucia", "Fernandez", 23);
 
-        schoolService.addStudent(student1);
-        schoolService.addStudent(student2);
+        schoolService.createStudent(student1);
+        schoolService.createStudent(student2);
 
         Course course1 = new Course(3, "Física", "Prof. García");
         Course course2 = new Course(4, "Química", "Prof. Sánchez");
 
-        schoolService.addCourse(course1);
-        schoolService.addCourse(course2);
+        schoolService.createCourse(course1);
+        schoolService.createCourse(course2);
 
         Grade grade1 = new Grade(1, 92, student1, course1);
         Grade grade2 = new Grade(2, 87, student1, course2);
         Grade grade3 = new Grade(3, 75, student2, course1);
         Grade grade4 = new Grade(4, 80, student2, course2);
 
-        schoolService.addGrade(grade1);
-        schoolService.addGrade(grade2);
-        schoolService.addGrade(grade3);
-        schoolService.addGrade(grade4);
+        schoolService.createGrade(grade1);
+        schoolService.createGrade(grade2);
+        schoolService.createGrade(grade3);
+        schoolService.createGrade(grade4);
 
-        log.info("zetServicePopulated initialized");
+        log.info("createZetServicePopulated initialized");
         return schoolService;
     }
 }

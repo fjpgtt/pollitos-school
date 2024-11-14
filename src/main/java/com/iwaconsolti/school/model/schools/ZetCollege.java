@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class ZetCollege extends School {
     public ZetCollege() {
-        super("ZetCollege", new ArrayList<Student>(), new ArrayList<Course>(), new ArrayList<Grade>());
+        super("ZetCollege", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         this.name = "ZetCollege";
         this.students = new ArrayList<>();

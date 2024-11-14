@@ -18,11 +18,8 @@ public class GradeServiceImpl implements GradeService {
     @Autowired
     private CourseService courseService;
 
-    private List<Grade> grades;
-
-
     @Override
-    public List<Grade> getGradesByStudent(School school, int studentId) {
+    public List<Grade> findGradesByStudent(School school, int studentId) {
         return school.getGrades().stream()
                 .filter(grade -> Objects.equals(grade.getStudent().getId(), studentId))
                 .collect(Collectors.toList());

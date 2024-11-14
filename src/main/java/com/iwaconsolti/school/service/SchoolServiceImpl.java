@@ -25,46 +25,51 @@ public class SchoolServiceImpl implements SchoolService {
     @Autowired
     private StudentService student;
 
-
-    public void addCourse(Course course) {
+    @Override
+    public Course createCourse(Course course) {
         school.getCourses().add(course);
+        return course;
     }
 
-    public void addStudent(Student student) {
-        school.getStudents().add(student);
+    @Override
+    public Student createStudent(Student newStudent) {
+        school.getStudents().add(newStudent);
+        return newStudent;
     }
 
-    public void addGrade(Grade grade) {
+    @Override
+    public Grade createGrade(Grade grade) {
         if (grade.getScore() <= limitGrade) {
             school.getGrades().add(grade);
+            return grade;
         } else {
-            throw new IllegalArgumentException("Grade value exceeds the score limit of " + limitGrade);
+            return null;
         }
     }
 
     @Override
-    public List<Student> getStudents() {
-        return student.getStudents(school);
+    public List<Student> findStudents() {
+        return student.findStudents(school);
     }
 
     @Override
-    public void editStudent(int id, Student updatedStudent) {
-        student.editStudent(school, id, updatedStudent);
+    public Student updateStudent(int id, Student updatedStudent) {
+        return student.updateStudent(school, id, updatedStudent);
     }
 
     @Override
-    public List<Course> getCourses() {
-        return course.getCourses(school);
+    public List<Course> findCourses() {
+        return course.findCourses(school);
     }
 
     @Override
-    public void editCourse(int id, Course updatedCourse) {
-        course.editCourse(school, id, updatedCourse);
+    public Course updateCourse(int id, Course updatedCourse) {
+        return course.updateCourse(school, id, updatedCourse);
     }
 
     @Override
-    public List<Grade> getGradesByStudent(int studentId) {
-        return grade.getGradesByStudent(school, studentId);
+    public List<Grade> findGradesByStudent(int studentId) {
+        return grade.findGradesByStudent(school, studentId);
     }
 
     @Override

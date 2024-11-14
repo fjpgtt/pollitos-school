@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface GradeService {
 
-    List<Grade> getGradesByStudent(School school, int idStudent);
+    List<Grade> findGradesByStudent(School school, int idStudent);
 
     void deleteGradesOfStudent(School school, int idStudent);
 

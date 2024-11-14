@@ -13,30 +13,23 @@ import java.util.Objects;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    List<Student> students;
-
     @Override
-    public List<Student> getStudents(School school) {
+    public List<Student> findStudents(School school) {
         return school.getStudents();
     }
 
     @Override
-    public Student editStudent(School school, int studentId, Student student) {
+    public Student updateStudent(School school, int studentId, Student student) {
         for (Student s : school.getStudents()) {
             if (Objects.equals(s.getId(), studentId)) {
-                if (student.getFirstName() != null) {
-                    s.setFirstName(student.getFirstName());
-                }
-                if (student.getLastName() != null) {
-                    s.setLastName(student.getLastName());
-                }
-                if (student.getAge() != 0) {
-                    s.setAge(student.getAge());
-                }
+                s.setFirstName(student.getFirstName());
+                s.setLastName(student.getLastName());
+                s.setAge(student.getAge());
                 return s;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + studentId);
+        return null;
+        //throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + studentId);
     }
 
 }

@@ -28,14 +28,14 @@ public class SchoolEmptyConfig {
     }
 
     @Bean("gerardoService")
-    public SchoolService gerardoService(@Value("${school.score.limit:100}") int limitGrade) {
-        log.info("gerardoServiceEmpty initialized");
-        return new SchoolServiceImpl(gerardoInstitute(), limitGrade);
+    public SchoolService createGerardoService(@Value("${school.score.limit:100}") int limitGrade) {
+        log.info("createGerardoServiceEmpty initialized");
+        return new SchoolServiceImpl(new GerardoInstitute(), limitGrade);
     }
 
     @Bean("zetService")
-    public SchoolService zetService(@Value("${school.score.limit:100}") int limitGrade) {
-        log.info("zetServiceEmpty initialized");
+    public SchoolService createZetService(@Value("${school.score.limit:100}") int limitGrade) {
+        log.info("createZetServiceEmpty initialized");
         return new SchoolServiceImpl(new ZetCollege(), limitGrade);
     }
 }

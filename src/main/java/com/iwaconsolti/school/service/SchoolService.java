@@ -8,15 +8,21 @@ import java.util.List;
 
 public interface SchoolService {
 
-    List<Student> getStudents();
+    List<Student> findStudents();
 
-    void editStudent(int id, Student updatedStudent);
+    Student createStudent(Student student);
 
-    List<Course> getCourses();
+    Student updateStudent(int id, Student updatedStudent);
 
-    void editCourse(int id, Course updatedCourse);
+    List<Course> findCourses();
 
-    List<Grade> getGradesByStudent(int studentId);
+    Course createCourse(Course course);
+
+    Course updateCourse(int id, Course updatedCourse);
+
+    List<Grade> findGradesByStudent(int studentId);
+
+    Grade createGrade(Grade grade);
 
     void deleteGradesOfStudent(int studentId);
 

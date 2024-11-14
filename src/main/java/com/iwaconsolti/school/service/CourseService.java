@@ -6,8 +6,8 @@ import com.iwaconsolti.school.model.School;
 import java.util.List;
 
 public interface CourseService {
-    List<Course> getCourses(School school);
+    List<Course> findCourses(School school);
 
-    Course editCourse(School school, int courseId, Course course);
+    Course updateCourse(School school, int courseId, Course course);
 
 }

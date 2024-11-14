@@ -5,7 +5,10 @@ import com.iwaconsolti.school.model.Student;
 import com.iwaconsolti.school.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.EntityResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,8 +50,8 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<StudentResponse> getAllStudents(@PathVariable String schoolName) {
-        List<Student> students = getServiceBySchoolName(schoolName).getStudents();
+    public List<StudentResponse> findAllStudents(@PathVariable String schoolName) {
+        List<Student> students = getServiceBySchoolName(schoolName).findStudents();
         return students.stream()
                 .map(student -> new StudentResponse(student.getId(),
                         student.getFirstName(),
@@ -57,9 +60,19 @@ public class StudentController {
                 .collect(Collectors.toList());
     }
 
+    @PostMapping
+    public ResponseEntity<StudentResponse> createStudent(@PathVariable String schoolName, @RequestBody StudentResponse studentResponse) {
+        Student student = convertToStudent(studentResponse);
+        if (getServiceBySchoolName(schoolName).createStudent(student) != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(studentResponse);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
     @PutMapping("/{id}")
-    public void editStudent(@PathVariable String schoolName, @PathVariable int id, @RequestBody StudentResponse updatedStudentResponse) {
+    public void updateStudent(@PathVariable String schoolName, @PathVariable int id, @RequestBody StudentResponse updatedStudentResponse) {
         Student updatedStudent = convertToStudent(updatedStudentResponse);
-        getServiceBySchoolName(schoolName).editStudent(id, updatedStudent);
+        getServiceBySchoolName(schoolName).updateStudent(id, updatedStudent);
     }
 }
