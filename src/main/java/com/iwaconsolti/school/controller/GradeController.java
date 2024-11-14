@@ -7,6 +7,7 @@ import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.Student;
 import com.iwaconsolti.school.service.SchoolService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/{schoolName}/grade")
 public class GradeController {
@@ -53,10 +55,9 @@ public class GradeController {
                 .stream()
                 .anyMatch(course -> course.getId() == grade.getCourse().getId());
         if (!studentExists || !courseExists) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }else {
             Grade createdGrade = getServiceBySchoolName(schoolName).createGrade(grade);
-
             if (createdGrade != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(grade);
             } else {
@@ -68,11 +69,13 @@ public class GradeController {
     @DeleteMapping("/student/{studentId}")
     public void deleteGradesByStudent(@PathVariable String schoolName, @PathVariable int studentId) {
         getServiceBySchoolName(schoolName).deleteGradesOfStudent(studentId);
+        log.info("Grades by student id: {} removed", studentId);
     }
 
     @DeleteMapping("/course/{courseId}")
     public void deleteGradesByCourse(@PathVariable String schoolName, @PathVariable int courseId) {
         getServiceBySchoolName(schoolName).deleteGradesOfCourse(courseId);
+        log.info("Grades by course id: {} removed", courseId);
     }
 
     private GradeRequest convertToGradeRequest(Grade grade) {
