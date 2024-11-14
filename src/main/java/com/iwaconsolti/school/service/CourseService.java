@@ -8,6 +8,6 @@ import java.util.List;
 public interface CourseService {
     List<Course> findCourses(School school);
 
-    Course updateCourse(School school, int courseId, Course course);
+    boolean updateCourse(School school, int courseId, Course course);
 
 }

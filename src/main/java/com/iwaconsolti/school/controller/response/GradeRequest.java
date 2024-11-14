@@ -5,9 +5,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class StudentResponse {
+public class GradeRequest {
     private final int id;
-    private String firstName;
-    private String lastName;
-    private Integer age;
+    private int score;
+    private StudentRequest studentRequest;
+    private CourseRequest courseRequest;
+
 }

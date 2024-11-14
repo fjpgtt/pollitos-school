@@ -1,6 +1,6 @@
 package com.iwaconsolti.school.controller;
 
-import com.iwaconsolti.school.controller.response.StudentResponse;
+import com.iwaconsolti.school.controller.response.StudentRequest;
 import com.iwaconsolti.school.model.Student;
 import com.iwaconsolti.school.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,25 +34,25 @@ public class StudentController {
         }
     }
 
-    private StudentResponse convertToStudentResponse(Student student) {
-        return new StudentResponse(student.getId(),
-                student.getFirstName(),
-                student.getLastName(),
-                student.getAge());
-    }
-
-    private Student convertToStudent(StudentResponse studentResponse) {
-        return new Student(studentResponse.getId(),
+    private StudentRequest convertToStudentRequest(Student studentResponse) {
+        return new StudentRequest(studentResponse.getId(),
                 studentResponse.getFirstName(),
                 studentResponse.getLastName(),
                 studentResponse.getAge());
     }
 
+    private Student convertToStudentResponse(StudentRequest studentRequest) {
+        return new Student(studentRequest.getId(),
+                studentRequest.getFirstName(),
+                studentRequest.getLastName(),
+                studentRequest.getAge());
+    }
+
     @GetMapping
-    public List<StudentResponse> findAllStudents(@PathVariable String schoolName) {
+    public List<StudentRequest> findAllStudents(@PathVariable String schoolName) {
         List<Student> students = getServiceBySchoolName(schoolName).findStudents();
         return students.stream()
-                .map(student -> new StudentResponse(student.getId(),
+                .map(student -> new StudentRequest(student.getId(),
                         student.getFirstName(),
                         student.getLastName(),
                         student.getAge()))
@@ -61,18 +60,18 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentResponse> createStudent(@PathVariable String schoolName, @RequestBody StudentResponse studentResponse) {
-        Student student = convertToStudent(studentResponse);
-        if (getServiceBySchoolName(schoolName).createStudent(student) != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(studentResponse);
+    public ResponseEntity<StudentRequest> createStudent(@PathVariable String schoolName, @RequestBody StudentRequest studentRequest) {
+        Student studentResponse = convertToStudentResponse(studentRequest);
+        if (getServiceBySchoolName(schoolName).createStudent(studentResponse) != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(studentRequest);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     @PutMapping("/{id}")
-    public void updateStudent(@PathVariable String schoolName, @PathVariable int id, @RequestBody StudentResponse updatedStudentResponse) {
-        Student updatedStudent = convertToStudent(updatedStudentResponse);
+    public void updateStudent(@PathVariable String schoolName, @PathVariable int id, @RequestBody StudentRequest updatedStudentRequest) {
+        Student updatedStudent = convertToStudentResponse(updatedStudentRequest);
         getServiceBySchoolName(schoolName).updateStudent(id, updatedStudent);
     }
 }

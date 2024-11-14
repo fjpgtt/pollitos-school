@@ -18,7 +18,7 @@ public interface SchoolService {
 
     Course createCourse(Course course);
 
-    Course updateCourse(int id, Course updatedCourse);
+    boolean updateCourse(int id, Course updatedCourse);
 
     List<Grade> findGradesByStudent(int studentId);
 

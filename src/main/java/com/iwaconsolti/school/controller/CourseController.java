@@ -1,6 +1,6 @@
 package com.iwaconsolti.school.controller;
 
-import com.iwaconsolti.school.controller.response.CourseResponse;
+import com.iwaconsolti.school.controller.response.CourseRequest;
 import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/{schoolName}/course")
+@RequestMapping("/{schoolName}/courses")
 public class CourseController {
 
     @Autowired
@@ -30,39 +30,48 @@ public class CourseController {
         } else if ("ZetCollege".equalsIgnoreCase(schoolName)) {
             return zetService;
         } else {
-            throw new IllegalArgumentException("Invalid school name");
+            throw new IllegalArgumentException("Invalid school name: " + schoolName);
         }
     }
 
-    private CourseResponse convertToCourseResponse(Course course) {
-        return new CourseResponse(course.getId(), course.getName(), course.getProfessorName());
+    private CourseRequest convertToCourseResponse(Course course) {
+        return new CourseRequest(course.getId(), course.getName(), course.getProfessorName());
     }
 
-    private Course convertToCourse(CourseResponse courseResponse) {
-        return new Course(courseResponse.getId(), courseResponse.getName(), courseResponse.getProfessorName());
+    private Course convertToCourseRequest(CourseRequest courseRequest) {
+        return new Course(courseRequest.getId(), courseRequest.getName(), courseRequest.getProfessorName());
     }
 
     @GetMapping
-    public List<CourseResponse> getAllCourses(@PathVariable String schoolName) {
+    public List<CourseRequest> findAllCourses(@PathVariable String schoolName) {
         List<Course> courses = getServiceBySchoolName(schoolName).findCourses();
         return courses.stream()
-                .map(course -> new CourseResponse(course.getId(), course.getName(), course.getProfessorName()))
+                .map(this::convertToCourseResponse)
                 .collect(Collectors.toList());
     }
 
     @PostMapping
-    public ResponseEntity<CourseResponse> createCourse(@PathVariable String schoolName, @RequestBody CourseResponse courseResponse) {
-        Course course = convertToCourse(courseResponse);
-        if (getServiceBySchoolName(schoolName).createCourse(course) != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(courseResponse);
+    public ResponseEntity<CourseRequest> createCourse(@PathVariable String schoolName, @RequestBody CourseRequest courseResponse) {
+        Course courseRequest = convertToCourseRequest(courseResponse);
+        Course createdCourse = getServiceBySchoolName(schoolName).createCourse(courseRequest);
+
+        if (createdCourse != null) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(convertToCourseResponse(createdCourse));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     @PutMapping("/{id}")
-    public void editCourse(@PathVariable String schoolName, @PathVariable int id, @RequestBody CourseResponse updatedCourseResponse) {
-        Course updatedCourse = convertToCourse(updatedCourseResponse);
-        getServiceBySchoolName(schoolName).updateCourse(id, updatedCourse);
+    public ResponseEntity<Void> editCourse(@PathVariable String schoolName, @PathVariable int id, @RequestBody CourseRequest updatedCourseRequest) {
+        Course updatedCourse = convertToCourseRequest(updatedCourseRequest);
+        boolean updated = getServiceBySchoolName(schoolName).updateCourse(id, updatedCourse);
+
+        if (updated) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

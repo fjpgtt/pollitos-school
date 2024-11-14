@@ -3,9 +3,7 @@ package com.iwaconsolti.school.service;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +27,6 @@ public class StudentServiceImpl implements StudentService {
             }
         }
         return null;
-        //throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found with ID: " + studentId);
     }
 
 }

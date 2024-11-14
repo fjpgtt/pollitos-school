@@ -12,12 +12,6 @@ import java.util.stream.Collectors;
 @Service
 public class GradeServiceImpl implements GradeService {
 
-    @Autowired
-    private StudentService studentService;
-
-    @Autowired
-    private CourseService courseService;
-
     @Override
     public List<Grade> findGradesByStudent(School school, int studentId) {
         return school.getGrades().stream()

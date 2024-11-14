@@ -128,6 +128,68 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "CreateStudent Gerardo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"firstName\": \"Miguel\",\r\n    \"lastName\": \"Hernandez\",\r\n    \"age\": 29\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/school/api/GerardoInstitute/student",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"school",
+								"api",
+								"GerardoInstitute",
+								"student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateStudent Zet",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"firstName\": \"Marco\",\r\n    \"lastName\": \"Lopez\",\r\n    \"age\": 29\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/school/api/ZetCollege/student",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"school",
+								"api",
+								"ZetCollege",
+								"student"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -277,6 +339,68 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "CreateGrade Gerardo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"score\": 100,\r\n    \"studentRequest\": {\r\n        \"id\": 4,\r\n        \"firstName\": \"Miguel\",\r\n        \"lastName\": \"Hernandez\",\r\n        \"age\": 29\r\n    },\r\n    \"courseRequest\": {\r\n        \"id\": 4,\r\n        \"name\": \"Matemáticas\",\r\n        \"professorName\": \"Prof. Ramirez\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/school/api/GerardoInstitute/grade",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"school",
+								"api",
+								"GerardoInstitute",
+								"grade"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateGrade Zet",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"score\": 100,\r\n    \"studentRequest\": {\r\n        \"id\": 4,\r\n        \"firstName\": \"Marco\",\r\n        \"lastName\": \"Lopez\",\r\n        \"age\": 29\r\n    },\r\n    \"courseRequest\": {\r\n        \"id\": 4,\r\n        \"name\": \"Geología\",\r\n        \"professorName\": \"Prof. Martinez\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/school/api/ZetCollege/grade",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"school",
+								"api",
+								"ZetCollege",
+								"grade"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -386,6 +510,69 @@
 								"GerardoInstitute",
 								"course",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateCourse Gerardo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"name\": \"Matemáticas\",\r\n    \"professorName\": \"Prof. Ramirez\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/school/api/GerardoInstitute/course",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"school",
+								"api",
+								"GerardoInstitute",
+								"course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateCourse Zet",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"name\": \"Geología\",\r\n    \"professorName\": \"Prof. Martinez\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/school/api/ZetCollege/course/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"school",
+								"api",
+								"ZetCollege",
+								"course",
+								""
 							]
 						}
 					},

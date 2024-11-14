@@ -63,7 +63,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public Course updateCourse(int id, Course updatedCourse) {
+    public boolean updateCourse(int id, Course updatedCourse) {
         return course.updateCourse(school, id, updatedCourse);
     }
 

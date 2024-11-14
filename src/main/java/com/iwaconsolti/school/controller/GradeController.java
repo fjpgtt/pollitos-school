@@ -1,8 +1,8 @@
 package com.iwaconsolti.school.controller;
 
-import com.iwaconsolti.school.controller.response.GradeResponse;
-import com.iwaconsolti.school.controller.response.CourseResponse;
-import com.iwaconsolti.school.controller.response.StudentResponse;
+import com.iwaconsolti.school.controller.response.GradeRequest;
+import com.iwaconsolti.school.controller.response.CourseRequest;
+import com.iwaconsolti.school.controller.response.StudentRequest;
 import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.Student;
@@ -39,19 +39,29 @@ public class GradeController {
     }
 
     @GetMapping("/student/{studentId}")
-    public List<GradeResponse> findGradesByStudent(@PathVariable String schoolName, @PathVariable int studentId) {
-        List<Grade> grades = getServiceBySchoolName(schoolName).findGradesByStudent(studentId);
-        return grades.stream()
-                .map(this::convertToGradeResponse)
-                .collect(Collectors.toList());
+    public List<Grade> findGradesByStudent(@PathVariable String schoolName, @PathVariable int studentId) {
+        return getServiceBySchoolName(schoolName).findGradesByStudent(studentId);
     }
+
     @PostMapping
-    public ResponseEntity<GradeResponse> createGrade(@PathVariable String schoolName, @RequestBody GradeResponse gradeResponse){
-        Grade grade = convertToGrade(gradeResponse);
-        if (getServiceBySchoolName(schoolName).createGrade(grade) != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(gradeResponse);
-        } else {
+    public ResponseEntity<Grade> createGrade(@PathVariable String schoolName, @RequestBody GradeRequest gradeRequest) {
+        Grade grade = convertToGradeResponse(gradeRequest);
+
+        boolean studentExists = getServiceBySchoolName(schoolName).findGradesByStudent(grade.getStudent().getId()) != null;
+        boolean courseExists = getServiceBySchoolName(schoolName)
+                .findCourses()
+                .stream()
+                .anyMatch(course -> course.getId() == grade.getCourse().getId());
+        if (!studentExists || !courseExists) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }else {
+            Grade createdGrade = getServiceBySchoolName(schoolName).createGrade(grade);
+
+            if (createdGrade != null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(grade);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
         }
     }
 
@@ -65,36 +75,36 @@ public class GradeController {
         getServiceBySchoolName(schoolName).deleteGradesOfCourse(courseId);
     }
 
-    private GradeResponse convertToGradeResponse(Grade grade) {
-        StudentResponse studentResponse = new StudentResponse(grade.getStudent().getId(),
+    private GradeRequest convertToGradeRequest(Grade grade) {
+        StudentRequest studentRequest = new StudentRequest(grade.getStudent().getId(),
                 grade.getStudent().getFirstName(),
                 grade.getStudent().getLastName(),
                 grade.getStudent().getAge());
 
-        CourseResponse courseResponse = new CourseResponse(grade.getCourse().getId(),
+        CourseRequest courseRequest = new CourseRequest(grade.getCourse().getId(),
                 grade.getCourse().getName(),
                 grade.getCourse().getProfessorName());
 
-        return new GradeResponse(grade.getId(), grade.getScore(), studentResponse, courseResponse);
+        return new GradeRequest(grade.getId(), grade.getScore(), studentRequest, courseRequest);
     }
 
-    private Grade convertToGrade(GradeResponse gradeResponse) {
+    private Grade convertToGradeResponse(GradeRequest gradeRequest) {
         Student student = new Student(
-                gradeResponse.getStudentResponse().getId(),
-                gradeResponse.getStudentResponse().getFirstName(),
-                gradeResponse.getStudentResponse().getLastName(),
-                gradeResponse.getStudentResponse().getAge()
+                gradeRequest.getStudentRequest().getId(),
+                gradeRequest.getStudentRequest().getFirstName(),
+                gradeRequest.getStudentRequest().getLastName(),
+                gradeRequest.getStudentRequest().getAge()
         );
 
         Course course = new Course(
-                gradeResponse.getCourseResponse().getId(),
-                gradeResponse.getCourseResponse().getName(),
-                gradeResponse.getCourseResponse().getProfessorName()
+                gradeRequest.getCourseRequest().getId(),
+                gradeRequest.getCourseRequest().getName(),
+                gradeRequest.getCourseRequest().getProfessorName()
         );
 
         return new Grade(
-                gradeResponse.getId(),
-                gradeResponse.getScore(),
+                gradeRequest.getId(),
+                gradeRequest.getScore(),
                 student,
                 course
         );
