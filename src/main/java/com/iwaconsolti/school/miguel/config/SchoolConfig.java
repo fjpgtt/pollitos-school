@@ -19,7 +19,7 @@ public class SchoolConfig {
     public School gerardoInstitute(){
         School school = new School();
         school.setName("GerardoInstitute");
-        return new School();
+        return school;
     }
 
     @Profile("default")
@@ -28,6 +28,6 @@ public class SchoolConfig {
     public School zetCollege(){
         School school = new School();
         school.setName("ZetCollege");
-        return new School();
+        return school;
     }
 }
