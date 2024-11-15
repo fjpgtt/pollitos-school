@@ -46,7 +46,6 @@ public class CourseController {
         return courseService.createCourse(school, course);
     }
 
-    /*
     @PutMapping("/{schoolName}/course")
     public String updateCourse(
             @PathVariable String schoolName,
@@ -69,7 +68,7 @@ public class CourseController {
         School school = schoolService.getSchoolByName(schoolName);
         Course course = new Course(id, name, professorName);
         return courseService.createCourse(school, course);
-    }*/
+    }
 
     @GetMapping("/{schoolName}/getCourses")
     public String returnCourses(@PathVariable String schoolName){

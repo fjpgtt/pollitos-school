@@ -25,8 +25,7 @@ public class StudentController {
     @DeleteMapping("/{schoolName}/studentGradesDelete")
     public String deleteGradesStudent(
             @PathVariable String schoolName,
-            @RequestParam int id
-    ){
+            @RequestParam int id){
         School school = schoolService.getSchoolByName(schoolName);
         return studentService.deleteGradesStudent(school, id);
     }
