@@ -2,13 +2,13 @@ package com.iwaconsolti.school.miguel.service;
 
 import com.iwaconsolti.school.miguel.model.School;
 import com.iwaconsolti.school.miguel.model.Students;
+import com.iwaconsolti.school.miguel.model.dto.StudentsDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 @Slf4j
 @Service
@@ -22,7 +22,13 @@ public class StudentService {
         this.zetCollege = zetCollege;
     }
 
-    public Students createStudents(String schoolName, Students student) {
+    public Students createStudents(String schoolName, StudentsDTO studentDTO) {
+        Students student = new Students();
+        student.setId(studentDTO.getId());
+        student.setFirstName(studentDTO.getFirstName());
+        student.setLastName(studentDTO.getLastName());
+        student.setAge(studentDTO.getAge());
+
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
             if(gerardoInstitute.getStudents().containsKey(student.getId())){
                 return gerardoInstitute.getStudents().get(student.getId());
@@ -36,25 +42,65 @@ public class StudentService {
         return student;
     }
 
-    public Students getStudentById(String schoolName, int studentId){
+    public Collection<StudentsDTO> getStudentById(String schoolName, int studentId){
+
+        Collection<StudentsDTO> studentsDTOS = new ArrayList<>();
+
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            return gerardoInstitute.getStudents().get(studentId);
+            for(Students students : gerardoInstitute.getStudents().values()) {
+                StudentsDTO studentDto = new StudentsDTO();
+                studentDto.setId(students.getId());
+                studentDto.setFirstName(students.getFirstName());
+                studentDto.setLastName(students.getLastName());
+                studentDto.setAge(students.getAge());
+                studentsDTOS.add(studentDto);
+            }
         }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            return zetCollege.getStudents().get(studentId);
+            for(Students students : zetCollege.getStudents().values()) {
+                StudentsDTO studentDto = new StudentsDTO();
+                studentDto.setId(students.getId());
+                studentDto.setFirstName(students.getFirstName());
+                studentDto.setLastName(students.getLastName());
+                studentDto.setAge(students.getAge());
+                studentsDTOS.add(studentDto);
+            }
         }
-        return null;
+        return studentsDTOS;
     }
 
-    public Collection<Students> getStudents(String schoolName) {
+    public Collection<StudentsDTO> getStudents(String schoolName) {
+
+        Collection<StudentsDTO> studentsDTO = new ArrayList<>();
+
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            return new ArrayList<>(gerardoInstitute.getStudents().values());
+            for(Students students : gerardoInstitute.getStudents().values()){
+                StudentsDTO studentDto = new StudentsDTO();
+                studentDto.setId(students.getId());
+                studentDto.setFirstName(students.getFirstName());
+                studentDto.setLastName(students.getLastName());
+                studentDto.setAge(students.getAge());
+                studentsDTO.add(studentDto);
+            }
         }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            return new ArrayList<>(zetCollege.getStudents().values());
+            for(Students students : gerardoInstitute.getStudents().values()){
+                StudentsDTO studentDto = new StudentsDTO();
+                studentDto.setId(students.getId());
+                studentDto.setFirstName(students.getFirstName());
+                studentDto.setLastName(students.getLastName());
+                studentDto.setAge(students.getAge());
+                studentsDTO.add(studentDto);
+            }
         }
-        return Collections.emptyList();
+        return studentsDTO;
     }
 
-    public Students editStudent(int id, String schoolName, Students student){
+    public Students editStudent(int id, String schoolName, StudentsDTO studentDTO){
+        Students student = new Students();
+        student.setId(studentDTO.getId());
+        student.setFirstName(studentDTO.getFirstName());
+        student.setLastName(studentDTO.getLastName());
+        student.setAge(studentDTO.getAge());
+
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
             gerardoInstitute.getStudents().put(id,student);
             log.info("The student was edited successfully in Gerardo Institute {}",student);
