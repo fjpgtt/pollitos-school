@@ -1,12 +1,10 @@
 package com.iwaconsolti.school.demo.model;
 
 import lombok.*;
-import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
 public class Student {
     private int id;
     private String firstName;

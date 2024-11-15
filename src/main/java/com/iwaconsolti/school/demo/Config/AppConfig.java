@@ -1,9 +1,6 @@
 package com.iwaconsolti.school.demo.Config;
 
-import com.iwaconsolti.school.demo.model.Course;
-import com.iwaconsolti.school.demo.model.Grade;
-import com.iwaconsolti.school.demo.model.School;
-import com.iwaconsolti.school.demo.model.Student;
+import com.iwaconsolti.school.demo.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,15 +34,15 @@ public class AppConfig {
     public String populateData(School gerardoInstitute, School zetCollege) {
         log.info("Populating data for GerardoInstitute and ZetCollege (APPCONFIG)");
 
-        gerardoInstitute.getGradeList().add(new Grade (100,1,1));
-        gerardoInstitute.getGradeList().add(new Grade (90,2,1));
-        gerardoInstitute.getGradeList().add(new Grade (50,3,1));
-        gerardoInstitute.getGradeList().add(new Grade (90,1,2));
+        gerardoInstitute.getGradeList().add(new Grade(100, 1, 1));
+        gerardoInstitute.getGradeList().add(new Grade(90, 2, 1));
+        gerardoInstitute.getGradeList().add(new Grade(50, 3, 1));
+        gerardoInstitute.getGradeList().add(new Grade(90, 1, 2));
 
-        zetCollege.getGradeList().add(new Grade (80,3,3));
-        zetCollege.getGradeList().add(new Grade (100,3,3));
-        zetCollege.getGradeList().add(new Grade (60,3,3));
-        zetCollege.getGradeList().add(new Grade (70,3,4));
+        zetCollege.getGradeList().add(new Grade(80, 3, 3));
+        zetCollege.getGradeList().add(new Grade(100, 3, 3));
+        zetCollege.getGradeList().add(new Grade(60, 3, 3));
+        zetCollege.getGradeList().add(new Grade(70, 3, 4));
 
         gerardoInstitute.getCourseList().add(new Course(1, "Matemáticas", "Prof. González"));
         gerardoInstitute.getCourseList().add(new Course(2, "Historia", "Prof. Sánchez"));
@@ -58,6 +55,6 @@ public class AppConfig {
 
         zetCollege.getStudentsList().add(new Student(3, "Ana", "Lopez", 22));
         zetCollege.getStudentsList().add(new Student(4, "Luis", "Martínez", 25));
-        return "Data populated";
+        return "Populate Data";
     }
 }

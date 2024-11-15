@@ -31,7 +31,7 @@ public class StudentController {
         return studentService.deleteGradesStudent(school, id);
     }
 
-    @PostMapping("/{schoolName}/studentsGrades")
+    @PostMapping("/{schoolName}/studentsGrades") // Since this method only receives a @PathVariable and a @RequestParam, I do not consider @RequestBody necessary, since a JSON body is not being sent.
     public String studentGrades(
             @PathVariable String schoolName,
             @RequestParam int id){
@@ -39,7 +39,24 @@ public class StudentController {
         return studentService.getStudentGrades(school, id);
     }
 
-    @PutMapping("/{schoolName}/students")
+    @PutMapping("/{schoolName}/bodyStudent")
+    public String updateStudent(
+            @PathVariable String schoolName,
+            @RequestBody Student student) {
+        School school = schoolService.getSchoolByName(schoolName);
+        return studentService.updateStudent(school, student);
+    }
+
+    @PostMapping("/{schoolName}/bodyStudent")
+    public String createStudent(
+            @PathVariable String schoolName,
+            @RequestBody Student student) {
+        School school = schoolService.getSchoolByName(schoolName);
+        return studentService.createStudent(school, student);
+    }
+
+
+    @PutMapping("/{schoolName}/students") //Some methods were updated to @RequestBody and the previous ones were preserved to exemplify another way of doing it by @RequestParam
     public String updateStudent(
             @PathVariable String schoolName,
             @RequestParam int id,

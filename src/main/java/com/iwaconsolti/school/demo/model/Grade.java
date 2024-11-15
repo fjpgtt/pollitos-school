@@ -3,12 +3,10 @@ package com.iwaconsolti.school.demo.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
 public class Grade {
     private static final int MAX_SCORE = 100;
     private int score;

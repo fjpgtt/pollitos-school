@@ -24,7 +24,7 @@ public class StudentService {
     public String deleteGradesStudent(School school, int id) {
         for (Student existingStudent : school.getStudentsList()) {
             if (existingStudent.getId() == id) {
-                boolean removed = school.getGradeList().removeIf(gradeElement -> gradeElement.getStudent() == id); // Elimina todas las calificaciones del estudiante con el ID dado
+                boolean removed = school.getGradeList().removeIf(gradeElement -> gradeElement.getStudent() == id); //Delete all grades of the student with the given ID
                 if (removed) {
                     return "All grades deleted for student; ID " + id + " | " + existingStudent.toString();
                 } else {
@@ -34,7 +34,6 @@ public class StudentService {
         }
         return "Student does not exist: " + id;
     }
-
 
     public String createStudent(School school, Student student) {
         for (Student existingStudent : school.getStudentsList()) {
@@ -77,5 +76,4 @@ public class StudentService {
         }
         return gradesStudentList.toString();
     }
-
 }

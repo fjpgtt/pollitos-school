@@ -19,6 +19,15 @@ public class GradeController {
         this.gradeService = gradeService;
     }
 
+    @PostMapping("/{schoolName}/bodyGrade")
+    public String createGrade(
+            @PathVariable String schoolName,
+            @RequestBody Grade grade) {
+
+        School school = schoolService.getSchoolByName(schoolName);
+        return gradeService.createGrade(school, grade);
+    }
+
     @PostMapping("/{schoolName}/grade")
     public String createStudent(
             @PathVariable String schoolName,
