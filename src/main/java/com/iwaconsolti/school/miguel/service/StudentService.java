@@ -23,8 +23,10 @@ public class StudentService {
     }
 
     public Students createStudents(String schoolName, Students student) {
-        log.info("{}",student);
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
+            if(gerardoInstitute.getStudents().containsKey(student.getId())){
+                return gerardoInstitute.getStudents().get(student.getId());
+            }
             gerardoInstitute.getStudents().put(student.getId(), student);
             log.info("The student registered successfully in Gerardo Institute {}",student);
         }else if("ZetCollege".equalsIgnoreCase(schoolName)){
@@ -32,6 +34,15 @@ public class StudentService {
             log.info("The student registered successfully in Zet College {}",student);
         }
         return student;
+    }
+
+    public Students getStudentById(String schoolName, int studentId){
+        if("GerardoInstitute".equalsIgnoreCase(schoolName)){
+            return gerardoInstitute.getStudents().get(studentId);
+        }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
+            return zetCollege.getStudents().get(studentId);
+        }
+        return null;
     }
 
     public Collection<Students> getStudents(String schoolName) {

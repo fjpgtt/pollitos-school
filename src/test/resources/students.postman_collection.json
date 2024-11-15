@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "45fa5967-9ba1-46dd-8d5a-0df33eaa4edf",
+		"name": "students",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10158065",
+		"_collection_link": "https://rest-pollitos-school.postman.co/workspace/REST-pollitos-school-Workspace~449822e4-c719-40ef-8e3b-4dee52c1a31d/collection/10158065-45fa5967-9ba1-46dd-8d5a-0df33eaa4edf?action=share&source=collection_link&creator=10158065"
+	},
+	"item": [
+		{
+			"name": "post_student",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"3\",\r\n  \"firstName\": \"Miguel\",\r\n  \"lastName\": \"Garcia\",\r\n  \"age\": 34\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/app/GerardoInstitute/student",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"GerardoInstitute",
+						"student"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_students",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/app/GerardoInstitute/student",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"GerardoInstitute",
+						"student"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put_student",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\" : 1,\r\n    \"firstName\" : \"Miguel\",\r\n    \"lastName\" : \"Garcia\",\r\n    \"age\" : 20\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/app/GerardoInstitute/student/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"GerardoInstitute",
+						"student",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

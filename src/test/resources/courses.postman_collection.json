@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "773cc8e7-d879-4873-8e7a-9c0536f94242",
+		"name": "courses",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10158065",
+		"_collection_link": "https://rest-pollitos-school.postman.co/workspace/REST-pollitos-school-Workspace~449822e4-c719-40ef-8e3b-4dee52c1a31d/collection/10158065-773cc8e7-d879-4873-8e7a-9c0536f94242?action=share&source=collection_link&creator=10158065"
+	},
+	"item": [
+		{
+			"name": "post_course",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"id\": \"1\",\r\n   \"nameCourse\": \"spring-boot\",\r\n   \"professorName\": \"Francisco\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/app/GerardoInstitute/course",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"GerardoInstitute",
+						"course"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_courses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/app/GerardoInstitute/course",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"GerardoInstitute",
+						"course"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put_course",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nameCourse\" : \"spring\",\r\n    \"professorName\" : \"Carlos\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/app/GerardoInstitute/course/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"GerardoInstitute",
+						"course",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
