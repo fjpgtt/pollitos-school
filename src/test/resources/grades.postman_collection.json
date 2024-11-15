@@ -75,6 +75,36 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "post_grade",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":1,\r\n    \"studentId\": 1,\r\n    \"courseId\": 1,\r\n    \"score\": 100\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/app/GerardoInstitute/grade",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"GerardoInstitute",
+						"grade"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
