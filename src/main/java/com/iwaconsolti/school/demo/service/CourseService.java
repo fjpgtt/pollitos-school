@@ -16,11 +16,11 @@ public class CourseService {
     private final List<Course> courses = new ArrayList<>();
 
     public CourseService() {
-        Course matematicas = Course.builder().id(1).name("Matematicas").professorName("Sergio").creationDate(new Date()).build();
-        Course español = Course.builder().id(2).name("Español").professorName("Guadalupe").creationDate(new Date()).build();
+        Course mathematics = Course.builder().id(1).name("Matematicas").professorName("Sergio").creationDate(new Date()).build();
+        Course Spanish = Course.builder().id(2).name("Español").professorName("Guadalupe").creationDate(new Date()).build();
 
-        this.courses.add(matematicas);
-        this.courses.add(español);
+        this.courses.add(mathematics);
+        this.courses.add(Spanish);
     }
 
     public List<Course> getCourses() {

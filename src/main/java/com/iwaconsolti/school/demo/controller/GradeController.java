@@ -6,6 +6,7 @@ import com.iwaconsolti.school.demo.service.GradeService;
 import com.iwaconsolti.school.demo.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/grades")
 @Slf4j
 @RequiredArgsConstructor
+@Profile("populated")
 public class GradeController {
 
     private final GradeService gradeService;
@@ -27,9 +29,9 @@ public class GradeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Grade> getGradeById(@PathVariable int id) {
+    public ResponseEntity<Grade> findGradeById(@PathVariable int id) {
         Grade grade = this.gradeService.getById(id);
-        log.info("Id: {}", id);
+        log.info("Finding grade with Id: {}", id);
         log.info("grade: {}", grade);
         if (grade != null)
             return ResponseEntity.ok(grade);

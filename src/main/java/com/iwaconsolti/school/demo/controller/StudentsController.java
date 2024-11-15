@@ -6,6 +6,7 @@ import com.iwaconsolti.school.demo.service.GradeService;
 import com.iwaconsolti.school.demo.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/students")
 @Slf4j
 @RequiredArgsConstructor
+@Profile("populated")
 public class StudentsController {
 
     private final StudentService studentService;
@@ -38,7 +40,7 @@ public class StudentsController {
     }
 
     @PostMapping()
-    public ResponseEntity<Student> getStudents(@RequestBody Student student){
+    public ResponseEntity<Student> createStudents(@RequestBody Student student){
         log.info("Creating the student");
         student = this.studentService.createStudent(student);
         return ResponseEntity.ok(student);
