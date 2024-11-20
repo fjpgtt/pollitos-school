@@ -1,15 +1,17 @@
 package com.iwaconsolti.school.service;
 
 import com.iwaconsolti.school.model.Grade;
-import com.iwaconsolti.school.model.School;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 public interface GradeService {
 
-    List<Grade> findGradesByStudent(School school, int idStudent);
+    public List<Grade> getGradesForStudent(int studentId);
 
-    void deleteGradesOfStudent(School school, int idStudent);
+    public void deleteGradesForStudent(int studentId);
 
-    void deleteGradesOfCourse(School school, int idCourse);
+    public void deleteGradesForCourse(int courseId);
+
+    public Grade createGrade(Grade grade);
 }

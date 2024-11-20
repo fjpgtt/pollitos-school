@@ -1,4 +1,4 @@
-package com.iwaconsolti.school.controller.response;
+package com.iwaconsolti.school.controller.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,5 +9,5 @@ public class StudentRequest {
     private final int id;
     private String firstName;
     private String lastName;
-    private Integer age;
+    private int age;
 }

@@ -1,16 +1,15 @@
 package com.iwaconsolti.school.model.schools;
 
 import com.iwaconsolti.school.model.School;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-
+@NoArgsConstructor
+@Entity
+@DiscriminatorValue("ZetCollege")
 public class ZetCollege extends School {
-    public ZetCollege() {
-        super("ZetCollege", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-
-        this.name = "ZetCollege";
-        this.students = new ArrayList<>();
-        this.courses = new ArrayList<>();
-        this.grades = new ArrayList<>();
+    public ZetCollege(String name) {
+        super(name);
     }
 }

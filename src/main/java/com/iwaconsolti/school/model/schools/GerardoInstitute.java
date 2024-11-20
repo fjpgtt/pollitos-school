@@ -1,16 +1,16 @@
 package com.iwaconsolti.school.model.schools;
 
 import com.iwaconsolti.school.model.School;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-
+@NoArgsConstructor
+@Entity
+@DiscriminatorValue("GerardoInstitute")
 public class GerardoInstitute extends School {
-    public GerardoInstitute() {
-        super("GerardoInstitute", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
-        this.name = "GerardoInstitute";
-        this.students = new ArrayList<>();
-        this.courses = new ArrayList<>();
-        this.grades = new ArrayList<>();
+    public GerardoInstitute(String name) {
+        super(name);
     }
 }
