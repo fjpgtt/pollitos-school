@@ -37,7 +37,12 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
     public School createSchool(School school) {
         return schoolRepository.save(school);
     }
-//-------------------------------------------------------------------------------------------------------
+
+    @Override
+    public Optional<School> findByName(String name) {
+        return schoolRepository.findByName(name);
+    }
+    //-------------------------------------------------------------------------------------------------------
 
     @Override
     public List<Course> getAllCourses() {
@@ -99,13 +104,13 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
 
     //-------------------------------------------------------------------------------------------------------
     @Override
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public List<Student> getAllStudentsBySchool(String schoolName) {
+        return studentRepository.findAllBySchoolName(schoolName);
     }
 
     @Override
-    public Optional<Student> getStudentById(int id) {
-        return studentRepository.findById(id);
+    public Optional<Student> getStudentById(int id, String schoolName) {
+        return studentRepository.findByIdAndSchoolName(id, schoolName);
     }
 
     @Override
@@ -114,8 +119,8 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
     }
 
     @Override
-    public Student updateStudent(int id, Student student) {
-        if (studentRepository.existsById(id)) {
+    public Student updateStudent(int id, Student student, String schoolName) {
+        if (studentRepository.findByIdAndSchoolName(id, schoolName).isPresent()) {
             student.setId(id);
             return studentRepository.save(student);
         }

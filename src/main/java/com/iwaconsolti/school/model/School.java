@@ -3,11 +3,14 @@ package com.iwaconsolti.school.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Setter
+@Getter
 @Entity
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

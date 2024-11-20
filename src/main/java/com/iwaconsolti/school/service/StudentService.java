@@ -7,14 +7,13 @@ import java.util.Optional;
 
 public interface StudentService {
 
-    public List<Student> getAllStudents();
-
-    public Optional<Student> getStudentById(int id);
-
     public Student createStudent(Student student);
 
-    public Student updateStudent(int id, Student student);
+    public Student updateStudent(int id, Student student, String schoolName);
 
     public void deleteStudent(int id);
 
-}
+    public List<Student> getAllStudentsBySchool(String schoolName) ;
+
+    public Optional<Student> getStudentById(int id, String schoolName);
+    }
