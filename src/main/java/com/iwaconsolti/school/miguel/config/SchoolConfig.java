@@ -1,8 +1,6 @@
 package com.iwaconsolti.school.miguel.config;
 
-import com.iwaconsolti.school.miguel.model.Courses;
-import com.iwaconsolti.school.miguel.model.School;
-import com.iwaconsolti.school.miguel.model.Students;
+import com.iwaconsolti.school.miguel.persistence.model.School;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

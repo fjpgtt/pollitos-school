@@ -1,4 +1,4 @@
-package com.iwaconsolti.school.miguel.model.dto;
+package com.iwaconsolti.school.miguel.persistence.model.dto;
 
 import lombok.Data;
 

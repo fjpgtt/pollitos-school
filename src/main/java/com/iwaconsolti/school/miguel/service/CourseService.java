@@ -1,20 +1,29 @@
 package com.iwaconsolti.school.miguel.service;
 
-import com.iwaconsolti.school.miguel.model.Courses;
-import com.iwaconsolti.school.miguel.model.School;
-import com.iwaconsolti.school.miguel.model.dto.CoursesDTO;
-import com.iwaconsolti.school.miguel.model.dto.StudentsDTO;
+import com.iwaconsolti.school.miguel.persistence.model.Courses;
+import com.iwaconsolti.school.miguel.persistence.model.School;
+import com.iwaconsolti.school.miguel.persistence.repository.CourseRepository;
+import com.iwaconsolti.school.miguel.persistence.repository.SchoolRepository;
+import com.iwaconsolti.school.miguel.persistence.repository.UnionSchoolStudentRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 @Slf4j
 @Service
 public class CourseService {
+
+    @Autowired
+    private SchoolRepository schoolRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private UnionSchoolStudentRepository unionSchoolStudentRepository;
+
 
     private final School gerardoInstitute;
     private final School zetCollege;
@@ -24,62 +33,19 @@ public class CourseService {
         this.zetCollege = zetCollege;
     }
 
-    public Courses createCourse(String schoolName, CoursesDTO courseDTO) {
-
-        Courses course = new Courses();
-        course.setId(courseDTO.getId());
-        course.setNameCourse(courseDTO.getNameCourse());
-        course.setProfessorName(courseDTO.getProfessorName());
-
-        if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            gerardoInstitute.getCourses().put(course.getId(), course);
-            log.info("The course was successfully registered in Gerardo Institute {}",course);
-        }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            zetCollege.getCourses().put(course.getId(), course);
-            log.info("The course was successfully registered in Zet College {}",course);
-        }
-        return course;
+    public Courses createCourse(String schoolName, Courses course) {
+        School school = schoolRepository.findByName(schoolName);
+        course.setSchoolId(school.getId());
+        return  courseRepository.save(course);
     }
 
-    public Collection<CoursesDTO> getCourses(String schoolName){
-
-        Collection<CoursesDTO> coursesDTOSList = new ArrayList<>();
-
-        if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            for(Courses courses : gerardoInstitute.getCourses().values()){
-                CoursesDTO courseDTO = new CoursesDTO();
-                courseDTO.setId(courses.getId());
-                courseDTO.setNameCourse(courses.getNameCourse());
-                courseDTO.setProfessorName(courses.getProfessorName());
-                coursesDTOSList.add(courseDTO);
-            }
-        }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            for(Courses courses : zetCollege.getCourses().values()){
-                CoursesDTO courseDTO = new CoursesDTO();
-                courseDTO.setId(courses.getId());
-                courseDTO.setNameCourse(courses.getNameCourse());
-                courseDTO.setProfessorName(courses.getProfessorName());
-                coursesDTOSList.add(courseDTO);
-            }
-        }
-        return coursesDTOSList;
+    public Courses getCourses(String schoolName){
+        School school = schoolRepository.findByName(schoolName);
+        return courseRepository.findAllCoursesBySchoolId(school.getId());
     }
 
-    public Courses editCourse(int id, String schoolName, CoursesDTO courseDTO){
-
-        Courses course = new Courses();
-        course.setId(courseDTO.getId());
-        course.setNameCourse(courseDTO.getNameCourse());
-        course.setProfessorName(courseDTO.getProfessorName());
-
-        if("GerardoInstitute".equals(schoolName)){
-            gerardoInstitute.getCourses().put(id,course);
-            log.info("The course was edited successfully in Gerardo Institute {}",course);
-        }else if("ZetCollege".equals(schoolName)) {
-            zetCollege.getCourses().put(id,course);
-            log.info("The course was edited successfully in Zet Collage {}",course);
-
-        }
-        return course;
+    public Integer editCourse(int id, String schoolName, Courses course){
+        School school = schoolRepository.findByName(schoolName);
+        return courseRepository.updateCourse(id,course.getNameCourse(),course.getProfessorName(),school.getId());
     }
 }

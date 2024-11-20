@@ -1,18 +1,31 @@
 package com.iwaconsolti.school.miguel.service;
 
-import com.iwaconsolti.school.miguel.model.School;
-import com.iwaconsolti.school.miguel.model.Students;
-import com.iwaconsolti.school.miguel.model.dto.StudentsDTO;
+import com.iwaconsolti.school.miguel.persistence.model.School;
+import com.iwaconsolti.school.miguel.persistence.model.Students;
+import com.iwaconsolti.school.miguel.persistence.model.UnionSchoolStudents;
+import com.iwaconsolti.school.miguel.persistence.repository.SchoolRepository;
+import com.iwaconsolti.school.miguel.persistence.repository.StudentRepository;
+import com.iwaconsolti.school.miguel.persistence.repository.UnionSchoolStudentRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
 public class StudentService {
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private UnionSchoolStudentRepository unionSchoolStudentRepository;
+
+    @Autowired
+    private SchoolRepository schoolRepository;
 
     private final School gerardoInstitute;
     private final School zetCollege;
@@ -22,93 +35,29 @@ public class StudentService {
         this.zetCollege = zetCollege;
     }
 
-    public Students createStudents(String schoolName, StudentsDTO studentDTO) {
-        Students student = new Students();
-        student.setId(studentDTO.getId());
-        student.setFirstName(studentDTO.getFirstName());
-        student.setLastName(studentDTO.getLastName());
-        student.setAge(studentDTO.getAge());
+    public  Students createStudentsDB(String schoolName, Students student){
+        School school = schoolRepository.findByName(schoolName);
+        Students objStudent = studentRepository.save(student);
 
-        if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            if(gerardoInstitute.getStudents().containsKey(student.getId())){
-                return gerardoInstitute.getStudents().get(student.getId());
-            }
-            gerardoInstitute.getStudents().put(student.getId(), student);
-            log.info("The student registered successfully in Gerardo Institute {}",student);
-        }else if("ZetCollege".equalsIgnoreCase(schoolName)){
-            zetCollege.getStudents().put(student.getId(), student);
-            log.info("The student registered successfully in Zet College {}",student);
-        }
-        return student;
+        UnionSchoolStudents objUnionSchoolStudents = new UnionSchoolStudents();
+        objUnionSchoolStudents.setSchool_id(school.getId());
+        objUnionSchoolStudents.setStudent_id(objStudent.getId());
+
+        unionSchoolStudentRepository.save(objUnionSchoolStudents);
+        log.info("{}",objStudent.getId());
+        return objStudent;
     }
 
-    public Collection<StudentsDTO> getStudentById(String schoolName, int studentId){
-
-        Collection<StudentsDTO> studentsDTOS = new ArrayList<>();
-
-        if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            for(Students students : gerardoInstitute.getStudents().values()) {
-                StudentsDTO studentDto = new StudentsDTO();
-                studentDto.setId(students.getId());
-                studentDto.setFirstName(students.getFirstName());
-                studentDto.setLastName(students.getLastName());
-                studentDto.setAge(students.getAge());
-                studentsDTOS.add(studentDto);
-            }
-        }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            for(Students students : zetCollege.getStudents().values()) {
-                StudentsDTO studentDto = new StudentsDTO();
-                studentDto.setId(students.getId());
-                studentDto.setFirstName(students.getFirstName());
-                studentDto.setLastName(students.getLastName());
-                studentDto.setAge(students.getAge());
-                studentsDTOS.add(studentDto);
-            }
-        }
-        return studentsDTOS;
+    public List<Students> getAllStudentsDB(String schoolName){
+        School school = schoolRepository.findByName(schoolName);
+        return studentRepository.findAllStudents(school.getId());
     }
 
-    public Collection<StudentsDTO> getStudents(String schoolName) {
-
-        Collection<StudentsDTO> studentsDTO = new ArrayList<>();
-
-        if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            for(Students students : gerardoInstitute.getStudents().values()){
-                StudentsDTO studentDto = new StudentsDTO();
-                studentDto.setId(students.getId());
-                studentDto.setFirstName(students.getFirstName());
-                studentDto.setLastName(students.getLastName());
-                studentDto.setAge(students.getAge());
-                studentsDTO.add(studentDto);
-            }
-        }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            for(Students students : gerardoInstitute.getStudents().values()){
-                StudentsDTO studentDto = new StudentsDTO();
-                studentDto.setId(students.getId());
-                studentDto.setFirstName(students.getFirstName());
-                studentDto.setLastName(students.getLastName());
-                studentDto.setAge(students.getAge());
-                studentsDTO.add(studentDto);
-            }
-        }
-        return studentsDTO;
+    public Integer editStudentDB(int id, Students student){
+        return studentRepository.UpdateStudent(id,student.getFirstName(),student.getLastName(),student.getAge());
     }
 
-    public Students editStudent(int id, String schoolName, StudentsDTO studentDTO){
-        Students student = new Students();
-        student.setId(studentDTO.getId());
-        student.setFirstName(studentDTO.getFirstName());
-        student.setLastName(studentDTO.getLastName());
-        student.setAge(studentDTO.getAge());
-
-        if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            gerardoInstitute.getStudents().put(id,student);
-            log.info("The student was edited successfully in Gerardo Institute {}",student);
-        }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            zetCollege.getStudents().put(id,student);
-            log.info("The student was edited successfully in Zet College {}",student);
-
-        }
-        return student;
+    public List<Students> getStudentById(int id){
+        return studentRepository.findById(id);
     }
 }

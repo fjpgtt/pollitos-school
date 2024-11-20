@@ -1,7 +1,8 @@
 package com.iwaconsolti.school.miguel.controller;
 
-import com.iwaconsolti.school.miguel.model.Grade;
-import com.iwaconsolti.school.miguel.model.dto.GradesDTO;
+import com.iwaconsolti.school.miguel.persistence.model.Grade;
+import com.iwaconsolti.school.miguel.persistence.model.School;
+import com.iwaconsolti.school.miguel.persistence.repository.SchoolRepository;
 import com.iwaconsolti.school.miguel.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/app/{nameSchool}")
@@ -17,43 +19,123 @@ public class GradeController {
     @Autowired
     private GradeService gradeService;
 
-    @PostMapping("/grade")
-    public ResponseEntity<Grade> createGrade(@PathVariable String nameSchool, @RequestBody GradesDTO gradeDTO){
+    @Autowired
+    private SchoolRepository schoolRepository;
 
-        if(gradeDTO.getScore() < 0 || gradeDTO.getScore() > 100){
-            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    @PostMapping("/grade")
+    public ResponseEntity<Object> createGrade(@PathVariable String nameSchool, @RequestBody Grade grade){
+
+        School school = schoolRepository.findByName(nameSchool);
+
+        if(school == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of(
+                            "message", "the school was not found",
+                            "status", HttpStatus.NOT_FOUND
+                    )
+            );
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(gradeService.createGrade(nameSchool, gradeDTO));
+        if(grade.getScore() < 0 || grade.getScore() > 100){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    Map.of(
+                            "message", "The limit allowed in the score was exceeded", "status", HttpStatus.BAD_REQUEST
+                    )
+            );
+        }
+
+        if(grade.getScore() == 0 || grade.getCourseId() == 0 || grade.getStudentId() == 0){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    Map.of(
+                            "message","Required data is missing", "status", HttpStatus.BAD_REQUEST
+                    )
+            );
+        }
+        Grade objGrade = gradeService.createGrade(grade);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                Map.of(
+                        "message", "The Grade was successfully registered", "status", HttpStatus.CREATED,
+                        "grade", objGrade
+                )
+        );
     }
 
     @GetMapping("/grade/student/{studentId}")
-    public ResponseEntity<List> getGradesByStudentId(@PathVariable String nameSchool, @PathVariable int studentId){
-        List<String> gradeByStudentId = gradeService.getGradesByStudentId(nameSchool,studentId);
+    public ResponseEntity<Object> getGradesByStudentId(@PathVariable String nameSchool, @PathVariable int studentId){
+
+        School school = schoolRepository.findByName(nameSchool);
+
+        if(school == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of(
+                            "message", "the school was not found",
+                            "status", HttpStatus.NOT_FOUND
+                    )
+            );
+        }
+
+        List<Map<String, Object>> gradeByStudentId = gradeService.findStudentById(studentId);
 
         if(gradeByStudentId.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of(
+                         "message", "there are no grades recorded for the student", "status", HttpStatus.NOT_FOUND
+                    )
+            );
         }
         return ResponseEntity.ok(gradeByStudentId);
     }
 
     @DeleteMapping("/grade/student/{studentId}")
-    public ResponseEntity<Boolean> deleteGradesByStudentId(@PathVariable String nameSchool,@PathVariable int studentId){
-        boolean result = gradeService.deleteGradeByStudentId(nameSchool,studentId);
+    public ResponseEntity<Object> deleteGradesByStudentId(@PathVariable String nameSchool,@PathVariable int studentId){
 
-        if(!result){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        School school = schoolRepository.findByName(nameSchool);
+
+        if(school == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of(
+                            "message", "the school was not found",
+                            "status", HttpStatus.NOT_FOUND
+                    )
+            );
         }
-        return ResponseEntity.ok(true);
+
+        int result = gradeService.deleteGradeByStudentId(studentId);
+
+        if(result == 0){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of(
+                            "message", "no grade was found associated with the student id",
+                            "status", HttpStatus.NOT_FOUND
+                    )
+            );
+        }
+        return ResponseEntity.ok(
+                Map.of(
+                        "message", "student's grades are successfully removed",
+                        "status", HttpStatus.OK
+                )
+        );
     }
 
     @DeleteMapping("/grade/course/{courseId}")
-    public ResponseEntity<Boolean> deleteGradesByCourseId(@PathVariable String nameSchool,@PathVariable int courseId){
-        boolean result = gradeService.deleteGradeByCourseId(nameSchool, courseId);
+    public ResponseEntity<Object> deleteGradesByCourseId(@PathVariable String nameSchool,@PathVariable int courseId){
+        Integer result = gradeService.deleteGradeByCourseId(courseId);
 
-        if(!result){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        if(result == 0){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of(
+                            "message", "no grade was found associated with the course id",
+                            "status", HttpStatus.NOT_FOUND
+                    )
+            );
         }
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(
+                Map.of(
+                        "message", "course's grades are successfully removed",
+                        "status", HttpStatus.OK
+                )
+        );
     }
 }

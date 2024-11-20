@@ -1,8 +1,8 @@
 package com.iwaconsolti.school.miguel.config;
 
-import com.iwaconsolti.school.miguel.model.Courses;
-import com.iwaconsolti.school.miguel.model.School;
-import com.iwaconsolti.school.miguel.model.Students;
+import com.iwaconsolti.school.miguel.persistence.model.Courses;
+import com.iwaconsolti.school.miguel.persistence.model.School;
+import com.iwaconsolti.school.miguel.persistence.model.Students;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -35,8 +35,8 @@ public class SchoolPopulatedConfig {
         secondStudent.setLastName("Lima");
         secondStudent.setAge(56);
 
-        school.getStudents().put(firstStudent.getId(),firstStudent);
-        school.getStudents().put(secondStudent.getId(),secondStudent);
+        //school.getStudents().put(firstStudent.getId(),firstStudent);
+        //school.getStudents().put(secondStudent.getId(),secondStudent);
 
         Courses firstCourse = new Courses();
         firstCourse.setId(1);
@@ -48,8 +48,8 @@ public class SchoolPopulatedConfig {
         secondCourse.setNameCourse("JAVA");
         secondCourse.setProfessorName("Gerardo");
 
-        school.getCourses().put(firstCourse.getId(), firstCourse);
-        school.getCourses().put(secondCourse.getId(), secondCourse);
+        //school.getCourses().put(firstCourse.getId(), firstCourse);
+        //school.getCourses().put(secondCourse.getId(), secondCourse);
 
         return school;
     }
@@ -74,8 +74,8 @@ public class SchoolPopulatedConfig {
         secondStudent.setLastName("Garcia");
         secondStudent.setAge(62);
 
-        school.getStudents().put(firstStudent.getId(),firstStudent);
-        school.getStudents().put(secondStudent.getId(),secondStudent);
+        //school.getStudents().put(firstStudent.getId(),firstStudent);
+        //school.getStudents().put(secondStudent.getId(),secondStudent);
 
         Courses firstCourse = new Courses();
         firstCourse.setId(1);
@@ -87,8 +87,8 @@ public class SchoolPopulatedConfig {
         secondCourse.setNameCourse("JAVA");
         secondCourse.setProfessorName("Gerardo");
 
-        school.getCourses().put(firstCourse.getId(), firstCourse);
-        school.getCourses().put(secondCourse.getId(), secondCourse);
+        //school.getCourses().put(firstCourse.getId(), firstCourse);
+        //school.getCourses().put(secondCourse.getId(), secondCourse);
 
         log.info("I finished loading the data");
 
