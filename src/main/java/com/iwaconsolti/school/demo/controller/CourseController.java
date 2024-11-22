@@ -1,77 +1,50 @@
 package com.iwaconsolti.school.demo.controller;
 
 import com.iwaconsolti.school.demo.model.Course;
-import com.iwaconsolti.school.demo.model.School;
+import com.iwaconsolti.school.demo.repository.CourseRepository;
 import com.iwaconsolti.school.demo.service.CourseService;
 import com.iwaconsolti.school.demo.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/school")
 public class CourseController {
-    CourseService courseService;
-    SchoolService schoolService;
+    private final  CourseService courseService;
+    private final SchoolService schoolService;
+    private final CourseRepository courseRepository;
 
     @Autowired
-    public CourseController(CourseService courseService, SchoolService schoolService) {
+    public CourseController(CourseService courseService, SchoolService schoolService, CourseRepository courseRepository) {
         this.courseService = courseService;
         this.schoolService = schoolService;
+        this.courseRepository = courseRepository;
     }
 
-    @DeleteMapping("/{schoolName}/courseGradesDelete")
-    public String deleteGradesStudent(
-            @PathVariable String schoolName,
-            @RequestParam int id){
-
-        School school = schoolService.getSchoolByName(schoolName); // Obtener la escuela según el nombre
-        return CourseService.deleteGradesCourse(school, id);
+    @GetMapping("/{schoolName}/allCourses")
+    public ResponseEntity<List<Course>> returnCourses(@PathVariable String schoolName) {
+        return ResponseEntity.ok(courseService.getCourses(schoolService.getSchoolByName(schoolName)));
     }
 
-    @PutMapping("/{schoolName}/bodyCourse")
-    public String updateCourse(
-            @PathVariable String schoolName,
-            @RequestBody Course course) {
-
-        School school = schoolService.getSchoolByName(schoolName);
-        return courseService.updateCourse(school, course);
+    @PostMapping("/newCourse")
+    public ResponseEntity<String> newCourse(@RequestBody Course course){
+        return ResponseEntity.ok(courseService.createCourse(course));
     }
 
-    @PostMapping("/{schoolName}/bodyCourse")
-    public String createCourse(
-            @PathVariable String schoolName,
-            @RequestBody Course course) {
-
-        School school = schoolService.getSchoolByName(schoolName);
-        return courseService.createCourse(school, course);
+    @PutMapping("/editCourse")
+    public ResponseEntity<String> editCourse(@RequestBody Course course){
+        System.out.println("Student: "+ course.toString());
+        return ResponseEntity.ok(courseService.updateCourse(course));
     }
 
-    @PutMapping("/{schoolName}/course")
-    public String updateCourse(
-            @PathVariable String schoolName,
-            @RequestParam int id,
-            @RequestParam String name,
-            @RequestParam String professorName){
-
-        School school = schoolService.getSchoolByName(schoolName);
-        Course course = new Course(id, name, professorName);
-        return courseService.updateCourse(school, course);
-    }
-
-    @PostMapping("/{schoolName}/courses")
-    public String createCourse(
-            @PathVariable String schoolName,
-            @RequestParam int id,
-            @RequestParam String name,
-            @RequestParam String professorName){
-
-        School school = schoolService.getSchoolByName(schoolName);
-        Course course = new Course(id, name, professorName);
-        return courseService.createCourse(school, course);
-    }
-
-    @GetMapping("/{schoolName}/getCourses")
-    public String returnCourses(@PathVariable String schoolName){
-        return courseService.getCourses(schoolName);
+    @DeleteMapping("/{id}/eraseCourse")
+    public ResponseEntity<String> eraseCourse(@PathVariable int id){
+        System.out.println("idToDelete"+ id);
+        return ResponseEntity.ok(courseService.deleteStudent(id));
     }
 }
+
+

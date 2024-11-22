@@ -2,40 +2,47 @@ package com.iwaconsolti.school.demo.service;
 
 import com.iwaconsolti.school.demo.model.Grade;
 import com.iwaconsolti.school.demo.model.School;
+import com.iwaconsolti.school.demo.repository.GradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 public class GradeService {
     private final School gerardoInstitute;
     private final School zetCollege;
+    private final GradeRepository gradeRepository;
 
     @Autowired
-    public GradeService(@Qualifier("gerardoInstitute") School gerardoInstitute, @Qualifier("zetCollege") School zetCollege) {
+    public GradeService(@Qualifier("gerardoInstitute") School gerardoInstitute, @Qualifier("zetCollege") School zetCollege, GradeRepository gradeRepository) {
         this.gerardoInstitute = gerardoInstitute;
         this.zetCollege = zetCollege;
+        this.gradeRepository = gradeRepository;
     }
 
-    public String createGrade(School school, Grade grade) {
-        for (Grade existingGrade : school.getGradeList()) {
-            if (existingGrade.getMaxScore() >= 0 && existingGrade.getStudent() == grade.getStudent() && existingGrade.getCourse() == grade.getCourse()) {
-                return "Grade not added; already exists: " + grade.toString();
-            }
-        }
-        school.getGradeList().add(grade);
+    public List<Grade> getGrades(int schoolId) {
+        return gradeRepository.findBySchoolId(schoolId);
+    }
+
+    public String createGrade(Grade grade) {
+        gradeRepository.save(grade);
         return "Grade added successfully: " + grade.toString();
     }
 
-    public String getGrades(String schoolName){
-        if ("GerardoInstitute".equalsIgnoreCase(schoolName)) {
-            return gerardoInstitute.getGradeList().toString();
-        } else if ("ZetCollege".equalsIgnoreCase(schoolName)) {
-            return zetCollege.getGradeList().toString();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found");
-        }
+    public String updateGrade(Grade grade) {
+        gradeRepository.save(grade);
+        return "Grade update successfully: " + grade.toString() ;
+    }
+
+    public String deleteGrade(int idToDelete) {
+        gradeRepository.deleteById(idToDelete);
+        return "Grade delete with ID " +idToDelete+ " successfully!";
+    }
+
+    public String deleteAllGradesOfCourse(int idToDelete) {
+        gradeRepository.deleteAllByCourseId(idToDelete);
+        return "Grade delete with ID " +idToDelete+ " successfully!";
     }
 }

@@ -1,15 +1,37 @@
 package com.iwaconsolti.school.demo.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@Entity(name = "courses")
 public class Course {
+    public Course(int id, String name, String professorName) {
+        this.id = id;
+        this.name = name;
+        this.professorName = professorName;
+    }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String Name;
+
+    @Column(name="name")
+    private String name;
+    @Column(name="professor_Name")
     private String professorName;
+    @Column (name="school_id")
+    int schoolId;
+
+    @ManyToOne
+    @JoinColumn(name = "school_id", updatable = false, nullable = false, insertable=false)
+    private School school;
+
+    public Course(String name, String professorName, int schoolId) {
+        this.name = name;
+        this.professorName = professorName;
+        this.schoolId = schoolId;
+    }
 }

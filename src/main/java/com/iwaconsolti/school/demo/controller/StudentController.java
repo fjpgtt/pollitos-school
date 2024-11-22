@@ -1,88 +1,56 @@
 package com.iwaconsolti.school.demo.controller;
 
-import com.iwaconsolti.school.demo.model.School;
+import com.iwaconsolti.school.demo.model.Grade;
 import com.iwaconsolti.school.demo.model.Student;
-import com.iwaconsolti.school.demo.service.GradeService;
 import com.iwaconsolti.school.demo.service.SchoolService;
 import com.iwaconsolti.school.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/school")
 public class StudentController {
-    SchoolService schoolService;
-    StudentService studentService;
-    GradeService gradeService;
+
+    private final SchoolService schoolService;
+    private final StudentService studentService;
 
     @Autowired
-    public StudentController(SchoolService schoolService, StudentService studentService, GradeService gradeService) {
+    public StudentController(SchoolService schoolService, StudentService studentService) {
         this.schoolService = schoolService;
         this.studentService = studentService;
-        this.gradeService = gradeService;
     }
 
-    @DeleteMapping("/{schoolName}/studentGradesDelete")
-    public String deleteGradesStudent(
-            @PathVariable String schoolName,
-            @RequestParam int id){
-        School school = schoolService.getSchoolByName(schoolName);
-        return studentService.deleteGradesStudent(school, id);
+    @GetMapping("/{schoolName}/allStudents")
+    public ResponseEntity<List<Student>> returnStudents(@PathVariable String schoolName) {
+        return ResponseEntity.ok(studentService.getStudents(schoolService.getSchoolByName(schoolName)));
     }
 
-    @PostMapping("/{schoolName}/studentsGrades") // Since this method only receives a @PathVariable and a @RequestParam, I do not consider @RequestBody necessary, since a JSON body is not being sent.
-    public String studentGrades(
-            @PathVariable String schoolName,
-            @RequestParam int id){
-        School school = schoolService.getSchoolByName(schoolName);
-        return studentService.getStudentGrades(school, id);
+    @PostMapping("/newStudent")
+    public ResponseEntity<String> newStudent(@RequestBody Student student){
+        return ResponseEntity.ok(studentService.createStudent(student));
     }
 
-    @PutMapping("/{schoolName}/bodyStudent")
-    public String updateStudent(
-            @PathVariable String schoolName,
-            @RequestBody Student student) {
-        School school = schoolService.getSchoolByName(schoolName);
-        return studentService.updateStudent(school, student);
+    @PutMapping("/editStudent")
+    public ResponseEntity<String> editStudent(@RequestBody Student student){
+        return ResponseEntity.ok(studentService.updateStudent(student));
     }
 
-    @PostMapping("/{schoolName}/bodyStudent")
-    public String createStudent(
-            @PathVariable String schoolName,
-            @RequestBody Student student) {
-        School school = schoolService.getSchoolByName(schoolName);
-        return studentService.createStudent(school, student);
+    @DeleteMapping("/{id}/eraseStudent")
+    public ResponseEntity<String> eraseStudent(@PathVariable int id){
+        return ResponseEntity.ok(studentService.deleteStudent(id));
     }
 
-
-    @PutMapping("/{schoolName}/students") //Some methods were updated to @RequestBody and the previous ones were preserved to exemplify another way of doing it by @RequestParam
-    public String updateStudent(
-            @PathVariable String schoolName,
-            @RequestParam int id,
-            @RequestParam String firstName,
-            @RequestParam String lastName,
-            @RequestParam int age){
-
-        School school = schoolService.getSchoolByName(schoolName);
-        Student student = new Student(id, firstName, lastName, age);
-        return studentService.updateStudent(school, student);
+    @DeleteMapping("/{idStudent}/eraseAllGradesOfStudent")
+    public ResponseEntity<String> eraseAllGradesOfStudent(@PathVariable int idStudent){
+        return ResponseEntity.ok(studentService.deleteAllGradesOfStudent(idStudent));
     }
 
-    @PostMapping("/{schoolName}/students")
-    public String createStudent(
-            @PathVariable String schoolName,
-            @RequestParam int id,
-            @RequestParam String firstName,
-            @RequestParam String lastName,
-            @RequestParam int age) {
-
-        School school = schoolService.getSchoolByName(schoolName);
-        Student student = new Student(id, firstName, lastName, age);
-        return studentService.createStudent(school, student);
-    }
-
-    @GetMapping("/{schoolName}/getStudents")
-    public String returnStudents(@PathVariable String schoolName){ // Obtener la escuela según el nombre
-        return studentService.getStudents(schoolName);
+    @GetMapping("/{schoolName}/{studentId}/allGradesOfStudent")
+    public ResponseEntity <List<Grade>> returnAllGradesOfStudent(@PathVariable String schoolName, @PathVariable int studentId) {
+        return ResponseEntity.ok(studentService.getAllGradesOfStudent(studentId, schoolService.getSchoolByName(schoolName)));
     }
 }
+

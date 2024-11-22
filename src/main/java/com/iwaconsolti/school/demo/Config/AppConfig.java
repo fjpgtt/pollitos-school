@@ -1,10 +1,14 @@
 package com.iwaconsolti.school.demo.Config;
 
 import com.iwaconsolti.school.demo.model.*;
+import com.iwaconsolti.school.demo.repository.CourseRepository;
+import com.iwaconsolti.school.demo.repository.GradeRepository;
+import com.iwaconsolti.school.demo.repository.SchoolRepository;
+import com.iwaconsolti.school.demo.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 @Slf4j
 @Configuration
@@ -30,31 +34,32 @@ public class AppConfig {
     public Grade grade() {return new Grade();}
 
     @Bean
-    @Profile("populated")
-    public String populateData(School gerardoInstitute, School zetCollege) {
-        log.info("Populating data for GerardoInstitute and ZetCollege (APPCONFIG)");
+    CommandLineRunner initDatabase( SchoolRepository schoolRepository, StudentRepository studentRepository, CourseRepository courseRepository,  GradeRepository gradeRepository) {
+        return args -> {
+            log.info("Populating data for GerardoInstitute and ZetCollege (APPCONFIG)");
 
-        gerardoInstitute.getGradeList().add(new Grade(100, 1, 1));
-        gerardoInstitute.getGradeList().add(new Grade(90, 2, 1));
-        gerardoInstitute.getGradeList().add(new Grade(50, 3, 1));
-        gerardoInstitute.getGradeList().add(new Grade(90, 1, 2));
+            School gerardoInstitute = schoolRepository.save(new School("GerardoInstitute"));
+            School zetCollege = schoolRepository.save(new School("ZetCollege"));
 
-        zetCollege.getGradeList().add(new Grade(80, 3, 3));
-        zetCollege.getGradeList().add(new Grade(100, 3, 3));
-        zetCollege.getGradeList().add(new Grade(60, 3, 3));
-        zetCollege.getGradeList().add(new Grade(70, 3, 4));
+            Student juan = studentRepository.save(new Student("Juan", "Perez", 18, gerardoInstitute.getId()));
+            Student ana = studentRepository.save(new Student("Ana", "Lopez", 22, gerardoInstitute.getId()));
+            Student mario = studentRepository.save(new Student("Mario", "Hdz", 22, zetCollege.getId()));
+            Student ernesto = studentRepository.save(new Student("Ernesto", "Gzlz", 25, zetCollege.getId()));
 
-        gerardoInstitute.getCourseList().add(new Course(1, "Matemáticas", "Prof. González"));
-        gerardoInstitute.getCourseList().add(new Course(2, "Historia", "Prof. Sánchez"));
+            Course mathematics = courseRepository.save(new Course("Mathematics", "Dr. Smith", gerardoInstitute.getId()));
+            Course history = courseRepository.save(new Course("History", "Dr. Brown", gerardoInstitute.getId()));
+            Course civic = courseRepository.save(new Course("Civic", "Dr. XX", gerardoInstitute.getId()));
+            Course geography = courseRepository.save(new Course("Geography", "Dr. ZZ", gerardoInstitute.getId()));
+            Course psychology = courseRepository.save(new Course("Psychology", "Dr. MM", zetCollege.getId()));
 
-        zetCollege.getCourseList().add(new Course(3, "Ciencias", "Prof. Ramírez"));
-        zetCollege.getCourseList().add(new Course(4, "Filosofía", "Prof. García"));
+            gradeRepository.save(new Grade(juan.getId(), mathematics.getId(), 95));
+            gradeRepository.save(new Grade(juan.getId(), history.getId(), 90));
+            gradeRepository.save(new Grade(juan.getId(), civic.getId(), 80));
+            gradeRepository.save(new Grade(ana.getId(), history.getId(), 85));
+            gradeRepository.save(new Grade(ana.getId(), mathematics.getId(), 100));
+            gradeRepository.save(new Grade(mario.getId(), mathematics.getId(), 100));
 
-        gerardoInstitute.getStudentsList().add(new Student(1, "Juan", "Perez", 18));
-        gerardoInstitute.getStudentsList().add(new Student(2, "Pedro", "Gonzales", 20));
-
-        zetCollege.getStudentsList().add(new Student(3, "Ana", "Lopez", 22));
-        zetCollege.getStudentsList().add(new Student(4, "Luis", "Martínez", 25));
-        return "Populate Data";
+        };
     }
+
 }

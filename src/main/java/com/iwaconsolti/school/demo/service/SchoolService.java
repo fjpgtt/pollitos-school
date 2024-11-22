@@ -18,14 +18,13 @@ public class SchoolService {
         this.zetCollege = zetCollege;
     }
 
-    public School getSchoolByName(String schoolName) {
+    public int getSchoolByName(String schoolName) {
         if ("GerardoInstitute".equalsIgnoreCase(schoolName)) {
-            return gerardoInstitute;
+            return 1;
         } else if ("ZetCollege".equalsIgnoreCase(schoolName)) {
-            return zetCollege;
+            return 2;
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found");
         }
     }
-
 }
