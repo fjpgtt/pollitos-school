@@ -8,7 +8,6 @@ import com.iwaconsolti.school.repository.CourseRepository;
 import com.iwaconsolti.school.repository.GradeRepository;
 import com.iwaconsolti.school.repository.SchoolRepository;
 import com.iwaconsolti.school.repository.StudentRepository;
-import org.hibernate.TransientPropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -53,28 +52,24 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
     }
 
     @Override
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public List<Course> findAllBySchoolId(int schoolId) {
+        return courseRepository.findAllBySchoolId(schoolId);
     }
 
     @Override
     public Optional<Course> getCourseById(int id, int schoolId) {
-        return courseRepository.findByIdAndSchoolName(id, schoolId);
+        return courseRepository.findByIdAndSchoolId(id, schoolId);
     }
 
     @Override
-    public Course updateCourse(int id, Course course) {
-        if (courseRepository.existsById(id)) {
+    public Course updateCourse(int id, Course course, int schoolId) {
+        if (courseRepository.findByIdAndSchoolId(id, schoolId).isPresent()) {
             course.setId(id);
             return courseRepository.save(course);
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found in this school");
     }
 
-    @Override
-    public void deleteCourse(int id) {
-        courseRepository.deleteById(id);
-    }
 //-------------------------------------------------------------------------------------------------------
 
     @Override
@@ -102,14 +97,7 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
 
     @Override
     public Grade createGrade(Grade grade) {
-        try {
-            return gradeRepository.save(grade);
-        } catch (TransientPropertyValueException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Cannot save grade: Ensure the course and student are already saved"
-            );
-        }
+        return gradeRepository.save(grade);
     }
 
     //-------------------------------------------------------------------------------------------------------

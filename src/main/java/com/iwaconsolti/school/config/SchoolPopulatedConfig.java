@@ -66,10 +66,6 @@ public class SchoolPopulatedConfig {
         gradeService.createGrade(new Grade(87, student3, course4, zetCollege));
         gradeService.createGrade(new Grade(75, student4, course3, zetCollege));
         gradeService.createGrade(new Grade(80, student4, course4, zetCollege));
-
-
-        Student aux = studentService.createStudent(new Student("Andres", "pauilna", 99, gerardoInstitute));
-        Course aux2 = courseService.createCourse(new Course("Manolo", "Prof. Manolo", gerardoInstitute));
     }
 
 }
