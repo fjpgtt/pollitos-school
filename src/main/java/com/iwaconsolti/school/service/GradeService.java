@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface GradeService {
 
-    public List<Grade> getGradesForStudent(int studentId);
+    public List<Grade> getAllGradesByStudent(int studentId, int schoolId);
 
-    public void deleteGradesForStudent(int studentId);
+    public void deleteAllGradesByStudent(int studentId, int schoolId);
 
-    public void deleteGradesForCourse(int courseId);
+    public void deleteAllGradesByCourse(int courseId, int schoolId);
 
     public Grade createGrade(Grade grade);
 }

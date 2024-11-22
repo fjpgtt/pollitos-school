@@ -9,11 +9,11 @@ public interface StudentService {
 
     public Student createStudent(Student student);
 
-    public Student updateStudent(int id, Student student, String schoolName);
+    public Student updateStudent(int id, Student student, int schoolId);
 
     public void deleteStudent(int id);
 
-    public List<Student> getAllStudentsBySchool(String schoolName) ;
+    public List<Student> getAllStudentsBySchool(int schoolId) ;
 
-    public Optional<Student> getStudentById(int id, String schoolName);
+    public Optional<Student> getStudentById(int id, int schoolId);
     }

@@ -44,6 +44,7 @@ public class SchoolPopulatedConfig {
         Student student1 = studentService.createStudent(new Student("Juan", "Perez", 20, gerardoInstitute));
         Student student2 = studentService.createStudent(new Student("Ana", "Gomez", 22, gerardoInstitute));
 
+
         Course course1 = courseService.createCourse(new Course("Matemáticas", "Prof. Ramirez", gerardoInstitute));
         Course course2 = courseService.createCourse(new Course("Historia", "Prof. López", gerardoInstitute));
 
@@ -66,6 +67,9 @@ public class SchoolPopulatedConfig {
         gradeService.createGrade(new Grade(75, student4, course3, zetCollege));
         gradeService.createGrade(new Grade(80, student4, course4, zetCollege));
 
+
+        Student aux = studentService.createStudent(new Student("Andres", "pauilna", 99, gerardoInstitute));
+        Course aux2 = courseService.createCourse(new Course("Manolo", "Prof. Manolo", gerardoInstitute));
     }
 
 }

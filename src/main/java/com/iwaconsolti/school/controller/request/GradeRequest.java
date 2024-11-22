@@ -1,13 +1,15 @@
 package com.iwaconsolti.school.controller.request;
+import com.iwaconsolti.school.model.School;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class GradeRequest {
-    private final int id;
+    private int id;
     private int score;
-    private StudentRequest studentRequest;
-    private CourseRequest courseRequest;
+    private int studentId;
+    private int courseId;
+    private School school;
 
 }

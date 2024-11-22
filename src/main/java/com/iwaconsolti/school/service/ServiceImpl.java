@@ -8,8 +8,11 @@ import com.iwaconsolti.school.repository.CourseRepository;
 import com.iwaconsolti.school.repository.GradeRepository;
 import com.iwaconsolti.school.repository.SchoolRepository;
 import com.iwaconsolti.school.repository.StudentRepository;
+import org.hibernate.TransientPropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,18 +48,18 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
     //-------------------------------------------------------------------------------------------------------
 
     @Override
+    public Course createCourse(Course course) {
+        return courseRepository.save(course);
+    }
+
+    @Override
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
 
     @Override
-    public Optional<Course> getCourseById(int id) {
-        return courseRepository.findById(id);
-    }
-
-    @Override
-    public Course createCourse(Course course) {
-        return courseRepository.save(course);
+    public Optional<Course> getCourseById(int id, int schoolId) {
+        return courseRepository.findByIdAndSchoolName(id, schoolId);
     }
 
     @Override
@@ -75,13 +78,13 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
 //-------------------------------------------------------------------------------------------------------
 
     @Override
-    public List<Grade> getGradesForStudent(int studentId) {
-        return gradeRepository.findByStudentId(studentId);
+    public List<Grade> getAllGradesByStudent(int studentId, int schoolId) {
+        return gradeRepository.findByStudentIdAndSchool(studentId, schoolId);
     }
 
     @Override
-    public void deleteGradesForStudent(int studentId) {
-        List<Grade> grades = gradeRepository.findByStudentId(studentId);
+    public void deleteAllGradesByStudent(int studentId, int schoolId) {
+        List<Grade> grades = gradeRepository.findByStudentIdAndSchool(studentId, schoolId);
         for (Grade grade : grades) {
             grade.setScore(0);
             gradeRepository.save(grade);
@@ -89,8 +92,8 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
     }
 
     @Override
-    public void deleteGradesForCourse(int courseId) {
-        List<Grade> grades = gradeRepository.findByCourseId(courseId);
+    public void deleteAllGradesByCourse(int courseId, int schoolId) {
+        List<Grade> grades = gradeRepository.findByCourseIdAndSchool(courseId, schoolId);
         for (Grade grade : grades) {
             grade.setScore(0);
             gradeRepository.save(grade);
@@ -99,18 +102,25 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
 
     @Override
     public Grade createGrade(Grade grade) {
-        return gradeRepository.save(grade);
+        try {
+            return gradeRepository.save(grade);
+        } catch (TransientPropertyValueException ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Cannot save grade: Ensure the course and student are already saved"
+            );
+        }
     }
 
     //-------------------------------------------------------------------------------------------------------
     @Override
-    public List<Student> getAllStudentsBySchool(String schoolName) {
-        return studentRepository.findAllBySchoolName(schoolName);
+    public List<Student> getAllStudentsBySchool(int schoolId) {
+        return studentRepository.findAllBySchoolId(schoolId);
     }
 
     @Override
-    public Optional<Student> getStudentById(int id, String schoolName) {
-        return studentRepository.findByIdAndSchoolName(id, schoolName);
+    public Optional<Student> getStudentById(int id, int schoolId) {
+        return studentRepository.findByIdAndSchoolId(id, schoolId);
     }
 
     @Override
@@ -119,12 +129,12 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
     }
 
     @Override
-    public Student updateStudent(int id, Student student, String schoolName) {
-        if (studentRepository.findByIdAndSchoolName(id, schoolName).isPresent()) {
+    public Student updateStudent(int id, Student student, int schoolId) {
+        if (studentRepository.findByIdAndSchoolId(id, schoolId).isPresent()) {
             student.setId(id);
             return studentRepository.save(student);
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found in this school");
     }
 
     @Override
