@@ -2,10 +2,12 @@ package com.iwaconsolti.school.demo.controller;
 
 import com.iwaconsolti.school.demo.model.Course;
 import com.iwaconsolti.school.demo.model.Grade;
+import com.iwaconsolti.school.demo.service.CourseInterface;
 import com.iwaconsolti.school.demo.service.CourseService;
 import com.iwaconsolti.school.demo.service.GradeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,14 @@ public class CourseController {
 
     private final CourseService courseService;
     private final GradeService gradeService;
+
+    @Autowired
+    CourseInterface courseInterface;
+
+    @GetMapping("/findAllCourses")
+    public List<com.iwaconsolti.school.demo.entity.Course> findAllCourses(){
+        return courseInterface.findAllCourses();
+    }
 
     @GetMapping()
     public ResponseEntity<List<Course>> getCourses(){

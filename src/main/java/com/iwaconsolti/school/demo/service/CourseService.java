@@ -1,8 +1,9 @@
 package com.iwaconsolti.school.demo.service;
 
+import com.iwaconsolti.school.demo.entity.repository.CourseRepository;
 import com.iwaconsolti.school.demo.model.Course;
-import com.iwaconsolti.school.demo.model.Student;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,7 +12,10 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class CourseService {
+public class CourseService implements CourseInterface {
+
+    @Autowired
+    CourseRepository courseRepository;
 
     private final List<Course> courses = new ArrayList<>();
 
@@ -21,6 +25,11 @@ public class CourseService {
 
         this.courses.add(mathematics);
         this.courses.add(Spanish);
+    }
+
+    @Override
+    public List<com.iwaconsolti.school.demo.entity.Course> findAllCourses(){
+        return courseRepository.findAll();
     }
 
     public List<Course> getCourses() {
@@ -53,5 +62,4 @@ public class CourseService {
         });
         return this.courses.stream().filter(c -> c.getId() == course.getId()).toList().getFirst();
     }
-
 }

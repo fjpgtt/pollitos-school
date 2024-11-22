@@ -40,7 +40,7 @@ public class StudentsController {
     }
 
     @PostMapping()
-    public ResponseEntity<Student> createStudents(@RequestBody Student student){
+    public ResponseEntity<Student> getStudents(@RequestBody Student student){
         log.info("Creating the student");
         student = this.studentService.createStudent(student);
         return ResponseEntity.ok(student);
