@@ -8,7 +8,10 @@ import com.iwaconsolti.school.repository.CourseRepository;
 import com.iwaconsolti.school.repository.GradeRepository;
 import com.iwaconsolti.school.repository.SchoolRepository;
 import com.iwaconsolti.school.repository.StudentRepository;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ServiceImpl implements SchoolService, StudentService, CourseService, GradeService {
 
@@ -23,6 +27,9 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
     private final StudentRepository studentRepository;
     private final GradeRepository gradeRepository;
     private final CourseRepository courseRepository;
+
+    @Value("${school.score.limit}")
+    private int scoreLimit;
 
     @Autowired
     public ServiceImpl(SchoolRepository schoolRepository,
@@ -63,6 +70,7 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
 
     @Override
     public Course updateCourse(int id, Course course, int schoolId) {
+        log.info("The course information is being updated with the id: {}", course.getId());
         if (courseRepository.findByIdAndSchoolId(id, schoolId).isPresent()) {
             course.setId(id);
             return courseRepository.save(course);
@@ -79,6 +87,7 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
 
     @Override
     public void deleteAllGradesByStudent(int studentId, int schoolId) {
+        log.info("Delete All Grades By Student: {}", studentId);
         List<Grade> grades = gradeRepository.findByStudentIdAndSchool(studentId, schoolId);
         for (Grade grade : grades) {
             grade.setScore(0);
@@ -88,6 +97,7 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
 
     @Override
     public void deleteAllGradesByCourse(int courseId, int schoolId) {
+        log.info("Delete All Grades By Course: {}", courseId);
         List<Grade> grades = gradeRepository.findByCourseIdAndSchool(courseId, schoolId);
         for (Grade grade : grades) {
             grade.setScore(0);
@@ -97,6 +107,9 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
 
     @Override
     public Grade createGrade(Grade grade) {
+        if (grade.getScore() > scoreLimit) {
+            throw new IllegalArgumentException("Score exceeds the allowed limit of " + scoreLimit);
+        }
         return gradeRepository.save(grade);
     }
 
@@ -127,6 +140,7 @@ public class ServiceImpl implements SchoolService, StudentService, CourseService
 
     @Override
     public void deleteStudent(int id) {
+        log.info("The student with the ID is being deleted: {}", id);
         studentRepository.deleteById(id);
     }
 }
