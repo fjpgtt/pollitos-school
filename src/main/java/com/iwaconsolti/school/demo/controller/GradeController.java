@@ -7,7 +7,6 @@ import com.iwaconsolti.school.demo.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -25,7 +24,7 @@ public class GradeController {
     }
 
     @GetMapping("/{schoolName}/allGrades")
-    public ResponseEntity<List<Grade>> returnGrades(@PathVariable String schoolName) {
+    public ResponseEntity<List<GradeRepository.GradeDTO>> returnGrades(@PathVariable String schoolName) {
         return ResponseEntity.ok(gradeService.getGrades(schoolService.getSchoolByName(schoolName)));
     }
 

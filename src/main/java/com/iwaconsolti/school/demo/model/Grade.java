@@ -28,12 +28,10 @@ public class Grade {
     private  int courseId;
 
     @ManyToOne
-    @MapsId("studentId") // Mapea el ID compuesto
-    @JoinColumn(name = "student_id", updatable = false, nullable = false, insertable=false) // Nombre de la columna que referencia a Student
-    private Student student; // Campo para la relación con Student
+    @JoinColumn(name = "student_id", updatable = false, nullable = false, insertable=false) //Column name that references Student
+    private Student student; // Field for the relationship with Student
 
     @ManyToOne
-    @MapsId("courseId")
     @JoinColumn(name = "course_id", updatable = false, nullable = false, insertable=false)
     private Course course;
 

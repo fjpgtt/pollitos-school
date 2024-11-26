@@ -6,8 +6,8 @@ import com.iwaconsolti.school.demo.repository.GradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GradeService {
@@ -22,8 +22,15 @@ public class GradeService {
         this.gradeRepository = gradeRepository;
     }
 
-    public List<Grade> getGrades(int schoolId) {
-        return gradeRepository.findBySchoolId(schoolId);
+    public List<GradeRepository.GradeDTO> getGrades(int schoolId) {
+        List<Grade> grades = gradeRepository.findBySchoolId(schoolId);
+        return grades.stream()
+                .map(grade -> new GradeRepository.GradeDTO(
+                        grade.getId(),
+                        grade.getScore(),
+                        grade.getStudentId(),
+                        grade.getCourseId()))
+                .collect(Collectors.toList());
     }
 
     public String createGrade(Grade grade) {

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity(name = "courses")
 public class Course {
+
     public Course(int id, String name, String professorName) {
         this.id = id;
         this.name = name;

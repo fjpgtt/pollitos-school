@@ -3,6 +3,7 @@ package com.iwaconsolti.school.demo.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Data
 @NoArgsConstructor
 @Entity(name = "students")
@@ -31,10 +32,9 @@ public class Student {
     @Column (name="school_id")
     int schoolId;
 
-
     @ManyToOne
-    @JoinColumn(name = "school_id", updatable = false, nullable = false, insertable=false) // Nombre de la columna que referencia a School
-    private School school; // Relación hacia School
+    @JoinColumn(name = "school_id", updatable = false, nullable = false, insertable=false)
+    private School school;
 
     public Student(String firstName, String lastName, int age, int schoolId) {
         this.firstName = firstName;

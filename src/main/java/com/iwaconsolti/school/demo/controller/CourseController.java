@@ -7,7 +7,6 @@ import com.iwaconsolti.school.demo.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -25,7 +24,7 @@ public class CourseController {
     }
 
     @GetMapping("/{schoolName}/allCourses")
-    public ResponseEntity<List<Course>> returnCourses(@PathVariable String schoolName) {
+    public ResponseEntity<List<CourseRepository.CourseDTO>> returnCourses(@PathVariable String schoolName) {
         return ResponseEntity.ok(courseService.getCourses(schoolService.getSchoolByName(schoolName)));
     }
 

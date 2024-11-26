@@ -1,32 +1,32 @@
 package com.iwaconsolti.school.demo.service;
 
 import com.iwaconsolti.school.demo.model.Grade;
-import com.iwaconsolti.school.demo.model.School;
 import com.iwaconsolti.school.demo.model.Student;
+import com.iwaconsolti.school.demo.repository.GradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import com.iwaconsolti.school.demo.repository.SchoolRepository;
 import com.iwaconsolti.school.demo.repository.StudentRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
-    private final School gerardoInstitute;
-    private final School zetCollege;
     private final StudentRepository studentRepository;
-    private final SchoolRepository schoolRepository;
 
     @Autowired
-    public StudentService(@Qualifier("gerardoInstitute") School gerardoInstitute, @Qualifier("zetCollege") School zetCollege, Grade grade, StudentRepository studentRepository, SchoolRepository schoolRepository) {
-        this.gerardoInstitute = gerardoInstitute;
-        this.zetCollege = zetCollege;
+    public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
-        this.schoolRepository = schoolRepository;
     }
 
-    public List<Student> getStudents(int schoolId) {
-        return studentRepository.findBySchoolId(schoolId);
+    public List<StudentRepository.StudentDTO> getStudents(int schoolId) {
+        List<Student>  students = studentRepository.findBySchoolId(schoolId);
+        return students.stream()
+                .map(student -> new StudentRepository.StudentDTO(
+                        student.getId(),
+                        student.getFirstName(),
+                        student.getLastName(),
+                        student.getAge()))
+                .collect(Collectors.toList());
     }
 
     public String createStudent(Student student) {
@@ -49,7 +49,14 @@ public class StudentService {
         return "All Grades delete of Student with ID " +idToDelete+ " successfully!";
     }
 
-    public List<Grade> getAllGradesOfStudent(int studentId, int schoolId) {
-        return studentRepository.findGradesByStudentAndSchool(studentId, schoolId);
+    public List<GradeRepository.GradeDTO> getAllGradesOfStudent(int studentId, int schoolId) {
+        List<Grade> grades = studentRepository.findGradesByStudentAndSchool(studentId, schoolId);
+        return grades.stream()
+                .map(grade -> new GradeRepository.GradeDTO(
+                        grade.getId(),
+                        grade.getScore(),
+                        grade.getStudentId(),
+                        grade.getCourseId()))
+                .collect(Collectors.toList());
     }
 }

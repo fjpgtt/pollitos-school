@@ -6,8 +6,8 @@ import com.iwaconsolti.school.demo.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService{
@@ -22,8 +22,14 @@ public class CourseService{
         this.courseRepository = courseRepository;
     }
 
-    public List<Course> getCourses(int schoolId) {
-            return courseRepository.findBySchoolId(schoolId);
+    public List<CourseRepository.CourseDTO> getCourses(int schoolId) {
+            List<Course> courses = courseRepository.findBySchoolId(schoolId);
+        return courses.stream()
+                .map(course -> new CourseRepository.CourseDTO(
+                        course.getId(),
+                        course.getName(),
+                        course.getProfessorName()))
+                .collect(Collectors.toList());
     }
 
     public String createCourse(Course course){
