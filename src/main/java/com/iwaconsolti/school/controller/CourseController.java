@@ -79,8 +79,7 @@ public class CourseController {
             @RequestBody CourseRequest courseRequest) {
 
         School school = findSchool(schoolName);
-        Course updateCourse = convertRequestToCourse(courseRequest, school);
-        Course savedCourse = courseService.updateCourse(id, updateCourse, school.getId());
+        Course savedCourse = courseService.updateCourse(id, courseRequest, school.getId());
         CourseResponse courseResponse = convertCourseToResponse(savedCourse);
 
         return new ResponseEntity<>(courseResponse, HttpStatus.OK);

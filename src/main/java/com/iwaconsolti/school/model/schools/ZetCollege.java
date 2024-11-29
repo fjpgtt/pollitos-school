@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("ZetCollege")
 public class ZetCollege extends School {
     public ZetCollege(String name) {
         super(name);

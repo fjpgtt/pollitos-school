@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile("empty")
+@Profile("default")
 @Slf4j
 @Configuration
 public class SchoolEmptyConfig {

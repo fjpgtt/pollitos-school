@@ -41,10 +41,10 @@ public class GradeController {
     public Grade convertRequestToGrade(GradeRequest gradeRequest, School school) {
 
         Student student = studentService.getStudentById(gradeRequest.getStudentId(), school.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
 
         Course course = courseService.getCourseById(gradeRequest.getCourseId(), school.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
 
         return new Grade(
                 gradeRequest.getScore(),

@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class GradeRequest {
-    private int id;
     private int score;
     private int studentId;
     private int courseId;
