@@ -4,6 +4,7 @@ import com.iwaconsolti.school.demo.model.Course;
 import com.iwaconsolti.school.demo.repository.CourseRepository;
 import com.iwaconsolti.school.demo.service.CourseService;
 import com.iwaconsolti.school.demo.service.SchoolService;
+import com.iwaconsolti.school.dto.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class CourseController {
     }
 
     @GetMapping("/{schoolName}/allCourses")
-    public ResponseEntity<List<CourseRepository.CourseDTO>> returnCourses(@PathVariable String schoolName) {
+    public ResponseEntity<List<CourseDTO>> returnCourses(@PathVariable String schoolName) {
         return ResponseEntity.ok(courseService.getCourses(schoolService.getSchoolByName(schoolName)));
     }
 

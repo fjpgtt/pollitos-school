@@ -5,14 +5,27 @@ import com.iwaconsolti.school.demo.repository.CourseRepository;
 import com.iwaconsolti.school.demo.repository.GradeRepository;
 import com.iwaconsolti.school.demo.repository.SchoolRepository;
 import com.iwaconsolti.school.demo.repository.StudentRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @Configuration
 public class AppConfig {
+    private final SchoolRepository schoolRepository;
+    private final StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
+    private final GradeRepository gradeRepository;
+
+    @Autowired
+    AppConfig(SchoolRepository schoolRepository, StudentRepository studentRepository, CourseRepository courseRepository,  GradeRepository gradeRepository){
+        this.schoolRepository = schoolRepository;
+        this.studentRepository = studentRepository;
+        this.courseRepository = courseRepository;
+        this.gradeRepository = gradeRepository;
+    }
 
     @Bean(name = "gerardoInstitute")
     public School gerardoInstitute() {
@@ -25,40 +38,46 @@ public class AppConfig {
     }
 
     @Bean
-    public Student student() {return new Student();}
+    public Student student() {
+        return new Student();
+    }
 
     @Bean
-    public Course course() {return new Course();}
+    public Course course() {
+        return new Course();
+    }
 
     @Bean
-    public Grade grade() {return new Grade();}
+    public Grade grade() {
+        return new Grade();
+    }
 
-    @Bean
-    CommandLineRunner initDatabase( SchoolRepository schoolRepository, StudentRepository studentRepository, CourseRepository courseRepository,  GradeRepository gradeRepository) {
-        return args -> {
-            log.info("Populating data for GerardoInstitute and ZetCollege (APPCONFIG)");
+    @PostConstruct
+    public void initDatabase() {
 
-            School gerardoInstitute = schoolRepository.save(new School("GerardoInstitute"));
-            School zetCollege = schoolRepository.save(new School("ZetCollege"));
+        log.info("Populating data for GerardoInstitute and ZetCollege (APPCONFIG)");
 
-            Student juan = studentRepository.save(new Student("Juan", "Perez", 18, gerardoInstitute.getId()));
-            Student ana = studentRepository.save(new Student("Ana", "Lopez", 22, gerardoInstitute.getId()));
-            Student mario = studentRepository.save(new Student("Mario", "Hdz", 22, zetCollege.getId()));
-            Student ernesto = studentRepository.save(new Student("Ernesto", "Gzlz", 25, zetCollege.getId()));
+        School gerardoInstitute = schoolRepository.save(new School("GerardoInstitute"));
+        School zetCollege = schoolRepository.save(new School("ZetCollege"));
 
-            Course mathematics = courseRepository.save(new Course("Mathematics", "Dr. Smith", gerardoInstitute.getId()));
-            Course history = courseRepository.save(new Course("History", "Dr. Brown", gerardoInstitute.getId()));
-            Course civic = courseRepository.save(new Course("Civic", "Dr. XX", gerardoInstitute.getId()));
-            Course geography = courseRepository.save(new Course("Geography", "Dr. ZZ", gerardoInstitute.getId()));
-            Course psychology = courseRepository.save(new Course("Psychology", "Dr. MM", zetCollege.getId()));
+        Student juan = studentRepository.save(new Student("Juan", "Perez", 18, gerardoInstitute.getId()));
+        Student ana = studentRepository.save(new Student("Ana", "Lopez", 22, gerardoInstitute.getId()));
+        Student mario = studentRepository.save(new Student("Mario", "Hdz", 22, zetCollege.getId()));
+        Student ernesto = studentRepository.save(new Student("Ernesto", "Gzlz", 25, zetCollege.getId()));
 
-            gradeRepository.save(new Grade(juan.getId(), mathematics.getId(), 95));
-            gradeRepository.save(new Grade(juan.getId(), history.getId(), 90));
-            gradeRepository.save(new Grade(juan.getId(), civic.getId(), 80));
-            gradeRepository.save(new Grade(ana.getId(), history.getId(), 85));
-            gradeRepository.save(new Grade(ana.getId(), mathematics.getId(), 100));
-            gradeRepository.save(new Grade(mario.getId(), mathematics.getId(), 100));
+        Course mathematics = courseRepository.save(new Course("Mathematics", "Dr. Smith", gerardoInstitute.getId()));
+        Course history = courseRepository.save(new Course("History", "Dr. Brown", gerardoInstitute.getId()));
+        Course civic = courseRepository.save(new Course("Civic", "Dr. XX", gerardoInstitute.getId()));
+        Course geography = courseRepository.save(new Course("Geography", "Dr. ZZ", gerardoInstitute.getId()));
+        Course psychology = courseRepository.save(new Course("Psychology", "Dr. MM", zetCollege.getId()));
 
-        };
+        gradeRepository.save(new Grade(juan.getId(), mathematics.getId(), 95));
+        gradeRepository.save(new Grade(juan.getId(), history.getId(), 90));
+        gradeRepository.save(new Grade(juan.getId(), civic.getId(), 80));
+        gradeRepository.save(new Grade(ana.getId(), history.getId(), 85));
+        gradeRepository.save(new Grade(ana.getId(), mathematics.getId(), 100));
+        gradeRepository.save(new Grade(mario.getId(), mathematics.getId(), 100));
+
     }
 }
+

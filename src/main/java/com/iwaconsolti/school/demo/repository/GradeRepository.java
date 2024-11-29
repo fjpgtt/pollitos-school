@@ -15,9 +15,6 @@ public interface GradeRepository extends JpaRepository<Grade, Integer>  {
     @Query("SELECT g FROM grades g WHERE g.student.school.id = :schoolId")
     List<Grade> findBySchoolId(@Param("schoolId") int schoolId);
 
-    //DTO class for projection
-    record GradeDTO(int id, int score, int studentId, int courseId) {}
-
     @Transactional
     @Modifying
     @Query("DELETE FROM grades g WHERE g.courseId = :courseId")

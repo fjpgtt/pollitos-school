@@ -1,10 +1,10 @@
 package com.iwaconsolti.school.demo.controller;
 
 import com.iwaconsolti.school.demo.model.Student;
-import com.iwaconsolti.school.demo.repository.GradeRepository;
-import com.iwaconsolti.school.demo.repository.StudentRepository;
 import com.iwaconsolti.school.demo.service.SchoolService;
 import com.iwaconsolti.school.demo.service.StudentService;
+import com.iwaconsolti.school.dto.GradeDTO;
+import com.iwaconsolti.school.dto.StudentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class StudentController {
     }
 
     @GetMapping("/{schoolName}/allStudents")
-    public ResponseEntity<List<StudentRepository.StudentDTO>> returnStudents(@PathVariable String schoolName) {
+    public ResponseEntity<List<StudentDTO>> returnStudents(@PathVariable String schoolName) {
         return ResponseEntity.ok(studentService.getStudents(schoolService.getSchoolByName(schoolName)));
     }
 
@@ -49,7 +49,7 @@ public class StudentController {
     }
 
     @GetMapping("/{schoolName}/{studentId}/allGradesOfStudent")
-    public ResponseEntity <List<GradeRepository.GradeDTO>> returnAllGradesOfStudent(@PathVariable String schoolName, @PathVariable int studentId) {
+    public ResponseEntity <List<GradeDTO>> returnAllGradesOfStudent(@PathVariable String schoolName, @PathVariable int studentId) {
         return ResponseEntity.ok(studentService.getAllGradesOfStudent(studentId, schoolService.getSchoolByName(schoolName)));
     }
 }

@@ -3,6 +3,7 @@ package com.iwaconsolti.school.demo.service;
 import com.iwaconsolti.school.demo.model.Course;
 import com.iwaconsolti.school.demo.model.School;
 import com.iwaconsolti.school.demo.repository.CourseRepository;
+import com.iwaconsolti.school.dto.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,10 @@ public class CourseService{
         this.courseRepository = courseRepository;
     }
 
-    public List<CourseRepository.CourseDTO> getCourses(int schoolId) {
+    public List<CourseDTO> getCourses(int schoolId) {
             List<Course> courses = courseRepository.findBySchoolId(schoolId);
         return courses.stream()
-                .map(course -> new CourseRepository.CourseDTO(
+                .map(course -> new CourseDTO(
                         course.getId(),
                         course.getName(),
                         course.getProfessorName()))

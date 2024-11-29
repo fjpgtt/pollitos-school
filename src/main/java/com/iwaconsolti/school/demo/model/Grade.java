@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Table(name = "grades")
 @Entity(name = "grades")
 public class Grade {
     private static final int MAX_SCORE = 100;

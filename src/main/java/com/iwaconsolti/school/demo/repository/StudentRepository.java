@@ -22,7 +22,4 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @Query("SELECT g FROM grades g WHERE g.student.id = :studentId AND g.student.school.id = :schoolId")
     List<Grade> findGradesByStudentAndSchool(@Param("studentId") int studentId, @Param("schoolId") int schoolId);
-
-    //DTO class for projection
-    record StudentDTO(int id, String firstName, String lastName, int age){}
 }

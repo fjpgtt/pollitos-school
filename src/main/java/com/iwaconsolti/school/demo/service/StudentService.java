@@ -2,7 +2,8 @@ package com.iwaconsolti.school.demo.service;
 
 import com.iwaconsolti.school.demo.model.Grade;
 import com.iwaconsolti.school.demo.model.Student;
-import com.iwaconsolti.school.demo.repository.GradeRepository;
+import com.iwaconsolti.school.dto.GradeDTO;
+import com.iwaconsolti.school.dto.StudentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.iwaconsolti.school.demo.repository.StudentRepository;
@@ -18,10 +19,10 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<StudentRepository.StudentDTO> getStudents(int schoolId) {
+    public List<StudentDTO> getStudents(int schoolId) {
         List<Student>  students = studentRepository.findBySchoolId(schoolId);
         return students.stream()
-                .map(student -> new StudentRepository.StudentDTO(
+                .map(student -> new StudentDTO(
                         student.getId(),
                         student.getFirstName(),
                         student.getLastName(),
@@ -49,10 +50,10 @@ public class StudentService {
         return "All Grades delete of Student with ID " +idToDelete+ " successfully!";
     }
 
-    public List<GradeRepository.GradeDTO> getAllGradesOfStudent(int studentId, int schoolId) {
+    public List<GradeDTO> getAllGradesOfStudent(int studentId, int schoolId) {
         List<Grade> grades = studentRepository.findGradesByStudentAndSchool(studentId, schoolId);
         return grades.stream()
-                .map(grade -> new GradeRepository.GradeDTO(
+                .map(grade -> new GradeDTO(
                         grade.getId(),
                         grade.getScore(),
                         grade.getStudentId(),

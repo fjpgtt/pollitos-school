@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "schools")
 @Entity(name = "schools")
 public class School{
     public School(String name) {
@@ -18,6 +19,6 @@ public class School{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name="name", nullable = false, unique = true)
+    @Column(name="name")
     private String name;
 }

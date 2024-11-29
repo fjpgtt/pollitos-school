@@ -10,5 +10,4 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     List<Course> findBySchoolId(int schoolId);
 
-    record CourseDTO(int id, String name, String professorName){}
 }
