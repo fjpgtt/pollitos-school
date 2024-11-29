@@ -1,115 +1,125 @@
 package com.iwaconsolti.school.controller;
 
-import com.iwaconsolti.school.controller.response.GradeRequest;
-import com.iwaconsolti.school.controller.response.CourseRequest;
-import com.iwaconsolti.school.controller.response.StudentRequest;
+import com.iwaconsolti.school.controller.request.GradeRequest;
+import com.iwaconsolti.school.controller.response.CourseResponse;
+import com.iwaconsolti.school.controller.response.GradeResponse;
+import com.iwaconsolti.school.controller.response.StudentResponse;
 import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
+import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
-import com.iwaconsolti.school.service.SchoolService;
-import lombok.extern.slf4j.Slf4j;
+import com.iwaconsolti.school.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Slf4j
 @RestController
 @RequestMapping("/{schoolName}/grade")
 public class GradeController {
 
-    @Autowired
-    @Qualifier("gerardoService")
-    private SchoolService gerardoService;
+    private final GradeService gradeService;
+    private final StudentService studentService;
+    private final CourseService courseService;
+    private final SchoolHelperService schoolHelperService;
 
     @Autowired
-    @Qualifier("zetService")
-    private SchoolService zetService;
+    public GradeController(GradeService gradeService, StudentService studentService, CourseService courseService, SchoolHelperService schoolHelperService) {
+        this.gradeService = gradeService;
+        this.studentService = studentService;
+        this.courseService = courseService;
+        this.schoolHelperService = schoolHelperService;
+    }
 
-    private SchoolService getServiceBySchoolName(String schoolName) {
-        if ("GerardoInstitute".equalsIgnoreCase(schoolName)) {
-            return gerardoService;
-        } else if ("ZetCollege".equalsIgnoreCase(schoolName)) {
-            return zetService;
-        } else {
-            throw new IllegalArgumentException("Invalid school name");
-        }
+    public Grade convertRequestToGrade(GradeRequest gradeRequest, School school) {
+
+        Student student = studentService.getStudentById(gradeRequest.getStudentId(), school.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        Course course = courseService.getCourseById(gradeRequest.getCourseId(), school.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        return new Grade(
+                gradeRequest.getScore(),
+                student,
+                course,
+                school
+        );
+    }
+
+    public GradeResponse convertGradeToResponse(Grade grade) {
+        StudentResponse studentResponse = new StudentResponse(
+                grade.getStudent().getId(),
+                grade.getStudent().getFirstName(),
+                grade.getStudent().getLastName(),
+                grade.getStudent().getAge()
+        );
+
+        CourseResponse courseResponse = new CourseResponse(
+                grade.getCourse().getId(),
+                grade.getCourse().getName(),
+                grade.getCourse().getProfessorName()
+        );
+
+        return new GradeResponse(
+                grade.getId(),
+                grade.getScore(),
+                studentResponse,
+                courseResponse
+        );
+    }
+
+
+    @PostMapping
+    public ResponseEntity<GradeResponse> createGrade(
+            @PathVariable String schoolName,
+            @RequestBody GradeRequest gradeRequest) {
+
+        School school = schoolHelperService.findSchool(schoolName);
+        Grade grade = convertRequestToGrade(gradeRequest, school);
+        Grade savedGrade = gradeService.createGrade(grade);
+        GradeResponse gradeResponse = convertGradeToResponse(savedGrade);
+
+        return new ResponseEntity<>(gradeResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("/student/{studentId}")
-    public List<Grade> findGradesByStudent(@PathVariable String schoolName, @PathVariable int studentId) {
-        return getServiceBySchoolName(schoolName).findGradesByStudent(studentId);
-    }
+    public ResponseEntity<List<GradeResponse>> getAllGradesByStudent(
+            @PathVariable String schoolName,
+            @PathVariable int studentId) {
 
-    @PostMapping
-    public ResponseEntity<Grade> createGrade(@PathVariable String schoolName, @RequestBody GradeRequest gradeRequest) {
-        Grade grade = convertToGradeResponse(gradeRequest);
+        School school = schoolHelperService.findSchool(schoolName);
+        List<Grade> grades = gradeService.getAllGradesByStudent(studentId, school.getId());
+        List<GradeResponse> gradeResponses = grades.stream()
+                .map(this::convertGradeToResponse)
+                .toList();
 
-        boolean studentExists = getServiceBySchoolName(schoolName).findGradesByStudent(grade.getStudent().getId()) != null;
-        boolean courseExists = getServiceBySchoolName(schoolName)
-                .findCourses()
-                .stream()
-                .anyMatch(course -> course.getId() == grade.getCourse().getId());
-        if (!studentExists || !courseExists) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }else {
-            Grade createdGrade = getServiceBySchoolName(schoolName).createGrade(grade);
-            if (createdGrade != null) {
-                return ResponseEntity.status(HttpStatus.CREATED).body(grade);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
-        }
+        return new ResponseEntity<>(gradeResponses, HttpStatus.OK);
     }
 
     @DeleteMapping("/student/{studentId}")
-    public void deleteGradesByStudent(@PathVariable String schoolName, @PathVariable int studentId) {
-        getServiceBySchoolName(schoolName).deleteGradesOfStudent(studentId);
-        log.info("Grades by student id: {} removed", studentId);
+    public ResponseEntity<Void> deleteAllGradesByStudent(
+            @PathVariable String schoolName,
+            @PathVariable int studentId) {
+
+        School school = schoolHelperService.findSchool(schoolName);
+        gradeService.deleteAllGradesByStudent(studentId, school.getId());
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/course/{courseId}")
-    public void deleteGradesByCourse(@PathVariable String schoolName, @PathVariable int courseId) {
-        getServiceBySchoolName(schoolName).deleteGradesOfCourse(courseId);
-        log.info("Grades by course id: {} removed", courseId);
+    public ResponseEntity<Void> deleteAllGradesByCourse(
+            @PathVariable String schoolName,
+            @PathVariable int courseId) {
+
+        School school = schoolHelperService.findSchool(schoolName);
+        gradeService.deleteAllGradesByCourse(courseId, school.getId());
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private GradeRequest convertToGradeRequest(Grade grade) {
-        StudentRequest studentRequest = new StudentRequest(grade.getStudent().getId(),
-                grade.getStudent().getFirstName(),
-                grade.getStudent().getLastName(),
-                grade.getStudent().getAge());
-
-        CourseRequest courseRequest = new CourseRequest(grade.getCourse().getId(),
-                grade.getCourse().getName(),
-                grade.getCourse().getProfessorName());
-
-        return new GradeRequest(grade.getId(), grade.getScore(), studentRequest, courseRequest);
-    }
-
-    private Grade convertToGradeResponse(GradeRequest gradeRequest) {
-        Student student = new Student(
-                gradeRequest.getStudentRequest().getId(),
-                gradeRequest.getStudentRequest().getFirstName(),
-                gradeRequest.getStudentRequest().getLastName(),
-                gradeRequest.getStudentRequest().getAge()
-        );
-
-        Course course = new Course(
-                gradeRequest.getCourseRequest().getId(),
-                gradeRequest.getCourseRequest().getName(),
-                gradeRequest.getCourseRequest().getProfessorName()
-        );
-
-        return new Grade(
-                gradeRequest.getId(),
-                gradeRequest.getScore(),
-                student,
-                course
-        );
-    }
 }

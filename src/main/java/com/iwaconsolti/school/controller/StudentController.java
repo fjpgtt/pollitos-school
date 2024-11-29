@@ -1,77 +1,96 @@
 package com.iwaconsolti.school.controller;
 
-import com.iwaconsolti.school.controller.response.StudentRequest;
+import com.iwaconsolti.school.controller.request.StudentRequest;
+import com.iwaconsolti.school.controller.response.StudentResponse;
+import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
-import com.iwaconsolti.school.service.SchoolService;
+import com.iwaconsolti.school.service.SchoolHelperService;
+import com.iwaconsolti.school.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/{schoolName}/student")
 public class StudentController {
 
-    @Autowired
-    @Qualifier("gerardoService")
-    private SchoolService gerardoService;
+    private final StudentService studentService;
+    private final SchoolHelperService schoolHelperService;
 
     @Autowired
-    @Qualifier("zetService")
-    private SchoolService zetService;
-
-    private SchoolService getServiceBySchoolName(String schoolName) {
-        if ("GerardoInstitute".equalsIgnoreCase(schoolName)) {
-            return gerardoService;
-        } else if ("ZetCollege".equalsIgnoreCase(schoolName)) {
-            return zetService;
-        } else {
-            throw new IllegalArgumentException("Invalid school name");
-        }
+    public StudentController(StudentService studentService, SchoolHelperService schoolHelperService) {
+        this.studentService = studentService;
+        this.schoolHelperService = schoolHelperService;
     }
 
-    private StudentRequest convertToStudentRequest(Student studentResponse) {
-        return new StudentRequest(studentResponse.getId(),
-                studentResponse.getFirstName(),
-                studentResponse.getLastName(),
-                studentResponse.getAge());
-    }
-
-    private Student convertToStudentResponse(StudentRequest studentRequest) {
-        return new Student(studentRequest.getId(),
+    private Student convertRequestToStudent(StudentRequest studentRequest, School school) {
+        return new Student(
                 studentRequest.getFirstName(),
                 studentRequest.getLastName(),
-                studentRequest.getAge());
+                studentRequest.getAge(),
+                school
+        );
+    }
+
+    private StudentResponse convertStudentToResponse(Student student) {
+        return new StudentResponse(
+                student.getId(),
+                student.getFirstName(),
+                student.getLastName(),
+                student.getAge()
+        );
     }
 
     @GetMapping
-    public List<StudentRequest> findAllStudents(@PathVariable String schoolName) {
-        List<Student> students = getServiceBySchoolName(schoolName).findStudents();
-        return students.stream()
-                .map(student -> new StudentRequest(student.getId(),
-                        student.getFirstName(),
-                        student.getLastName(),
-                        student.getAge()))
-                .collect(Collectors.toList());
+    public ResponseEntity<List<StudentResponse>> findAllStudents(@PathVariable String schoolName) {
+        School school = schoolHelperService.findSchool(schoolName);
+
+        List<StudentResponse> students = studentService
+                .getAllStudentsBySchool(school.getId())
+                .stream()
+                .map(this::convertStudentToResponse)
+                .toList();
+
+        return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentResponse> findStudentById(@PathVariable String schoolName, @PathVariable int id) {
+        School school = schoolHelperService.findSchool(schoolName);
+
+        return studentService
+                .getStudentById(id, school.getId())
+                .map(this::convertStudentToResponse)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+
     @PostMapping
-    public ResponseEntity<StudentRequest> createStudent(@PathVariable String schoolName, @RequestBody StudentRequest studentRequest) {
-        Student studentResponse = convertToStudentResponse(studentRequest);
-        if (getServiceBySchoolName(schoolName).createStudent(studentResponse) != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(studentRequest);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public ResponseEntity<StudentResponse> createStudent(@PathVariable String schoolName,
+                                                         @RequestBody StudentRequest studentRequest) {
+        School school = schoolHelperService.findSchool(schoolName);
+        Student student = convertRequestToStudent(studentRequest, school);
+        student = studentService.createStudent(student);
+        StudentResponse studentResponse = convertStudentToResponse(student);
+
+        return new ResponseEntity<>(studentResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public void updateStudent(@PathVariable String schoolName, @PathVariable int id, @RequestBody StudentRequest updatedStudentRequest) {
-        Student updatedStudent = convertToStudentResponse(updatedStudentRequest);
-        getServiceBySchoolName(schoolName).updateStudent(id, updatedStudent);
+    public ResponseEntity<StudentResponse> updateStudent(
+            @PathVariable String schoolName,
+            @PathVariable int id,
+            @RequestBody StudentRequest studentRequest) {
+
+        School school = schoolHelperService.findSchool(schoolName);
+        Student updatedStudent = convertRequestToStudent(studentRequest, school);
+        Student savedStudent = studentService.updateStudent(id, updatedStudent, school.getId());
+        StudentResponse studentResponse = convertStudentToResponse(savedStudent);
+
+        return new ResponseEntity<>(studentResponse, HttpStatus.OK);
     }
 }

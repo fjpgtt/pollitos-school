@@ -1,13 +1,19 @@
 package com.iwaconsolti.school.service;
 
-import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentService {
-    List<Student> findStudents(School school);
 
-    Student updateStudent(School school, int studentId, Student student);
+    Student createStudent(Student student);
 
-}
+    Student updateStudent(int id, Student student, int schoolId);
+
+    void deleteStudent(int id);
+
+    List<Student> getAllStudentsBySchool(int schoolId) ;
+
+    Optional<Student> getStudentById(int id, int schoolId);
+    }

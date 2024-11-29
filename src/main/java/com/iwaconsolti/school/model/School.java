@@ -1,17 +1,37 @@
 package com.iwaconsolti.school.model;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-@Data
-@AllArgsConstructor
+@Setter
+@Getter
+@Entity
+@NoArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class School {
 
-    protected String name;
-    protected List<Student> students;
-    protected List<Course> courses;
-    protected List<Grade> grades;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(unique = true)
+    private String name;
+
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY)
+    private List<Student> students;
+
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY)
+    private List<Course> courses;
+
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY)
+    private List<Grade> grades;
+
+    public School (String name){
+        this.name = name;
+    }
 
 }

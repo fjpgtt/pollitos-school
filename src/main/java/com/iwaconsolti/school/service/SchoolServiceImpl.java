@@ -1,84 +1,29 @@
 package com.iwaconsolti.school.service;
 
-import com.iwaconsolti.school.model.Course;
-import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.School;
-import com.iwaconsolti.school.model.Student;
+import com.iwaconsolti.school.repository.SchoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
-public class SchoolServiceImpl implements SchoolService {
-    private final School school;
+@Service
+public class SchoolServiceImpl implements SchoolService{
 
-    private final int limitGrade;
-
-    public SchoolServiceImpl(School school, int limitGrade) {
-        this.school = school;
-        this.limitGrade = limitGrade;
-    }
+    private final SchoolRepository schoolRepository;
 
     @Autowired
-    private CourseService course;
-    @Autowired
-    private GradeService grade;
-    @Autowired
-    private StudentService student;
-
-    @Override
-    public Course createCourse(Course course) {
-        school.getCourses().add(course);
-        return course;
+    public SchoolServiceImpl(SchoolRepository schoolRepository) {
+        this.schoolRepository = schoolRepository;
     }
 
     @Override
-    public Student createStudent(Student newStudent) {
-        school.getStudents().add(newStudent);
-        return newStudent;
+    public School createSchool(School school) {
+        return schoolRepository.save(school);
     }
 
     @Override
-    public Grade createGrade(Grade grade) {
-        if (grade.getScore() <= limitGrade) {
-            school.getGrades().add(grade);
-            return grade;
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public List<Student> findStudents() {
-        return student.findStudents(school);
-    }
-
-    @Override
-    public Student updateStudent(int id, Student updatedStudent) {
-        return student.updateStudent(school, id, updatedStudent);
-    }
-
-    @Override
-    public List<Course> findCourses() {
-        return course.findCourses(school);
-    }
-
-    @Override
-    public boolean updateCourse(int id, Course updatedCourse) {
-        return course.updateCourse(school, id, updatedCourse);
-    }
-
-    @Override
-    public List<Grade> findGradesByStudent(int studentId) {
-        return grade.findGradesByStudent(school, studentId);
-    }
-
-    @Override
-    public void deleteGradesOfStudent(int studentId) {
-        grade.deleteGradesOfStudent(school,studentId);
-    }
-
-    @Override
-    public void deleteGradesOfCourse(int courseId) {
-        grade.deleteGradesOfCourse(school, courseId);
+    public Optional<School> findByName(String name) {
+        return schoolRepository.findByName(name);
     }
 }

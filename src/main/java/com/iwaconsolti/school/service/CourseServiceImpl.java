@@ -1,31 +1,52 @@
 package com.iwaconsolti.school.service;
 
+import com.iwaconsolti.school.controller.request.CourseRequest;
 import com.iwaconsolti.school.model.Course;
-
-import com.iwaconsolti.school.model.School;
+import com.iwaconsolti.school.repository.CourseRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
+@Slf4j
 @Service
 public class CourseServiceImpl implements CourseService {
+    private final CourseRepository courseRepository;
 
-    @Override
-    public List<Course> findCourses(School school) {
-        return school.getCourses();
+    @Autowired
+    public CourseServiceImpl(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 
     @Override
-    public boolean updateCourse(School school, int courseId, Course course) {
-        for (Course c : school.getCourses()) {
-            if (Objects.equals(c.getId(), courseId)) {
-                c.setName(course.getName());
-                c.setProfessorName(course.getProfessorName());
-                return true;
-            }
+    public Course createCourse(Course course) {
+        return courseRepository.save(course);
+    }
+
+    @Override
+    public List<Course> findAllBySchoolId(int schoolId) {
+        return courseRepository.findAllBySchoolId(schoolId);
+    }
+
+    @Override
+    public Optional<Course> getCourseById(int id, int schoolId) {
+        return courseRepository.findByIdAndSchoolId(id, schoolId);
+    }
+
+    @Override
+    public Course updateCourse(int id, CourseRequest courseRequest, int schoolId) {
+        Optional<Course> optionalCourse = courseRepository.findByIdAndSchoolId(id, schoolId);
+        if (optionalCourse.isPresent()) {
+            Course course = optionalCourse.get();
+            course.setName(courseRequest.getName());
+            course.setProfessorName(courseRequest.getProfessorName());
+            log.info("The course information is being updated with the id: {}", id);
+            return course;
         }
-        return false;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
-
 }
