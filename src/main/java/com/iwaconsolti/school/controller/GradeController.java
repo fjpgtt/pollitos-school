@@ -8,10 +8,7 @@ import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
-import com.iwaconsolti.school.service.CourseService;
-import com.iwaconsolti.school.service.GradeService;
-import com.iwaconsolti.school.service.SchoolService;
-import com.iwaconsolti.school.service.StudentService;
+import com.iwaconsolti.school.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +23,16 @@ import java.util.stream.Collectors;
 public class GradeController {
 
     private final GradeService gradeService;
-    private final SchoolService schoolService;
     private final StudentService studentService;
     private final CourseService courseService;
+    private final SchoolHelperService schoolHelperService;
 
     @Autowired
-    public GradeController(GradeService gradeService, SchoolService schoolService, StudentService studentService, CourseService courseService) {
+    public GradeController(GradeService gradeService, StudentService studentService, CourseService courseService, SchoolHelperService schoolHelperService) {
         this.gradeService = gradeService;
-        this.schoolService = schoolService;
         this.studentService = studentService;
         this.courseService = courseService;
+        this.schoolHelperService = schoolHelperService;
     }
 
     public Grade convertRequestToGrade(GradeRequest gradeRequest, School school) {
@@ -76,17 +73,13 @@ public class GradeController {
         );
     }
 
-    public School findSchool(String schoolName) {
-        return schoolService.findByName(schoolName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid school name"));
-    }
 
     @PostMapping
     public ResponseEntity<GradeResponse> createGrade(
             @PathVariable String schoolName,
             @RequestBody GradeRequest gradeRequest) {
 
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
         Grade grade = convertRequestToGrade(gradeRequest, school);
         Grade savedGrade = gradeService.createGrade(grade);
         GradeResponse gradeResponse = convertGradeToResponse(savedGrade);
@@ -99,7 +92,7 @@ public class GradeController {
             @PathVariable String schoolName,
             @PathVariable int studentId) {
 
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
         List<Grade> grades = gradeService.getAllGradesByStudent(studentId, school.getId());
         List<GradeResponse> gradeResponses = grades.stream()
                 .map(this::convertGradeToResponse)
@@ -113,7 +106,7 @@ public class GradeController {
             @PathVariable String schoolName,
             @PathVariable int studentId) {
 
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
         gradeService.deleteAllGradesByStudent(studentId, school.getId());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -124,7 +117,7 @@ public class GradeController {
             @PathVariable String schoolName,
             @PathVariable int courseId) {
 
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
         gradeService.deleteAllGradesByCourse(courseId, school.getId());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

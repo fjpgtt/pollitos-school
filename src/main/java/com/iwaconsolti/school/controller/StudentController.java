@@ -4,6 +4,7 @@ import com.iwaconsolti.school.controller.request.StudentRequest;
 import com.iwaconsolti.school.controller.response.StudentResponse;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
+import com.iwaconsolti.school.service.SchoolHelperService;
 import com.iwaconsolti.school.service.SchoolService;
 import com.iwaconsolti.school.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,12 @@ import java.util.stream.Collectors;
 public class StudentController {
 
     private final StudentService studentService;
-    private final SchoolService schoolService;
+    private final SchoolHelperService schoolHelperService;
 
     @Autowired
-    public StudentController(StudentService studentService, SchoolService schoolService) {
+    public StudentController(StudentService studentService, SchoolHelperService schoolHelperService) {
         this.studentService = studentService;
-        this.schoolService = schoolService;
+        this.schoolHelperService = schoolHelperService;
     }
 
     private Student convertRequestToStudent(StudentRequest studentRequest, School school) {
@@ -46,14 +47,9 @@ public class StudentController {
         );
     }
 
-    public School findSchool(String schoolName) {
-        return schoolService.findByName(schoolName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid school name"));
-    }
-
     @GetMapping
     public List<StudentResponse> findAllStudents(@PathVariable String schoolName) {
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
 
         return studentService
                 .getAllStudentsBySchool(school.getId())
@@ -64,7 +60,7 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public StudentResponse findStudentById(@PathVariable String schoolName, @PathVariable int id) {
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
 
         return studentService
                 .getStudentById(id, school.getId())
@@ -75,7 +71,7 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<StudentResponse> createStudent(@PathVariable String schoolName,
                                                          @RequestBody StudentRequest studentRequest) {
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
         Student student = convertRequestToStudent(studentRequest, school);
         student = studentService.createStudent(student);
         StudentResponse studentResponse = convertStudentToResponse(student);
@@ -89,7 +85,7 @@ public class StudentController {
             @PathVariable int id,
             @RequestBody StudentRequest studentRequest) {
 
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
         Student updatedStudent = convertRequestToStudent(studentRequest, school);
         Student savedStudent = studentService.updateStudent(id, updatedStudent, school.getId());
         StudentResponse studentResponse = convertStudentToResponse(savedStudent);

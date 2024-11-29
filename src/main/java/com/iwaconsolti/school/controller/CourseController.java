@@ -5,12 +5,11 @@ import com.iwaconsolti.school.controller.response.CourseResponse;
 import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.service.CourseService;
-import com.iwaconsolti.school.service.SchoolService;
+import com.iwaconsolti.school.service.SchoolHelperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,12 +19,12 @@ import java.util.stream.Collectors;
 public class CourseController {
 
     private final CourseService courseService;
-    private final SchoolService schoolService;
+    private final SchoolHelperService schoolHelperService;
 
     @Autowired
-    public CourseController(CourseService courseService, SchoolService schoolService) {
+    public CourseController(CourseService courseService, SchoolHelperService schoolHelperService) {
         this.courseService = courseService;
-        this.schoolService = schoolService;
+        this.schoolHelperService = schoolHelperService;
     }
 
     private Course convertRequestToCourse(CourseRequest courseRequest, School school) {
@@ -44,14 +43,9 @@ public class CourseController {
         );
     }
 
-    public School findSchool(String schoolName) {
-        return schoolService.findByName(schoolName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid school name"));
-    }
-
     @GetMapping
     public List<CourseResponse> findAllCourses(@PathVariable String schoolName) {
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
 
         return courseService
                 .findAllBySchoolId(school.getId())
@@ -60,11 +54,10 @@ public class CourseController {
                 .collect(Collectors.toList());
     }
 
-
     @PostMapping
     public ResponseEntity<CourseResponse> createCourse(@PathVariable String schoolName,
                                                          @RequestBody CourseRequest courseRequest) {
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
         Course course = convertRequestToCourse(courseRequest, school);
         course = courseService.createCourse(course);
         CourseResponse courseResponse = convertCourseToResponse(course);
@@ -78,7 +71,7 @@ public class CourseController {
             @PathVariable int id,
             @RequestBody CourseRequest courseRequest) {
 
-        School school = findSchool(schoolName);
+        School school = schoolHelperService.findSchool(schoolName);
         Course savedCourse = courseService.updateCourse(id, courseRequest, school.getId());
         CourseResponse courseResponse = convertCourseToResponse(savedCourse);
 

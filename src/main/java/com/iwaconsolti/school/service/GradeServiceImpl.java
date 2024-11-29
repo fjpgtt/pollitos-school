@@ -6,7 +6,9 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public Grade createGrade(Grade grade) {
         if (grade.getScore() > scoreLimit) {
-            throw new IllegalArgumentException("Score exceeds the allowed limit of " + scoreLimit);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return gradeRepository.save(grade);
     }
