@@ -1,9 +1,17 @@
 package com.iwaconsolti.school.miguel.model.dto;
 
-import lombok.Data;
+import com.iwaconsolti.school.miguel.model.Courses;
+import lombok.Getter;
 
-@Data
+@Getter
 public class CoursesDTO {
     private int id;
-    private String nameCourse, professorName;
+    private String nameCourse;
+    private String professorName;
+
+    public CoursesDTO(Courses courses){
+        this.id = courses.getId();
+        this.nameCourse = courses.getNameCourse();
+        this.professorName = courses.getProfessorName();
+    }
 }

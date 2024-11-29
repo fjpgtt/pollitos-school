@@ -4,6 +4,7 @@ import com.iwaconsolti.school.miguel.model.Courses;
 import com.iwaconsolti.school.miguel.model.Grade;
 import com.iwaconsolti.school.miguel.model.School;
 import com.iwaconsolti.school.miguel.model.Students;
+import com.iwaconsolti.school.miguel.model.dto.GradeStudentDTO;
 import com.iwaconsolti.school.miguel.model.dto.GradesDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -28,6 +30,24 @@ public class GradeService {
         this.zetCollege = zetCollege;
     }
 
+    private List<GradeStudentDTO> gradeStudent(Map<Integer,Grade> grades, int id){
+        List<GradeStudentDTO> gradeStudent = new ArrayList<>();
+
+        for(Grade grade : grades.values()){
+            if(grade.getStudent().getId() == id){
+                GradeStudentDTO gradeStudentDTO = new GradeStudentDTO(
+                        grade.getStudent().getFirstName() + " " + grade.getStudent().getLastName(),
+                        grade.getStudent().getAge(),
+                        grade.getCourse().getProfessorName(),
+                        grade.getCourse().getNameCourse(),
+                        grade.getScore()
+                );
+                gradeStudent.add(gradeStudentDTO);
+            }
+        }
+        return gradeStudent;
+    }
+
     public Grade createGrade(String schoolName, GradesDTO gradeDTO) {
         Grade grade = new Grade();
         grade.setId(gradeDTO.getId());
@@ -41,36 +61,22 @@ public class GradeService {
             grade.setCourse(course);
 
             gerardoInstitute.getGrades().put(grade.getId(), grade);
-            log.info("The grade was successfully registered in Gerardo Institute {}",grade);
         }else if("ZetCollege".equalsIgnoreCase(schoolName) && grade.getScore() <= limitGrade) {
+            grade.setStudent(student);
+            grade.setCourse(course);
+
             zetCollege.getGrades().put(grade.getId(), grade);
-            log.info("The grade was successfully registered in Zet College {}",grade);
         }
         return grade;
     }
 
-    public List<String> getGradesByStudentId(String schoolName, Integer id){
-        List<String> studentGrades = new ArrayList<>();
+    public List<GradeStudentDTO> getGradesByStudentId(String schoolName, Integer id){
+        List<GradeStudentDTO> studentGrades = new ArrayList<>();
+
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            for(Grade grade : gerardoInstitute.getGrades().values()) {
-                if (grade.getStudent().getId() == id) {
-                    studentGrades.add("Name: " + grade.getStudent().getFirstName() + " " + grade.getStudent().getLastName());
-                    studentGrades.add("Age: " + grade.getStudent().getAge());
-                    studentGrades.add("Professor: " + grade.getCourse().getProfessorName());
-                    studentGrades.add("Curse: " + grade.getCourse().getNameCourse());
-                    studentGrades.add("Score: " + grade.getScore());
-                }
-            }
-        }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            for(Grade grade: zetCollege.getGrades().values()) {
-                if (grade.getStudent().getId() == id) {
-                    studentGrades.add("Name: " + grade.getStudent().getFirstName() + " " + grade.getStudent().getLastName());
-                    studentGrades.add("Age: " + grade.getStudent().getAge());
-                    studentGrades.add("Professor: " + grade.getCourse().getProfessorName());
-                    studentGrades.add("Curse: " + grade.getCourse().getNameCourse());
-                    studentGrades.add("Score: " + grade.getScore());
-                }
-            }
+            studentGrades.addAll(gradeStudent(gerardoInstitute.getGrades(),id));
+        } else if ("ZetCollege".equalsIgnoreCase(schoolName)) {
+            studentGrades.addAll(gradeStudent(zetCollege.getGrades(),id));
         }
         return studentGrades;
     }
@@ -79,18 +85,17 @@ public class GradeService {
         boolean removed = false;
 
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            for(int key : new ArrayList<>(gerardoInstitute.getGrades().keySet())){
-                if(gerardoInstitute.getGrades().get(key).getStudent().getId() == studentId){
-                    gerardoInstitute.getGrades().remove(key);
-                    log.info("Student's grades were successfully deleted in Gerardo Institute {}",studentId);
+            for(Map.Entry<Integer, Grade> entry: gerardoInstitute.getGrades().entrySet()){
+                if(entry.getValue().getStudent().getId() == studentId){
+                    gerardoInstitute.getGrades().remove(entry.getKey());
                     removed = true;
                 }
             }
+
         }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            for(int key : new ArrayList<>(zetCollege.getGrades().keySet())){
-                if(zetCollege.getGrades().get(key).getStudent().getId() == studentId){
-                    zetCollege.getGrades().remove(key);
-                    log.info("Student's grades were successfully deleted in Zet Collage {}",studentId);
+            for(Map.Entry<Integer, Grade> entry: zetCollege.getGrades().entrySet()){
+                if(entry.getValue().getStudent().getId() == studentId){
+                    zetCollege.getGrades().remove(entry.getKey());
                     removed = true;
                 }
             }
@@ -102,18 +107,15 @@ public class GradeService {
         boolean removed = false;
 
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            for(int key : new ArrayList<>(gerardoInstitute.getGrades().keySet())){
-                if(gerardoInstitute.getGrades().get(key).getCourse().getId() == courseId){
-                    gerardoInstitute.getGrades().remove(key);
-                    log.info("Course grades were successfully deleted in Gerardo Intitute {}",courseId);
-                    removed = true;
+            for(Map.Entry<Integer, Grade> entry: gerardoInstitute.getGrades().entrySet()){
+                if(entry.getValue().getCourse().getId() == courseId){
+                    gerardoInstitute.getGrades().remove(entry.getKey());
                 }
             }
         }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            for(int key : new ArrayList<>(zetCollege.getGrades().keySet())){
-                if(zetCollege.getGrades().get(key).getCourse().getId() == courseId){
-                    zetCollege.getGrades().remove(key);
-                    log.info("Course grades were successfully deleted in Zet College {}",courseId);
+            for(Map.Entry<Integer, Grade> entry: zetCollege.getGrades().entrySet()){
+                if(entry.getValue().getCourse().getId() == courseId){
+                    zetCollege.getGrades().remove(entry.getKey());
                     removed = true;
                 }
             }
@@ -123,7 +125,6 @@ public class GradeService {
 
     private Students findStudentById(String schoolName, int studentId) {
         if ("GerardoInstitute".equals(schoolName)) {
-            log.info("valor del id {}",studentId);
             return gerardoInstitute.getStudents().get(studentId);
         } else if ("ZetCollege".equals(schoolName)) {
             return zetCollege.getStudents().get(studentId);

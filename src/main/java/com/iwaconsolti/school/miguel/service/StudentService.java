@@ -23,49 +23,37 @@ public class StudentService {
     }
 
     public Students createStudents(String schoolName, StudentsDTO studentDTO) {
-        Students student = new Students();
-        student.setId(studentDTO.getId());
-        student.setFirstName(studentDTO.getFirstName());
-        student.setLastName(studentDTO.getLastName());
-        student.setAge(studentDTO.getAge());
-
+        Students student = new Students(studentDTO);
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
             if(gerardoInstitute.getStudents().containsKey(student.getId())){
                 return gerardoInstitute.getStudents().get(student.getId());
             }
             gerardoInstitute.getStudents().put(student.getId(), student);
-            log.info("The student registered successfully in Gerardo Institute {}",student);
         }else if("ZetCollege".equalsIgnoreCase(schoolName)){
+            if(zetCollege.getStudents().containsKey(student.getId())){
+                return zetCollege.getStudents().get(student.getId());
+            }
             zetCollege.getStudents().put(student.getId(), student);
-            log.info("The student registered successfully in Zet College {}",student);
         }
         return student;
     }
 
-    public Collection<StudentsDTO> getStudentById(String schoolName, int studentId){
-
-        Collection<StudentsDTO> studentsDTOS = new ArrayList<>();
+    public StudentsDTO getStudentById(String schoolName, int studentId){
 
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
-            for(Students students : gerardoInstitute.getStudents().values()) {
-                StudentsDTO studentDto = new StudentsDTO();
-                studentDto.setId(students.getId());
-                studentDto.setFirstName(students.getFirstName());
-                studentDto.setLastName(students.getLastName());
-                studentDto.setAge(students.getAge());
-                studentsDTOS.add(studentDto);
+
+            Students students = gerardoInstitute.getStudents().get(studentId);
+            if(students != null){
+                return new StudentsDTO(students);
             }
         }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
-            for(Students students : zetCollege.getStudents().values()) {
-                StudentsDTO studentDto = new StudentsDTO();
-                studentDto.setId(students.getId());
-                studentDto.setFirstName(students.getFirstName());
-                studentDto.setLastName(students.getLastName());
-                studentDto.setAge(students.getAge());
-                studentsDTOS.add(studentDto);
+
+            Students students = zetCollege.getStudents().get(studentId);
+            if(students != null){
+                return new StudentsDTO(students);
             }
         }
-        return studentsDTOS;
+        return null;
     }
 
     public Collection<StudentsDTO> getStudents(String schoolName) {
@@ -74,20 +62,12 @@ public class StudentService {
 
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
             for(Students students : gerardoInstitute.getStudents().values()){
-                StudentsDTO studentDto = new StudentsDTO();
-                studentDto.setId(students.getId());
-                studentDto.setFirstName(students.getFirstName());
-                studentDto.setLastName(students.getLastName());
-                studentDto.setAge(students.getAge());
+                StudentsDTO studentDto = new StudentsDTO(students);
                 studentsDTO.add(studentDto);
             }
         }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
             for(Students students : gerardoInstitute.getStudents().values()){
-                StudentsDTO studentDto = new StudentsDTO();
-                studentDto.setId(students.getId());
-                studentDto.setFirstName(students.getFirstName());
-                studentDto.setLastName(students.getLastName());
-                studentDto.setAge(students.getAge());
+                StudentsDTO studentDto = new StudentsDTO(students);
                 studentsDTO.add(studentDto);
             }
         }
@@ -95,19 +75,12 @@ public class StudentService {
     }
 
     public Students editStudent(int id, String schoolName, StudentsDTO studentDTO){
-        Students student = new Students();
-        student.setId(studentDTO.getId());
-        student.setFirstName(studentDTO.getFirstName());
-        student.setLastName(studentDTO.getLastName());
-        student.setAge(studentDTO.getAge());
+        Students student = new Students(studentDTO);
 
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
             gerardoInstitute.getStudents().put(id,student);
-            log.info("The student was edited successfully in Gerardo Institute {}",student);
         }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
             zetCollege.getStudents().put(id,student);
-            log.info("The student was edited successfully in Zet College {}",student);
-
         }
         return student;
     }

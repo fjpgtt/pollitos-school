@@ -3,14 +3,12 @@ package com.iwaconsolti.school.miguel.service;
 import com.iwaconsolti.school.miguel.model.Courses;
 import com.iwaconsolti.school.miguel.model.School;
 import com.iwaconsolti.school.miguel.model.dto.CoursesDTO;
-import com.iwaconsolti.school.miguel.model.dto.StudentsDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 @Slf4j
 @Service
@@ -26,17 +24,17 @@ public class CourseService {
 
     public Courses createCourse(String schoolName, CoursesDTO courseDTO) {
 
-        Courses course = new Courses();
-        course.setId(courseDTO.getId());
-        course.setNameCourse(courseDTO.getNameCourse());
-        course.setProfessorName(courseDTO.getProfessorName());
-
+        Courses course = new Courses(courseDTO);
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
+            if(gerardoInstitute.getCourses().containsKey(course.getId())){
+                return gerardoInstitute.getCourses().get(course.getId());
+            }
             gerardoInstitute.getCourses().put(course.getId(), course);
-            log.info("The course was successfully registered in Gerardo Institute {}",course);
         }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
+            if(zetCollege.getCourses().containsKey(course.getId())){
+                return zetCollege.getCourses().get(course.getId());
+            }
             zetCollege.getCourses().put(course.getId(), course);
-            log.info("The course was successfully registered in Zet College {}",course);
         }
         return course;
     }
@@ -47,18 +45,12 @@ public class CourseService {
 
         if("GerardoInstitute".equalsIgnoreCase(schoolName)){
             for(Courses courses : gerardoInstitute.getCourses().values()){
-                CoursesDTO courseDTO = new CoursesDTO();
-                courseDTO.setId(courses.getId());
-                courseDTO.setNameCourse(courses.getNameCourse());
-                courseDTO.setProfessorName(courses.getProfessorName());
+                CoursesDTO courseDTO = new CoursesDTO(courses);
                 coursesDTOSList.add(courseDTO);
             }
         }else if("ZetCollege".equalsIgnoreCase(schoolName)) {
             for(Courses courses : zetCollege.getCourses().values()){
-                CoursesDTO courseDTO = new CoursesDTO();
-                courseDTO.setId(courses.getId());
-                courseDTO.setNameCourse(courses.getNameCourse());
-                courseDTO.setProfessorName(courses.getProfessorName());
+                CoursesDTO courseDTO = new CoursesDTO(courses);
                 coursesDTOSList.add(courseDTO);
             }
         }
@@ -67,19 +59,31 @@ public class CourseService {
 
     public Courses editCourse(int id, String schoolName, CoursesDTO courseDTO){
 
-        Courses course = new Courses();
-        course.setId(courseDTO.getId());
-        course.setNameCourse(courseDTO.getNameCourse());
-        course.setProfessorName(courseDTO.getProfessorName());
+        if("GerardoInstitute".equalsIgnoreCase(schoolName)){
+            if(gerardoInstitute.getCourses().containsKey(id)){
 
-        if("GerardoInstitute".equals(schoolName)){
-            gerardoInstitute.getCourses().put(id,course);
-            log.info("The course was edited successfully in Gerardo Institute {}",course);
+                Courses course = gerardoInstitute.getCourses().get(id);
+                course.setNameCourse(courseDTO.getNameCourse());
+                course.setProfessorName(courseDTO.getProfessorName());
+                gerardoInstitute.getCourses().put(id,course);
+
+                return course;
+            }
+
+
         }else if("ZetCollege".equals(schoolName)) {
-            zetCollege.getCourses().put(id,course);
-            log.info("The course was edited successfully in Zet Collage {}",course);
+            if(zetCollege.getCourses().containsKey(id)){
+
+                Courses course = zetCollege.getCourses().get(id);
+                course.setNameCourse(courseDTO.getNameCourse());
+                course.setProfessorName(courseDTO.getProfessorName());
+
+                zetCollege.getCourses().put(id,course);
+
+                return course;
+            }
 
         }
-        return course;
+        return null;
     }
 }

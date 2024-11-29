@@ -9,25 +9,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/app/{nameSchool}")
+@RequestMapping("/app/{nameSchool}/course")
 public class CourseController {
 
     @Autowired
     private CourseService courseService;
 
-    @PostMapping("/course")
-    public ResponseEntity<Courses> newCourse(@PathVariable String nameSchool, @RequestBody CoursesDTO courseDTO) {
+    @PostMapping("/")
+    public ResponseEntity<Object> newCourse(@PathVariable String nameSchool, @RequestBody CoursesDTO courseDTO) {
 
         if (courseDTO.getNameCourse() == null || courseDTO.getProfessorName() == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    Map.of(
+                            "message","a required piece of information is missing"
+                    )
+            );
+        }else if(courseService.createCourse(nameSchool, courseDTO) != null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    Map.of(
+                            "message", "The provided id is already registered"
+                    )
+            );
         }
-
-         return ResponseEntity.status(HttpStatus.CREATED).body(courseService.createCourse(nameSchool,courseDTO));
+        Courses course = courseService.createCourse(nameSchool,courseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                Map.of(
+                        "message", "The course registered successfully",
+                        "status", HttpStatus.CREATED.value()
+                )
+        );
     }
 
-    @GetMapping("/course")
+    @GetMapping("/")
     public ResponseEntity<Collection<CoursesDTO>> listCourse(@PathVariable String nameSchool) {
 
         Collection<CoursesDTO> courses = courseService.getCourses(nameSchool);
@@ -39,13 +55,17 @@ public class CourseController {
         return ResponseEntity.ok(courses);
     }
 
-    @PutMapping("/course/{courseId}")
-    public ResponseEntity<Courses> editCourse(@PathVariable String nameSchool,@PathVariable int courseId, @RequestBody CoursesDTO courseDTO){
+    @PutMapping("/{courseId}")
+    public ResponseEntity<Object> editCourse(@PathVariable String nameSchool,@PathVariable int courseId, @RequestBody CoursesDTO courseDTO){
 
         Courses updateCourse = courseService.editCourse(courseId, nameSchool, courseDTO);
 
         if(updateCourse == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of(
+                            "message","Course ID does not exist"
+                    )
+            );
         }
 
         return ResponseEntity.ok(updateCourse);

@@ -6,7 +6,11 @@ import java.util.Map;
 
 @Data
 public class School {
-    private String name;
+    private final String name;
+
+    public School(String name){
+        this.name = name;
+    }
     Map<Integer, Students> students = new HashMap<>();
     Map<Integer, Courses> courses = new HashMap<>();
     Map<Integer, Grade> grades = new HashMap<>();

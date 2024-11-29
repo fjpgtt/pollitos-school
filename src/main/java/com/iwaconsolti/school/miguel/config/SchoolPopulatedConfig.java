@@ -3,6 +3,7 @@ package com.iwaconsolti.school.miguel.config;
 import com.iwaconsolti.school.miguel.model.Courses;
 import com.iwaconsolti.school.miguel.model.School;
 import com.iwaconsolti.school.miguel.model.Students;
+import com.iwaconsolti.school.miguel.model.dto.StudentsDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -17,23 +18,22 @@ public class SchoolPopulatedConfig {
     @Bean
     @Qualifier("GerardoInstitute")
     public School gerardoInstitutePopulated(){
-        log.info("The populated profile is activated, the data will be loaded");
+        School school = new School("GerardoInstitute");
 
-        log.info("The data was generated for the GerardoInstitute school");
-        School school = new School();
-        school.setName("GerardoInstitute");
+        StudentsDTO firstStudentDTO = new StudentsDTO();
+        firstStudentDTO.setId(1);
+        firstStudentDTO.setFirstName("Miguel");
+        firstStudentDTO.setLastName("Garcia");
+        firstStudentDTO.setAge(34);
 
-        Students firstStudent = new Students();
-        firstStudent.setId(1);
-        firstStudent.setFirstName("Miguel");
-        firstStudent.setLastName("Garcia");
-        firstStudent.setAge(34);
+        StudentsDTO secondStudentDTO = new StudentsDTO();
+        secondStudentDTO.setId(2);
+        secondStudentDTO.setFirstName("Angelica");
+        secondStudentDTO.setLastName("Lima");
+        secondStudentDTO.setAge(56);
 
-        Students secondStudent = new Students();
-        secondStudent.setId(2);
-        secondStudent.setFirstName("Angelica");
-        secondStudent.setLastName("Lima");
-        secondStudent.setAge(56);
+        Students firstStudent = new Students(firstStudentDTO);
+        Students secondStudent = new Students(secondStudentDTO);
 
         school.getStudents().put(firstStudent.getId(),firstStudent);
         school.getStudents().put(secondStudent.getId(),secondStudent);
@@ -57,22 +57,23 @@ public class SchoolPopulatedConfig {
     @Bean
     @Qualifier("ZetCollege")
     public School zetCollegePopulated(){
-        log.info("The data was generated for the zetCollege school");
 
-        School school = new School();
-        school.setName("ZetCollege");
+        School school = new School("ZetCollege");
 
-        Students firstStudent = new Students();
-        firstStudent.setId(1);
-        firstStudent.setFirstName("Juan");
-        firstStudent.setLastName("Lima");
-        firstStudent.setAge(34);
+        StudentsDTO firstStudentDTO = new StudentsDTO();
+        firstStudentDTO.setId(1);
+        firstStudentDTO.setFirstName("Juan");
+        firstStudentDTO.setLastName("Lima");
+        firstStudentDTO.setAge(34);
 
-        Students secondStudent = new Students();
-        secondStudent.setId(2);
-        secondStudent.setFirstName("Ignacio");
-        secondStudent.setLastName("Garcia");
-        secondStudent.setAge(62);
+        StudentsDTO secondStudentDTO = new StudentsDTO();
+        secondStudentDTO.setId(2);
+        secondStudentDTO.setFirstName("Ignacio");
+        secondStudentDTO.setLastName("Garcia");
+        secondStudentDTO.setAge(62);
+
+        Students firstStudent = new Students(firstStudentDTO);
+        Students secondStudent = new Students(secondStudentDTO);
 
         school.getStudents().put(firstStudent.getId(),firstStudent);
         school.getStudents().put(secondStudent.getId(),secondStudent);
@@ -89,9 +90,6 @@ public class SchoolPopulatedConfig {
 
         school.getCourses().put(firstCourse.getId(), firstCourse);
         school.getCourses().put(secondCourse.getId(), secondCourse);
-
-        log.info("I finished loading the data");
-
         return school;
     }
 }
