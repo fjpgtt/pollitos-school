@@ -5,6 +5,7 @@ import com.iwaconsolti.school.demo.service.SchoolService;
 import com.iwaconsolti.school.demo.service.StudentService;
 import com.iwaconsolti.school.dto.GradeDTO;
 import com.iwaconsolti.school.dto.StudentDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +30,12 @@ public class StudentController {
     }
 
     @PostMapping("/newStudent")
-    public ResponseEntity<String> newStudent(@RequestBody Student student){
+    public ResponseEntity<String> newStudent(@Valid @RequestBody Student student){
         return ResponseEntity.ok(studentService.createStudent(student));
     }
 
     @PutMapping("/editStudent")
-    public ResponseEntity<String> editStudent(@RequestBody Student student){
+    public ResponseEntity<String> editStudent(@Valid @RequestBody Student student){
         return ResponseEntity.ok(studentService.updateStudent(student));
     }
 

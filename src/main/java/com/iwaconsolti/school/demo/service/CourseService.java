@@ -4,12 +4,14 @@ import com.iwaconsolti.school.demo.model.Course;
 import com.iwaconsolti.school.demo.model.School;
 import com.iwaconsolti.school.demo.repository.CourseRepository;
 import com.iwaconsolti.school.dto.CourseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CourseService{
         private final School gerardoInstitute;
@@ -35,16 +37,19 @@ public class CourseService{
 
     public String createCourse(Course course){
         courseRepository.save(course);
+        log.info("Course added successfully");
         return "Course added successfully: " + course.toString();
     }
 
     public String updateCourse(Course course) {
         courseRepository.save(course);
+        log.info("Course updatesuccessfully");
         return "Course update successfully: " + course.toString() ;
     }
 
     public String deleteStudent(int idToDelete) {
         courseRepository.deleteById(idToDelete);
+        log.info("Course delete with ID " +idToDelete+ " successfully!");
         return "Course delete with ID " +idToDelete+ " successfully!";
     }
 }

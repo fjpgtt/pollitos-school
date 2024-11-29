@@ -1,6 +1,8 @@
 package com.iwaconsolti.school.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 
@@ -21,9 +23,13 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull(message = "This field cannot be null")
+    @Size(min = 3, max = 50, message = "The name must be between 3 and 50 characters")
     @Column(name="first_name")
     private String firstName;
 
+    @NotNull(message = "This field cannot be null")
+    @Size(min = 3, max = 50, message = "The name must be between 3 and 50 characters")
     @Column(name="last_name")
     private String lastName;
 
