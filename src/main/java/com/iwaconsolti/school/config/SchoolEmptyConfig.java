@@ -1,8 +1,6 @@
 package com.iwaconsolti.school.config;
 
 import com.iwaconsolti.school.model.School;
-import com.iwaconsolti.school.model.schools.GerardoInstitute;
-import com.iwaconsolti.school.model.schools.ZetCollege;
 import com.iwaconsolti.school.service.SchoolService;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +22,7 @@ public class SchoolEmptyConfig {
 
     @PostConstruct
     public void populateData() {
-        School gerardoInstitute = schoolService.createSchool(new GerardoInstitute("GerardoInstitute"));
-        School zetCollege = schoolService.createSchool(new ZetCollege("ZetCollege"));
+        School gerardoInstitute = schoolService.createSchool("GerardoInstitute");
+        School zetCollege = schoolService.createSchool("ZetCollege");
     }
 }

@@ -4,8 +4,6 @@ import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.model.Grade;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
-import com.iwaconsolti.school.model.schools.GerardoInstitute;
-import com.iwaconsolti.school.model.schools.ZetCollege;
 import com.iwaconsolti.school.service.CourseService;
 import com.iwaconsolti.school.service.GradeService;
 import com.iwaconsolti.school.service.SchoolService;
@@ -39,7 +37,7 @@ public class SchoolPopulatedConfig {
 
     @PostConstruct
     public void populateData() {
-        School gerardoInstitute = schoolService.createSchool(new GerardoInstitute("GerardoInstitute"));
+        School gerardoInstitute = schoolService.createSchool("GerardoInstitute");
 
         Student student1 = studentService.createStudent(new Student("Juan", "Perez", 20, gerardoInstitute));
         Student student2 = studentService.createStudent(new Student("Ana", "Gomez", 22, gerardoInstitute));
@@ -54,7 +52,7 @@ public class SchoolPopulatedConfig {
         gradeService.createGrade(new Grade(88, student2, course2, gerardoInstitute));
 
 
-        School zetCollege = schoolService.createSchool(new ZetCollege("ZetCollege"));
+        School zetCollege = schoolService.createSchool("ZetCollege");
 
         Student student3 = studentService.createStudent(new Student("Carlos", "Martinez", 21, zetCollege));
         Student student4 = studentService.createStudent(new Student("Lucia", "Fernandez", 23, zetCollege));

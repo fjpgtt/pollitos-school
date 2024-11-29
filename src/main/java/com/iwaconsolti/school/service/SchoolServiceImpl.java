@@ -3,7 +3,9 @@ package com.iwaconsolti.school.service;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.repository.SchoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -18,7 +20,19 @@ public class SchoolServiceImpl implements SchoolService{
     }
 
     @Override
-    public School createSchool(School school) {
+    public School createSchool(String schoolName) {
+        if (schoolName == null || schoolName.trim().isEmpty()) {
+            throw new IllegalArgumentException("School name cannot be null or empty");
+        }
+
+        Optional<School> existingSchool = schoolRepository.findByName(schoolName);
+        if (existingSchool.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "School name already exists");
+        }
+
+        School school = new School();
+        school.setName(schoolName);
+
         return schoolRepository.save(school);
     }
 

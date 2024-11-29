@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface SchoolService {
 
-    School createSchool(School school);
+    School createSchool(String school);
 
     Optional<School> findByName(String name);
 }
