@@ -1,5 +1,6 @@
 package com.iwaconsolti.school.demo.service;
 
+import com.iwaconsolti.school.demo.entity.CourseEntity;
 import com.iwaconsolti.school.demo.entity.repository.CourseRepository;
 import com.iwaconsolti.school.demo.model.Course;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import java.util.List;
 @Slf4j
 public class CourseService implements CourseInterface {
 
+    //H2
     @Autowired
     CourseRepository courseRepository;
 
@@ -27,13 +29,25 @@ public class CourseService implements CourseInterface {
         this.courses.add(Spanish);
     }
 
+    //H2
     @Override
-    public List<com.iwaconsolti.school.demo.entity.Course> findAllCourses(){
+    public List<CourseEntity> findAllCourses(){
         return courseRepository.findAll();
     }
 
     public List<Course> getCourses() {
         return this.courses;
+    }
+
+    public List<Course> findCoursesByName(String name) {
+        List<CourseEntity> courses = this.courseRepository.findByName(name);
+        return courses.stream().map(courseEntity -> {
+            return Course.builder()
+                    .name(courseEntity.getName())
+                    .professorName(courseEntity.getProfessorName())
+                    .id(courseEntity.getId())
+                    .build();
+        }).toList();
     }
 
     public Course getById(int id) {

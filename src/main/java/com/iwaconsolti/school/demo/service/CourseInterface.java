@@ -1,9 +1,9 @@
 package com.iwaconsolti.school.demo.service;
 
-import com.iwaconsolti.school.demo.entity.Course;
+import com.iwaconsolti.school.demo.entity.CourseEntity;
 
 import java.util.List;
 
 public interface CourseInterface {
-    List<Course> findAllCourses();
+    List<CourseEntity> findAllCourses();
 }

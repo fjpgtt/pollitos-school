@@ -1,7 +1,10 @@
 package com.iwaconsolti.school.demo.service;
 
+import com.iwaconsolti.school.demo.entity.StudentEntity;
+import com.iwaconsolti.school.demo.entity.repository.StudentRepository;
 import com.iwaconsolti.school.demo.model.Student;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,7 +13,10 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class StudentService {
+public class StudentService implements StudentInterface{
+
+    @Autowired
+    StudentRepository studentRepository;
 
     private final List<Student> students = new ArrayList<>();
 
@@ -24,6 +30,12 @@ public class StudentService {
         this.students.add(gerardo);
         this.students.add(claudia);
         this.students.add(emmanuel);
+    }
+
+    //H2
+    @Override
+    public List<StudentEntity> findAllStudents(){
+        return studentRepository.findAll();
     }
 
     public List<Student> getStudents() {

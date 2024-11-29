@@ -1,11 +1,12 @@
 package com.iwaconsolti.school.demo.controller;
 
+import com.iwaconsolti.school.demo.entity.GradeEntity;
 import com.iwaconsolti.school.demo.model.Grade;
-import com.iwaconsolti.school.demo.model.Student;
+import com.iwaconsolti.school.demo.service.GradeInterface;
 import com.iwaconsolti.school.demo.service.GradeService;
-import com.iwaconsolti.school.demo.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,17 @@ public class GradeController {
 
     private final GradeService gradeService;
 
+    //H2
+    @Autowired
+    GradeInterface gradeInterface;
+
+    //H2
+    @GetMapping("/findAllGrades")
+    public List<GradeEntity> findAllGrades(){
+        return gradeInterface.findAllGrades();
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
     @GetMapping()
     public ResponseEntity<List<Grade>> getGrades(){
         log.info("Getting all the grades");

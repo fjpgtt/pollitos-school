@@ -1,9 +1,10 @@
 package com.iwaconsolti.school.demo.service;
 
-import com.iwaconsolti.school.demo.model.Course;
+import com.iwaconsolti.school.demo.entity.GradeEntity;
+import com.iwaconsolti.school.demo.entity.repository.GradeRepository;
 import com.iwaconsolti.school.demo.model.Grade;
-import com.iwaconsolti.school.demo.model.Student;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,7 +13,10 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class GradeService {
+public class GradeService implements GradeInterface {
+
+    @Autowired
+    GradeRepository gradeRepository;
 
     private final List<Grade> grades = new ArrayList<>();
 
@@ -29,6 +33,13 @@ public class GradeService {
         this.grades.add(primera2);
         this.grades.add(segunda);
     }
+
+    //H2
+    @Override
+    public List<GradeEntity> findAllGrades(){
+        return gradeRepository.findAll();
+    }
+
 
     public List<Grade> getGrades() {
         return this.grades;

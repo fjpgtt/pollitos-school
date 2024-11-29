@@ -1,5 +1,6 @@
 package com.iwaconsolti.school.demo.controller;
 
+import com.iwaconsolti.school.demo.entity.CourseEntity;
 import com.iwaconsolti.school.demo.model.Course;
 import com.iwaconsolti.school.demo.model.Grade;
 import com.iwaconsolti.school.demo.service.CourseInterface;
@@ -25,14 +26,23 @@ public class CourseController {
     private final CourseService courseService;
     private final GradeService gradeService;
 
+    //H2
     @Autowired
     CourseInterface courseInterface;
 
+    //H2
     @GetMapping("/findAllCourses")
-    public List<com.iwaconsolti.school.demo.entity.Course> findAllCourses(){
+    public List<CourseEntity> findAllCourses(){
         return courseInterface.findAllCourses();
     }
 
+    //@query
+    @GetMapping("/findAllCourses2/{name}")
+    public List<Course> findAllCoursesByName(@PathVariable String name){
+        return courseService.findCoursesByName(name);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
     @GetMapping()
     public ResponseEntity<List<Course>> getCourses(){
         log.info("Getting all the courses");
