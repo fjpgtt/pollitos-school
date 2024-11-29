@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/{schoolName}/grade")
@@ -96,7 +95,7 @@ public class GradeController {
         List<Grade> grades = gradeService.getAllGradesByStudent(studentId, school.getId());
         List<GradeResponse> gradeResponses = grades.stream()
                 .map(this::convertGradeToResponse)
-                .collect(Collectors.toList());
+                .toList();
 
         return new ResponseEntity<>(gradeResponses, HttpStatus.OK);
     }

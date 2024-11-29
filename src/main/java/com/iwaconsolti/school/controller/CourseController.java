@@ -44,19 +44,20 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<CourseResponse> findAllCourses(@PathVariable String schoolName) {
+    public ResponseEntity<List<CourseResponse>> findAllCourses(@PathVariable String schoolName) {
         School school = schoolHelperService.findSchool(schoolName);
-
-        return courseService
+        List<CourseResponse> courseResponses = courseService
                 .findAllBySchoolId(school.getId())
                 .stream()
                 .map(this::convertCourseToResponse)
-                .collect(Collectors.toList());
+                .toList();
+
+        return new ResponseEntity<>(courseResponses, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<CourseResponse> createCourse(@PathVariable String schoolName,
-                                                         @RequestBody CourseRequest courseRequest) {
+                                                       @RequestBody CourseRequest courseRequest) {
         School school = schoolHelperService.findSchool(schoolName);
         Course course = convertRequestToCourse(courseRequest, school);
         course = courseService.createCourse(course);

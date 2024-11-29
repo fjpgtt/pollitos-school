@@ -5,16 +5,13 @@ import com.iwaconsolti.school.controller.response.StudentResponse;
 import com.iwaconsolti.school.model.School;
 import com.iwaconsolti.school.model.Student;
 import com.iwaconsolti.school.service.SchoolHelperService;
-import com.iwaconsolti.school.service.SchoolService;
 import com.iwaconsolti.school.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/{schoolName}/student")
@@ -48,25 +45,29 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<StudentResponse> findAllStudents(@PathVariable String schoolName) {
+    public ResponseEntity<List<StudentResponse>> findAllStudents(@PathVariable String schoolName) {
         School school = schoolHelperService.findSchool(schoolName);
 
-        return studentService
+        List<StudentResponse> students = studentService
                 .getAllStudentsBySchool(school.getId())
                 .stream()
                 .map(this::convertStudentToResponse)
-                .collect(Collectors.toList());
+                .toList();
+
+        return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public StudentResponse findStudentById(@PathVariable String schoolName, @PathVariable int id) {
+    public ResponseEntity<StudentResponse> findStudentById(@PathVariable String schoolName, @PathVariable int id) {
         School school = schoolHelperService.findSchool(schoolName);
 
         return studentService
                 .getStudentById(id, school.getId())
                 .map(this::convertStudentToResponse)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found in this school"));
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
 
     @PostMapping
     public ResponseEntity<StudentResponse> createStudent(@PathVariable String schoolName,
