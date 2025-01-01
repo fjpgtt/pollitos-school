@@ -1,4 +1,5 @@
 package com.iwaconsolti.school.controller.request;
+
 import com.iwaconsolti.school.model.School;
 import lombok.AllArgsConstructor;
 import lombok.Data;

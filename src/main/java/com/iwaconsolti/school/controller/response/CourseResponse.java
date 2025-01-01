@@ -1,4 +1,3 @@
-
 package com.iwaconsolti.school.controller.response;
 
 import lombok.AllArgsConstructor;

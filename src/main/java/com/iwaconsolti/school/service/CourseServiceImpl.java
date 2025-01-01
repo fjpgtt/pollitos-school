@@ -1,6 +1,5 @@
 package com.iwaconsolti.school.service;
 
-import com.iwaconsolti.school.controller.request.CourseRequest;
 import com.iwaconsolti.school.model.Course;
 import com.iwaconsolti.school.repository.CourseRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -38,14 +37,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course updateCourse(int id, CourseRequest courseRequest, int schoolId) {
-        Optional<Course> optionalCourse = courseRepository.findByIdAndSchoolId(id, schoolId);
-        if (optionalCourse.isPresent()) {
-            Course course = optionalCourse.get();
-            course.setName(courseRequest.getName());
-            course.setProfessorName(courseRequest.getProfessorName());
-            log.info("The course information is being updated with the id: {}", id);
-            return course;
+    public Course updateCourse(int id, Course course, int schoolId) {
+        if (courseRepository.findByIdAndSchoolId(id, schoolId).isPresent()) {
+            course.setId(id);
+            return courseRepository.save(course);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }

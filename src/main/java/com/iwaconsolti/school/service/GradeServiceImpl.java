@@ -45,7 +45,7 @@ public class GradeServiceImpl implements GradeService {
         if (!grades.isEmpty()) {
             gradeRepository.deleteByStudentIdAndSchoolId(studentId, schoolId);
             log.info("Successfully deleted all grades for Student ID: {} in School ID: {}", studentId, schoolId);
-        }else {
+        } else {
             log.warn("No grades found for Student ID: {} in School ID: {}", studentId, schoolId);
         }
     }
@@ -57,7 +57,7 @@ public class GradeServiceImpl implements GradeService {
         if (!grades.isEmpty()) {
             gradeRepository.deleteByCourseIdAndSchoolId(courseId, schoolId);
             log.info("Successfully deleted all grades for Course ID: {} in School ID: {}", courseId, schoolId);
-        }else {
+        } else {
             log.warn("No grades found for Course ID: {} in School ID: {}", courseId, schoolId);
         }
     }

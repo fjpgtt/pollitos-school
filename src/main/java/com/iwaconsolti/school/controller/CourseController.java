@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/{schoolName}/course")
 public class CourseController {
@@ -55,6 +55,15 @@ public class CourseController {
         return new ResponseEntity<>(courseResponses, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CourseResponse> findCourseById(@PathVariable String schoolName, @PathVariable int id) {
+        School school = schoolHelperService.findSchool(schoolName);
+        return courseService.getCourseById(id, school.getId())
+                .map(this::convertCourseToResponse)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<CourseResponse> createCourse(@PathVariable String schoolName,
                                                        @RequestBody CourseRequest courseRequest) {
@@ -73,7 +82,8 @@ public class CourseController {
             @RequestBody CourseRequest courseRequest) {
 
         School school = schoolHelperService.findSchool(schoolName);
-        Course savedCourse = courseService.updateCourse(id, courseRequest, school.getId());
+        Course updatedCourse = convertRequestToCourse(courseRequest, school);
+        Course savedCourse = courseService.updateCourse(id, updatedCourse, school.getId());
         CourseResponse courseResponse = convertCourseToResponse(savedCourse);
 
         return new ResponseEntity<>(courseResponse, HttpStatus.OK);

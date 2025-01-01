@@ -1,4 +1,3 @@
-
 package com.iwaconsolti.school.controller.request;
 
 import com.iwaconsolti.school.model.School;

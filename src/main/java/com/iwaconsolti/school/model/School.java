@@ -1,16 +1,14 @@
 package com.iwaconsolti.school.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
-@Setter
-@Getter
-@Entity
+@Data
 @NoArgsConstructor
+@Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class School {
 
@@ -30,8 +28,9 @@ public class School {
     @OneToMany(mappedBy = "school", fetch = FetchType.LAZY)
     private List<Grade> grades;
 
-    public School (String name){
+    public School(String name) {
         this.name = name;
     }
 
 }
+

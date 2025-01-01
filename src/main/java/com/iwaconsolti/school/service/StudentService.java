@@ -13,7 +13,7 @@ public interface StudentService {
 
     void deleteStudent(int id);
 
-    List<Student> getAllStudentsBySchool(int schoolId) ;
+    List<Student> getAllStudentsBySchool(int schoolId);
 
     Optional<Student> getStudentById(int id, int schoolId);
-    }
+}
