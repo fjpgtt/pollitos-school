@@ -8,7 +8,7 @@ import lombok.Data;
 public class GradeResponse {
     private final int id;
     private int score;
-    private StudentResponse studentRequest;
-    private CourseResponse courseRequest;
+    private StudentResponse student;
+    private CourseResponse course;
 
 }
