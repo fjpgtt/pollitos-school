@@ -26,12 +26,20 @@ public class GradeService implements GradeInterface {
     public GradeService(StudentService studentService, CourseService courseService) {
         this.studentService = studentService;
         this.courseService = courseService;
-        Grade primera = Grade.builder().id(1).score(100).studentId(1).courseId(1).creationDate(new Date()).build();
-        Grade primera2 = Grade.builder().id(1).score(90).studentId(1).courseId(2).creationDate(new Date()).build();
-        Grade segunda = Grade.builder().id(2).score(100).studentId(2).courseId(2).creationDate(new Date()).build();
+        Grade primera = Grade.builder().id(1).score(100).studentId(4).courseId(1).creationDate(new Date()).build();
+        Grade segunda = Grade.builder().id(2).score(100).studentId(3).courseId(2).creationDate(new Date()).build();
+        Grade tercera = Grade.builder().id(3).score(90).studentId(2).courseId(3).creationDate(new Date()).build();
+        Grade cuarta = Grade.builder().id(4).score(70).studentId(1).courseId(4).creationDate(new Date()).build();
+        Grade quinta = Grade.builder().id(5).score(50).studentId(2).courseId(3).creationDate(new Date()).build();
+        Grade sexta = Grade.builder().id(6).score(77).studentId(3).courseId(2).creationDate(new Date()).build();
+
+
         this.grades.add(primera);
-        this.grades.add(primera2);
         this.grades.add(segunda);
+        this.grades.add(tercera);
+        this.grades.add(cuarta);
+        this.grades.add(quinta);
+        this.grades.add(sexta);
     }
 
     //H2

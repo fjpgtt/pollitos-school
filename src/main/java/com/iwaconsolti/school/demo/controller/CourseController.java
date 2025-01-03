@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/course")
@@ -36,13 +37,44 @@ public class CourseController {
         return courseInterface.findAllCourses();
     }
 
-    //@query
-    @GetMapping("/findAllCourses2/{name}")
-    public List<Course> findAllCoursesByName(@PathVariable String name){
-        return courseService.findCoursesByName(name);
+    //H2
+    @PostMapping("/createCourse")
+    public CourseEntity saveLocal(@RequestBody CourseEntity courseEntity){
+        return courseInterface.saveCourse(courseEntity);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
+    //H2
+    @PutMapping("/updateCourse/{id}")
+    public CourseEntity updateCourse(@PathVariable Integer id, @RequestBody CourseEntity courseEntity){
+        return courseInterface.updateCourse(id,courseEntity);
+    }
+
+    //H2
+    @DeleteMapping("/deleteCourse/{id}")
+    public String deleteCourse(@PathVariable Integer id) {
+        courseInterface.deleteCourse(id);
+        return "Successfully deleted";
+    }
+
+    //@Query
+    @GetMapping("/findLocalByNameWithJPQL/{name}")
+    Optional<CourseEntity> findCourseByNameWithJPQL(@PathVariable String name){
+        return courseInterface.findCourseByNameWithJPQL(name);
+    }
+
+    // Consulta con Inversión de Control
+    @GetMapping("/findByNameIgnoreCase/{name}")
+    Optional<CourseEntity> findByNameIgnoreCase(@PathVariable String name){
+        return courseInterface.findByNameIgnoreCase(name);
+    }
+
+    /*@query
+    @GetMapping("/findAllCourses/{name}")
+    public List<Course> findAllCoursesByName(@PathVariable String name){
+        return courseService.findCoursesByName(name);
+    }*/
+
+    //////////////////////////////////// OPERATION RETS //////////////////////////////////////////////////
     @GetMapping()
     public ResponseEntity<List<Course>> getCourses(){
         log.info("Getting all the courses");

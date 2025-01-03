@@ -1,5 +1,6 @@
 package com.iwaconsolti.school.demo.service;
 
+import com.iwaconsolti.school.demo.entity.CourseEntity;
 import com.iwaconsolti.school.demo.entity.StudentEntity;
 import com.iwaconsolti.school.demo.entity.repository.StudentRepository;
 import com.iwaconsolti.school.demo.model.Student;
@@ -10,11 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
 public class StudentService implements StudentInterface{
 
+    //H2
     @Autowired
     StudentRepository studentRepository;
 
@@ -38,6 +41,36 @@ public class StudentService implements StudentInterface{
         return studentRepository.findAll();
     }
 
+    @Override
+    public StudentEntity saveStudent(StudentEntity studentEntity) {
+        return studentRepository.save(studentEntity);
+    }
+
+    @Override
+    public StudentEntity updateStudent(Integer id, StudentEntity studentEntity) {
+        StudentEntity studentEntityDB = studentRepository.findById(id).get();
+        if(Objects.nonNull(studentEntity.getAge()) && !"".equalsIgnoreCase(String.valueOf(studentEntity.getAge()))){
+            studentEntityDB.setAge(studentEntity.getAge());
+        }
+
+        if(Objects.nonNull(studentEntity.getFirstName()) && !"".equalsIgnoreCase(studentEntity.getFirstName())){
+            studentEntityDB.setFirstName(studentEntity.getFirstName());
+        }
+
+        if(Objects.nonNull(studentEntity.getLastName()) && !"".equalsIgnoreCase(studentEntity.getLastName())){
+            studentEntityDB.setLastName(studentEntity.getLastName());
+        }
+
+        return studentRepository.save(studentEntityDB);
+    }
+
+    @Override
+    public void deleteStudent(Integer id) {
+        studentRepository.deleteById(id);
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
     public List<Student> getStudents() {
         return this.students;
     }

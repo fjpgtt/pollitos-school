@@ -1,5 +1,6 @@
 package com.iwaconsolti.school.demo.controller;
 
+import com.iwaconsolti.school.demo.entity.CourseEntity;
 import com.iwaconsolti.school.demo.entity.StudentEntity;
 import com.iwaconsolti.school.demo.model.Grade;
 import com.iwaconsolti.school.demo.model.Student;
@@ -34,6 +35,25 @@ public class StudentsController {
     @GetMapping("/findAllStudents")
     public List<StudentEntity> findAllStudents(){
         return studentInterface.findAllStudents();
+    }
+
+    //H2
+    @PostMapping("/createStudent")
+    public StudentEntity saveStudent(@RequestBody StudentEntity studentEntity){
+        return studentInterface.saveStudent(studentEntity);
+    }
+
+    //H2
+    @PutMapping("/updateStudent/{id}")
+    public StudentEntity updateStudent(@PathVariable Integer id, @RequestBody StudentEntity studentEntity){
+        return studentInterface.updateStudent(id,studentEntity);
+    }
+
+    //H2
+    @DeleteMapping("/deleteStudent/{id}")
+    public String deleteStudent(@PathVariable Integer id) {
+        studentInterface.deleteStudent(id);
+        return "Successfully deleted";
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
