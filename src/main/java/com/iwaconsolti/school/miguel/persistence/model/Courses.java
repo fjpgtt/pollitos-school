@@ -1,5 +1,6 @@
 package com.iwaconsolti.school.miguel.persistence.model;
 
+import com.iwaconsolti.school.miguel.persistence.model.dto.CoursesDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,4 +19,11 @@ public class Courses {
 
     @Column(name = "school_id")
     private int schoolId;
+
+    public Courses(){}
+
+    public Courses(CoursesDTO coursesDTO){
+        this.nameCourse = coursesDTO.getNameCourse();
+        this.professorName = coursesDTO.getProfessorName();
+    }
 }

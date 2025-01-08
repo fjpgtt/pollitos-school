@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Slf4j
 @Service
@@ -39,13 +41,17 @@ public class CourseService {
         return  courseRepository.save(course);
     }
 
-    public Courses getCourses(String schoolName){
+    public List<Courses> getCourses(String schoolName){
         School school = schoolRepository.findByName(schoolName);
         return courseRepository.findAllCoursesBySchoolId(school.getId());
     }
 
-    public Integer editCourse(int id, String schoolName, Courses course){
+    public Courses editCourse(String schoolName, Courses course){
         School school = schoolRepository.findByName(schoolName);
-        return courseRepository.updateCourse(id,course.getNameCourse(),course.getProfessorName(),school.getId());
+        if(school != null){
+            course.setSchoolId(school.getId());
+            return courseRepository.save(course);
+        }
+        return null;
     }
 }

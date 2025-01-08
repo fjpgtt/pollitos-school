@@ -1,9 +1,6 @@
 package com.iwaconsolti.school.miguel.persistence.model.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.iwaconsolti.school.miguel.persistence.model.Students;
 import lombok.Data;
 
 @Data
@@ -13,5 +10,14 @@ public class StudentsDTO {
     private String firstName;
     private String lastName;
     private int age;
+
+    public StudentsDTO(){}
+
+    public StudentsDTO(Students students){
+        this.id = students.getId();
+        this.firstName = students.getFirstName();
+        this.lastName = students.getLastName();
+        this.age = students.getAge();
+    }
 }
 

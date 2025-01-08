@@ -1,8 +1,6 @@
 package com.iwaconsolti.school.miguel.controller;
-
 import com.iwaconsolti.school.miguel.persistence.model.School;
 import com.iwaconsolti.school.miguel.persistence.model.Students;
-import com.iwaconsolti.school.miguel.persistence.model.dto.StudentsDTO;
 import com.iwaconsolti.school.miguel.persistence.repository.SchoolRepository;
 import com.iwaconsolti.school.miguel.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +23,7 @@ public class StudentController {
     @Autowired
     private SchoolRepository schoolRepository;
 
-    @PostMapping("/student/db")
+    @PostMapping("/student")
     public ResponseEntity<Object> registerStudent(@PathVariable String nameSchool, @RequestBody Students student){
 
         School school = schoolRepository.findByName(nameSchool);
@@ -48,7 +45,9 @@ public class StudentController {
                     )
             );
         }
+
         Students saveStudent = studentService.createStudentsDB(nameSchool,student);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 Map.of(
                         "message","The student registered successfully",

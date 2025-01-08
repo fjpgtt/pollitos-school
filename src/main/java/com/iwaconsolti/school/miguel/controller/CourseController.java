@@ -1,67 +1,88 @@
 package com.iwaconsolti.school.miguel.controller;
 
 import com.iwaconsolti.school.miguel.persistence.model.Courses;
+import com.iwaconsolti.school.miguel.persistence.model.School;
+import com.iwaconsolti.school.miguel.persistence.model.Students;
+import com.iwaconsolti.school.miguel.persistence.model.dto.CoursesDTO;
+import com.iwaconsolti.school.miguel.persistence.repository.SchoolRepository;
 import com.iwaconsolti.school.miguel.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
-@RequestMapping("/app/{nameSchool}")
+@RequestMapping("/app/{nameSchool}/course")
 public class CourseController {
 
     @Autowired
     private CourseService courseService;
 
-    @PostMapping("/course")
-    public ResponseEntity<Object> newCourse(@PathVariable String nameSchool, @RequestBody Courses course) {
+    @Autowired
+    private SchoolRepository schoolRepository;
 
-        if (course.getNameCourse() == null || course.getProfessorName() == null){
+    @PostMapping("/")
+    public ResponseEntity<Object> newCourse(@PathVariable String nameSchool, @RequestBody CoursesDTO courseDTO) {
+
+        School school = schoolRepository.findByName(nameSchool);
+
+        if(school == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of(
+                            "message", "the school was not found",
+                            "status", HttpStatus.NOT_FOUND
+                    )
+            );
+        }
+
+        if (courseDTO.getNameCourse() == null || courseDTO.getProfessorName() == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     Map.of(
                             "message","Required data is missing", "stautus", HttpStatus.BAD_REQUEST
                     )
             );
         }
-        Courses objCourse = courseService.createCourse(nameSchool,course);
+        Courses objCourse = convertToEntity(courseDTO);
+        courseService.createCourse(nameSchool,objCourse);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 Map.of(
-                        "message", "The Course registered successfully","status", HttpStatus.CREATED,
-                        "course", objCourse
+                        "message", "The Course registered successfully"
                 )
         );
     }
 
-    @GetMapping("/course")
+    @GetMapping("/")
     public ResponseEntity<Object> listCourse(@PathVariable String nameSchool) {
 
-        Courses courses = courseService.getCourses(nameSchool);
+        List<Courses>  courses = courseService.getCourses(nameSchool);
 
-        if(courses == null){
+        if(courses.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     Map.of(
                             "message","there are no registered courses","status",HttpStatus.NOT_FOUND
                     )
             );
         }
+
         return ResponseEntity.ok(courses);
     }
 
-    @PutMapping("/course/{courseId}")
-    public ResponseEntity<Object> editCourse(@PathVariable String nameSchool,@PathVariable int courseId, @RequestBody Courses course){
+    @PutMapping("/{courseId}")
+    public ResponseEntity<Object> editCourse(@PathVariable String nameSchool,@PathVariable int courseId, @RequestBody CoursesDTO coursesDTO){
 
-        if(course.getNameCourse() == null || course.getProfessorName() == null){
+        if(coursesDTO.getNameCourse() == null || coursesDTO.getProfessorName() == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     Map.of("message", "Required data is missing", "status", HttpStatus.BAD_REQUEST)
             );
         }
+        Courses objCourses = convertToEntity(coursesDTO);
+        Courses updateCourse = courseService.editCourse(nameSchool, objCourses);
 
-        Integer updateCourse = courseService.editCourse(courseId, nameSchool, course);
-
-        if(updateCourse == 0){
+        if(updateCourse == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     Map.of(
                             "message","The course to modify was not found","status", HttpStatus.NOT_FOUND
@@ -74,5 +95,17 @@ public class CourseController {
                         "message", "The course was updated successfully", "status", HttpStatus.ACCEPTED
                 )
         );
+    }
+
+    protected CoursesDTO convertToDto(Courses entity){
+        return new CoursesDTO(entity);
+    }
+
+    protected Courses convertToEntity(CoursesDTO dto){
+        Courses course = new Courses(dto);
+        if(!Objects.isNull(dto.getId())){
+            course.setId(dto.getId());
+        }
+        return course;
     }
 }

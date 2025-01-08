@@ -15,17 +15,13 @@ public class SchoolConfig {
     @Bean
     @Qualifier("GerardoInstitute")
     public School gerardoInstitute(){
-        School school = new School();
-        school.setName("GerardoInstitute");
-        return school;
+        return new School("GerardoInstitute");
     }
 
     @Profile("default")
     @Bean
     @Qualifier("ZetCollege")
     public School zetCollege(){
-        School school = new School();
-        school.setName("ZetCollege");
-        return school;
+        return new School("ZetCollege");
     }
 }

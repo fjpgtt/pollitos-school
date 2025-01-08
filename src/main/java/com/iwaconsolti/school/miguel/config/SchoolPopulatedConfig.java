@@ -20,11 +20,10 @@ public class SchoolPopulatedConfig {
         log.info("The populated profile is activated, the data will be loaded");
 
         log.info("The data was generated for the GerardoInstitute school");
-        School school = new School();
-        school.setName("GerardoInstitute");
+        School school = new School("GerardoInstitute");
 
         Students firstStudent = new Students();
-        firstStudent.setId(1);
+        /*firstStudent.setId(1);
         firstStudent.setFirstName("Miguel");
         firstStudent.setLastName("Garcia");
         firstStudent.setAge(34);
@@ -33,7 +32,7 @@ public class SchoolPopulatedConfig {
         secondStudent.setId(2);
         secondStudent.setFirstName("Angelica");
         secondStudent.setLastName("Lima");
-        secondStudent.setAge(56);
+        secondStudent.setAge(56);*/
 
         //school.getStudents().put(firstStudent.getId(),firstStudent);
         //school.getStudents().put(secondStudent.getId(),secondStudent);
@@ -59,11 +58,10 @@ public class SchoolPopulatedConfig {
     public School zetCollegePopulated(){
         log.info("The data was generated for the zetCollege school");
 
-        School school = new School();
-        school.setName("ZetCollege");
+        School school = new School("ZetCollege");
 
         Students firstStudent = new Students();
-        firstStudent.setId(1);
+        /*firstStudent.setId(1);
         firstStudent.setFirstName("Juan");
         firstStudent.setLastName("Lima");
         firstStudent.setAge(34);
@@ -72,7 +70,7 @@ public class SchoolPopulatedConfig {
         secondStudent.setId(2);
         secondStudent.setFirstName("Ignacio");
         secondStudent.setLastName("Garcia");
-        secondStudent.setAge(62);
+        secondStudent.setAge(62);*/
 
         //school.getStudents().put(firstStudent.getId(),firstStudent);
         //school.getStudents().put(secondStudent.getId(),secondStudent);

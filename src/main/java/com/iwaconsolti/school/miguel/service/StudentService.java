@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -44,7 +43,7 @@ public class StudentService {
         objUnionSchoolStudents.setStudent_id(objStudent.getId());
 
         unionSchoolStudentRepository.save(objUnionSchoolStudents);
-        log.info("{}",objStudent.getId());
+
         return objStudent;
     }
 

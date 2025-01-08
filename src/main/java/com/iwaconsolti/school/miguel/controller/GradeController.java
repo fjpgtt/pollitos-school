@@ -2,15 +2,18 @@ package com.iwaconsolti.school.miguel.controller;
 
 import com.iwaconsolti.school.miguel.persistence.model.Grade;
 import com.iwaconsolti.school.miguel.persistence.model.School;
+import com.iwaconsolti.school.miguel.persistence.model.dto.GradesDTO;
 import com.iwaconsolti.school.miguel.persistence.repository.SchoolRepository;
 import com.iwaconsolti.school.miguel.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/app/{nameSchool}")
@@ -22,8 +25,11 @@ public class GradeController {
     @Autowired
     private SchoolRepository schoolRepository;
 
+    @Value("${school.score.limit:100}")
+    private int limitGrade;
+
     @PostMapping("/grade")
-    public ResponseEntity<Object> createGrade(@PathVariable String nameSchool, @RequestBody Grade grade){
+    public ResponseEntity<Object> createGrade(@PathVariable String nameSchool, @RequestBody GradesDTO gradesDTO){
 
         School school = schoolRepository.findByName(nameSchool);
 
@@ -36,7 +42,7 @@ public class GradeController {
             );
         }
 
-        if(grade.getScore() < 0 || grade.getScore() > 100){
+        if(gradesDTO.getScore() < 0 || gradesDTO.getScore() > limitGrade){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     Map.of(
                             "message", "The limit allowed in the score was exceeded", "status", HttpStatus.BAD_REQUEST
@@ -44,14 +50,15 @@ public class GradeController {
             );
         }
 
-        if(grade.getScore() == 0 || grade.getCourseId() == 0 || grade.getStudentId() == 0){
+        if(gradesDTO.getScore() == 0 || gradesDTO.getCourseId() == 0 || gradesDTO.getStudentId() == 0){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     Map.of(
                             "message","Required data is missing", "status", HttpStatus.BAD_REQUEST
                     )
             );
         }
-        Grade objGrade = gradeService.createGrade(grade);
+        Grade objGrade =  convertToEntity(gradesDTO);
+        gradeService.createGrade(objGrade);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 Map.of(
@@ -137,5 +144,17 @@ public class GradeController {
                         "status", HttpStatus.OK
                 )
         );
+    }
+
+    protected GradesDTO convertToDto(Grade entity){
+        return new GradesDTO(entity);
+    }
+
+    protected Grade convertToEntity(GradesDTO dto){
+        Grade grade = new Grade(dto);
+        if(!Objects.isNull(dto.getId())){
+            grade.setId(dto.getId());
+        }
+        return grade;
     }
 }

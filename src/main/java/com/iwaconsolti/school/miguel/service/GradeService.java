@@ -1,20 +1,14 @@
 package com.iwaconsolti.school.miguel.service;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.iwaconsolti.school.miguel.persistence.model.Courses;
 import com.iwaconsolti.school.miguel.persistence.model.Grade;
 import com.iwaconsolti.school.miguel.persistence.model.School;
-import com.iwaconsolti.school.miguel.persistence.model.Students;
-import com.iwaconsolti.school.miguel.persistence.model.dto.GradesDTO;
 import com.iwaconsolti.school.miguel.persistence.repository.GradeRepository;
-import com.iwaconsolti.school.miguel.persistence.repository.SchoolRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.h2.util.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.ls.LSInput;
+
 
 import java.util.*;
 

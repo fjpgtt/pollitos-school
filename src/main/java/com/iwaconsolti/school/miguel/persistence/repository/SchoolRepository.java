@@ -11,6 +11,5 @@ import java.util.Objects;
 
 @Repository
 public interface SchoolRepository extends CrudRepository<School, Long> {
-    @Query("SELECT s FROM School s WHERE s.name = ?1")
     School findByName(String schoolName);
 }
