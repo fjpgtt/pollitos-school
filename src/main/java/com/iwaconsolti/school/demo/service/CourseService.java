@@ -43,7 +43,7 @@ public class CourseService{
 
     public String updateCourse(Course course) {
         courseRepository.save(course);
-        log.info("Course updatesuccessfully");
+        log.info("Course update successfully");
         return "Course update successfully: " + course.toString() ;
     }
 

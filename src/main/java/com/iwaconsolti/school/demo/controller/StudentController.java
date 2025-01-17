@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200") // Enable CORS for this URL
 @RequestMapping("/school")
 public class StudentController {
 

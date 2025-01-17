@@ -5,7 +5,6 @@ import com.iwaconsolti.school.demo.repository.CourseRepository;
 import com.iwaconsolti.school.demo.repository.GradeRepository;
 import com.iwaconsolti.school.demo.repository.SchoolRepository;
 import com.iwaconsolti.school.demo.repository.StudentRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -55,7 +54,7 @@ public class AppConfig {
 
     @Bean
     @Profile("populated")
-    public boolean initDatabase() {
+    public boolean initDatabase(){
 
         log.info("Populating data for GerardoInstitute and ZetCollege (APPCONFIG)");
 
